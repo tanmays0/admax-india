@@ -7,7 +7,7 @@ const db = mysql.createPool({
   database: "admax_india",
   waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0
+  queueLimit: 0,
 });
 
 db.getConnection((err, connection) => {

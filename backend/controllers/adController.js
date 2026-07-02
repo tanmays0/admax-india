@@ -1,7 +1,6 @@
 const db = require("../config/db");
 
 exports.uploadAd = (req, res) => {
-
   const { user_id, media_url, media_type, duration } = req.body;
 
   const sql = `
@@ -9,16 +8,13 @@ exports.uploadAd = (req, res) => {
   VALUES (?, ?, ?, ?)
   `;
 
-  db.query(sql, [user_id, media_url, media_type, duration], (err, result) => {
-
+  db.query(sql, [user_id, media_url, media_type, duration], (err, _result) => {
     if (err) {
       return res.status(500).json(err);
     }
 
     res.json({
-      message: "Ad uploaded successfully"
+      message: "Ad uploaded successfully",
     });
-
   });
-
 };

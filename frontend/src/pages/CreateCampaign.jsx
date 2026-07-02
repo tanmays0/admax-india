@@ -1,566 +1,485 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Check,
+  MapPin,
+  Rocket,
+  PartyPopper,
+} from "lucide-react";
 import API from "../services/api";
+import DashboardLayout from "../components/DashboardLayout";
+import Card from "../components/ui/Card";
+import Button from "../components/ui/Button";
+import Input from "../components/ui/Input";
+import { images } from "../constants/images";
 
 const CATEGORIES = [
-  "🍽️ Restaurant", "💪 Gym", "💆 Salon", "🏥 Hospital",
-  "💊 Pharmacy", "☕ Cafe", "🦷 Dental", "🛍️ Retail",
+  { id: "restaurant", label: "Restaurant", image: images.categories.restaurant },
+  { id: "gym", label: "Gym", image: images.categories.gym },
+  { id: "salon", label: "Salon", image: images.categories.salon },
+  { id: "hospital", label: "Hospital", image: images.categories.hospital },
+  { id: "pharmacy", label: "Pharmacy", image: images.categories.pharmacy },
+  { id: "cafe", label: "Cafe", image: images.categories.cafe },
+  { id: "dental", label: "Dental", image: images.categories.dental },
+  { id: "retail", label: "Retail", image: images.categories.retail },
 ];
 
 const RADIUS_OPTIONS = [
-  { value: 1, label: "1 km", sub: "Immediate area", icon: "🎯" },
-  { value: 3, label: "3 km", sub: "Neighbourhood", icon: "📍" },
-  { value: 5, label: "5 km", sub: "Wider locality", icon: "🗺️" },
+  { value: 1, label: "1 km", sub: "Immediate area" },
+  { value: 3, label: "3 km", sub: "Neighbourhood" },
+  { value: 5, label: "5 km", sub: "Wider locality" },
 ];
 
 const TIME_SLOTS = [
-  { id: "morning", label: "Morning", time: "6am – 12pm", icon: "🌅" },
-  { id: "lunch", label: "Lunch", time: "12pm – 3pm", icon: "🍽️" },
-  { id: "evening", label: "Evening", time: "3pm – 7pm", icon: "🌆" },
-  { id: "night", label: "Night", time: "7pm – 11pm", icon: "🌙" },
+  { id: "morning", label: "Morning", time: "6am – 12pm" },
+  { id: "lunch", label: "Lunch", time: "12pm – 3pm" },
+  { id: "evening", label: "Evening", time: "3pm – 7pm" },
+  { id: "night", label: "Night", time: "7pm – 11pm" },
 ];
-  
+
 const STEPS = ["Details", "Targeting", "Schedule", "Review"];
 
-// ── Sidebar (same as Dashboard) ─────────────────────────────────
-const navItems = [
-  { icon: "⚡", label: "Dashboard", path: "/dashboard" },
-  { icon: "📣", label: "Campaigns", path: "/campaigns", active: true },
-  { icon: "🖼️", label: "My Ads", path: "/ads" },
-  { icon: "📺", label: "Screens", path: "/screens" },
-  { icon: "📊", label: "Analytics", path: "/analytics" },
-  { icon: "💳", label: "Billing", path: "/billing" },
-  { icon: "⚙️", label: "Settings", path: "/settings" },
-];
-
-function Sidebar() {
-  const navigate = useNavigate();
-  const handleLogout = () => { localStorage.removeItem("token"); navigate("/login"); };
+function StepIndicator({ step }) {
   return (
-    <div style={{
-      width: "240px", minHeight: "100vh", background: "white",
-      borderRight: "1px solid #f0f0f0", display: "flex",
-      flexDirection: "column", padding: "24px 16px", flexShrink: 0,
-    }}>
-      <div style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 12px", marginBottom: "32px" }}>
-        <div style={{ width: "36px", height: "36px", background: "#1F7A4D", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "16px" }}>📺</div>
-        <div>
-          <div style={{ fontFamily: "'Sora', sans-serif", fontSize: "15px", fontWeight: "800", color: "#0a0a0a", letterSpacing: "-0.02em" }}>AdMax</div>
-          <div style={{ fontSize: "10px", color: "#aaa", fontWeight: "500" }}>India</div>
-        </div>
-      </div>
-      <nav style={{ flex: 1, display: "flex", flexDirection: "column", gap: "4px" }}>
-        <p style={{ fontSize: "10px", fontWeight: "700", color: "#ccc", letterSpacing: "0.1em", textTransform: "uppercase", padding: "0 12px", marginBottom: "8px" }}>MAIN MENU</p>
-        {navItems.map((item) => (
-          <Link key={item.label} to={item.path} style={{
-            display: "flex", alignItems: "center", gap: "10px",
-            padding: "10px 12px", borderRadius: "12px", textDecoration: "none",
-            background: item.active ? "#EAF7EF" : "transparent",
-            color: item.active ? "#1F7A4D" : "#555",
-            fontWeight: item.active ? "700" : "500", fontSize: "14px",
-            transition: "all 0.18s ease",
-          }}
-            onMouseEnter={e => { if (!item.active) e.currentTarget.style.background = "#f9fafb"; }}
-            onMouseLeave={e => { if (!item.active) e.currentTarget.style.background = "transparent"; }}
-          >
-            <span style={{ fontSize: "16px", width: "20px", textAlign: "center" }}>{item.icon}</span>
-            {item.label}
-            {item.active && <div style={{ marginLeft: "auto", width: "6px", height: "6px", borderRadius: "50%", background: "#1F7A4D" }} />}
-          </Link>
-        ))}
-      </nav>
-      <div style={{ borderTop: "1px solid #f0f0f0", paddingTop: "16px" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", marginBottom: "4px" }}>
-          <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "#EAF7EF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px" }}>👤</div>
-          <div>
-            <div style={{ fontSize: "13px", fontWeight: "600", color: "#111" }}>My Business</div>
-            <div style={{ fontSize: "11px", color: "#aaa" }}>Advertiser</div>
+    <div className="mb-8 flex items-center">
+      {STEPS.map((label, i) => {
+        const idx = i + 1;
+        const done = step > idx;
+        const active = step === idx;
+        return (
+          <div key={label} className={`flex items-center ${i < STEPS.length - 1 ? "flex-1" : ""}`}>
+            <div className="flex flex-col items-center gap-2">
+              <div
+                className={`flex h-9 w-9 items-center justify-center rounded-lg text-sm font-bold transition ${
+                  done
+                    ? "bg-admax-green text-white"
+                    : active
+                      ? "bg-admax-green-light text-admax-green"
+                      : "bg-gray-100 text-gray-500"
+                }`}
+              >
+                {done ? <Check className="h-4 w-4" /> : idx}
+              </div>
+              <span
+                className={`text-[11px] font-semibold uppercase tracking-wide ${
+                  active ? "text-dark" : "text-gray-500"
+                }`}
+              >
+                {label}
+              </span>
+            </div>
+            {i < STEPS.length - 1 && (
+              <div
+                className={`mx-3 mb-6 h-0.5 flex-1 transition ${done ? "bg-admax-green" : "bg-gray-200"}`}
+              />
+            )}
           </div>
-        </div>
-        <button onClick={handleLogout} style={{
-          width: "100%", background: "none", border: "none",
-          display: "flex", alignItems: "center", gap: "10px",
-          padding: "10px 12px", borderRadius: "12px", color: "#888",
-          fontSize: "14px", cursor: "pointer", fontFamily: "'DM Sans', sans-serif",
-          fontWeight: "500", transition: "all 0.18s ease",
-        }}
-          onMouseEnter={e => { e.currentTarget.style.background = "#fef2f2"; e.currentTarget.style.color = "#dc2626"; }}
-          onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#888"; }}
-        >
-          <span>🚪</span> Log out
-        </button>
-      </div>
+        );
+      })}
     </div>
   );
 }
 
-// ── Main Component ───────────────────────────────────────────────
 export default function CreateCampaign() {
-  const navigate = useNavigate();
-
-  // Step
   const [step, setStep] = useState(1);
-
-  // Step 1 — Details
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const [city, setCity] = useState("");
-
-  // Step 2 — Targeting
   const [radius, setRadius] = useState(null);
-
-  // Step 3 — Schedule
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [slots, setSlots] = useState([]);
-
-  // UI
-  const [focused, setFocused] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({});
+  const [formError, setFormError] = useState("");
   const [success, setSuccess] = useState(false);
 
   const toggleSlot = (id) =>
-    setSlots((prev) => prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]);
+    setSlots((prev) => (prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]));
 
-  const inputStyle = (fname) => ({
-    width: "100%", padding: "13px 16px", borderRadius: "12px",
-    border: `1.5px solid ${focused === fname ? "#1F7A4D" : "#e5e7eb"}`,
-    fontSize: "14px", color: "#111", outline: "none",
-    background: focused === fname ? "#f9fffe" : "white",
-    transition: "all 0.2s ease", boxSizing: "border-box",
-    fontFamily: "'DM Sans', sans-serif",
-    boxShadow: focused === fname ? "0 0 0 4px rgba(31,122,77,0.08)" : "none",
-  });
-
-  const labelStyle = {
-    fontSize: "13px", fontWeight: "600", color: "#333",
-    marginBottom: "6px", display: "block", letterSpacing: "-0.01em",
+  const validateStep = () => {
+    const next = {};
+    if (step === 1) {
+      if (!name.trim()) next.name = "Campaign name is required";
+      if (!city.trim()) next.city = "City is required";
+    }
+    if (step === 2 && !radius) {
+      next.radius = "Please select a targeting radius";
+    }
+    if (step === 3) {
+      if (!startDate) next.startDate = "Start date is required";
+      if (!endDate) next.endDate = "End date is required";
+      if (startDate && endDate && new Date(endDate) <= new Date(startDate)) {
+        next.endDate = "End date must be after start date";
+      }
+    }
+    setErrors(next);
+    return Object.keys(next).length === 0;
   };
 
   const handleNext = (e) => {
     e.preventDefault();
-    setError("");
-    if (step === 1) {
-      if (!name || !city) { setError("Please fill in all required fields."); return; }
-    }
-    if (step === 2) {
-      if (!radius) { setError("Please select a targeting radius."); return; }
-    }
-    if (step === 3) {
-      if (!startDate || !endDate) { setError("Please set start and end dates."); return; }
-      if (new Date(endDate) <= new Date(startDate)) { setError("End date must be after start date."); return; }
-    }
+    setFormError("");
+    if (!validateStep()) return;
     setStep((s) => s + 1);
   };
 
   const handleSubmit = async () => {
     setLoading(true);
-    setError("");
+    setFormError("");
     try {
-      const res = await API.post("/campaigns/create", {
-        name, category, city, radius,
-        start_date: startDate, end_date: endDate,
+      await API.post("/campaigns/create", {
+        name,
+        category,
+        city,
+        radius,
+        start_date: startDate,
+        end_date: endDate,
         time_slots: slots,
       });
       setSuccess(true);
     } catch (err) {
-      setError(err?.response?.data?.message || "Campaign creation failed. Please try again.");
+      setFormError(err?.response?.data?.message || "Campaign creation failed");
     } finally {
       setLoading(false);
     }
   };
 
+  const resetForm = () => {
+    setSuccess(false);
+    setStep(1);
+    setName("");
+    setCity("");
+    setCategory("");
+    setRadius(null);
+    setStartDate("");
+    setEndDate("");
+    setSlots([]);
+    setErrors({});
+    setFormError("");
+  };
+
+  const categoryLabel = CATEGORIES.find((c) => c.id === category)?.label || "Not specified";
+
   return (
-    <div style={{ display: "flex", minHeight: "100vh", background: "#f8fafb", fontFamily: "'DM Sans', sans-serif" }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap');
-        * { box-sizing: border-box; }
+    <DashboardLayout
+      activePage="/campaigns"
+      title="Create Campaign"
+      subtitle="Launch a new local ad campaign in minutes"
+    >
+      <div className="mb-6 flex items-center gap-2 text-sm">
+        <Link to="/campaigns" className="flex items-center gap-1 text-gray-500 hover:text-admax-green">
+          <ChevronLeft className="h-4 w-4" />
+          Campaigns
+        </Link>
+        <span className="text-gray-300">/</span>
+        <span className="font-medium text-dark">New Campaign</span>
+      </div>
 
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(16px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes scaleIn {
-          from { opacity: 0; transform: scale(0.9); }
-          to   { opacity: 1; transform: scale(1); }
-        }
-        @keyframes shake {
-          0%,100% { transform: translateX(0); }
-          20% { transform: translateX(-6px); }
-          40% { transform: translateX(6px); }
-          60% { transform: translateX(-4px); }
-          80% { transform: translateX(4px); }
-        }
-        @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
+      <div className="mx-auto max-w-3xl">
+        {!success && <StepIndicator step={step} />}
 
-        .cc-card { animation: fadeUp 0.5s ease both; }
-        .success-anim { animation: scaleIn 0.4s ease both; }
-        .error-shake { animation: shake 0.4s ease; }
-
-        .radius-pill {
-          border: 1.5px solid #e5e7eb; border-radius: 16px;
-          padding: 16px 20px; cursor: pointer; background: white;
-          transition: all 0.2s ease; text-align: center;
-          display: flex; flex-direction: column; align-items: center; gap: 6px;
-        }
-        .radius-pill:hover { border-color: #1F7A4D; background: #f9fffe; }
-        .radius-pill.selected { border-color: #1F7A4D; background: #EAF7EF; }
-
-        .slot-pill {
-          border: 1.5px solid #e5e7eb; border-radius: 14px;
-          padding: 14px 16px; cursor: pointer; background: white;
-          transition: all 0.2s ease; display: flex; flex-direction: column; gap: 4px;
-        }
-        .slot-pill:hover { border-color: #1F7A4D; background: #f9fffe; }
-        .slot-pill.selected { border-color: #1F7A4D; background: #EAF7EF; }
-
-        .cat-pill {
-          padding: 9px 14px; border-radius: 100px; font-size: 13px;
-          font-weight: 500; cursor: pointer; border: 1.5px solid #e5e7eb;
-          background: white; color: #444; transition: all 0.18s ease;
-          font-family: 'DM Sans', sans-serif; white-space: nowrap;
-        }
-        .cat-pill:hover { border-color: #1F7A4D; color: #1F7A4D; }
-        .cat-pill.selected { background: #EAF7EF; border-color: #1F7A4D; color: #1F7A4D; font-weight: 600; }
-
-        .submit-btn {
-          background: #1F7A4D; color: white; border: none;
-          padding: 15px 32px; border-radius: 12px; font-size: 15px;
-          font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif;
-          transition: all 0.25s ease; display: inline-flex; align-items: center; gap: 8px;
-        }
-        .submit-btn:not(:disabled):hover {
-          transform: translateY(-2px); box-shadow: 0 12px 28px rgba(31,122,77,0.3);
-        }
-        .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; }
-
-        .back-btn {
-          background: white; color: #555; border: 1.5px solid #e5e7eb;
-          padding: 14px 24px; border-radius: 12px; font-size: 14px;
-          font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif;
-          transition: all 0.2s ease;
-        }
-        .back-btn:hover { border-color: #ccc; background: #fafafa; }
-      `}</style>
-
-      <Sidebar />
-
-      <div style={{ flex: 1, padding: "36px 48px", overflowY: "auto" }}>
-
-        {/* Header */}
-        <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "32px" }}>
-          <Link to="/campaigns" style={{ color: "#aaa", textDecoration: "none", fontSize: "14px", fontWeight: "500", display: "flex", alignItems: "center", gap: "4px" }}
-            onMouseEnter={e => e.currentTarget.style.color = "#555"}
-            onMouseLeave={e => e.currentTarget.style.color = "#aaa"}
-          >← Campaigns</Link>
-          <span style={{ color: "#e5e7eb" }}>/</span>
-          <span style={{ fontSize: "14px", color: "#333", fontWeight: "600" }}>New Campaign</span>
-        </div>
-
-        <div style={{ maxWidth: "680px" }}>
-
-          {/* Page title */}
-          <div style={{ marginBottom: "32px" }}>
-            <h1 style={{ fontFamily: "'Sora', sans-serif", fontSize: "28px", fontWeight: "800", color: "#0a0a0a", letterSpacing: "-0.025em", marginBottom: "6px" }}>
-              Create Campaign
-            </h1>
-            <p style={{ fontSize: "14px", color: "#888" }}>Launch a new local ad campaign in minutes.</p>
+        {formError && !success && (
+          <div className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
+            {formError}
           </div>
+        )}
 
-          {/* Step indicator */}
-          {!success && (
-            <div style={{ display: "flex", alignItems: "center", marginBottom: "36px" }}>
-              {STEPS.map((label, i) => {
-                const idx = i + 1;
-                const done = step > idx;
-                const active = step === idx;
-                return (
-                  <div key={i} style={{ display: "flex", alignItems: "center", flex: i < STEPS.length - 1 ? "1" : "0" }}>
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "5px" }}>
-                      <div style={{
-                        width: "32px", height: "32px", borderRadius: "50%",
-                        background: done ? "#1F7A4D" : active ? "#EAF7EF" : "#f3f4f6",
-                        border: `2px solid ${done || active ? "#1F7A4D" : "#e5e7eb"}`,
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        fontSize: "13px", fontWeight: "700",
-                        color: done ? "white" : active ? "#1F7A4D" : "#aaa",
-                        transition: "all 0.3s ease",
-                      }}>{done ? "✓" : idx}</div>
-                      <span style={{ fontSize: "11px", fontWeight: active ? "700" : "500", color: active ? "#1F7A4D" : done ? "#555" : "#aaa", whiteSpace: "nowrap" }}>{label}</span>
-                    </div>
-                    {i < STEPS.length - 1 && (
-                      <div style={{ flex: 1, height: "2px", margin: "0 8px", marginBottom: "18px", background: done ? "#1F7A4D" : "#e5e7eb", transition: "background 0.3s ease" }} />
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          )}
+        {step === 1 && !success && (
+          <Card>
+            <h2 className="mb-1 font-display text-lg font-bold text-dark">Campaign Details</h2>
+            <p className="mb-6 text-sm text-gray-500">Name your campaign and define its scope</p>
 
-          {/* Error */}
-          {error && !success && (
-            <div className="error-shake" style={{
-              background: "#fef2f2", border: "1px solid #fecaca",
-              borderRadius: "12px", padding: "12px 16px",
-              marginBottom: "20px", display: "flex", gap: "10px", alignItems: "center",
-            }}>
-              <span>⚠️</span>
-              <span style={{ fontSize: "13px", color: "#dc2626", fontWeight: "500" }}>{error}</span>
-            </div>
-          )}
+            <form onSubmit={handleNext} className="space-y-5">
+              <Input
+                label="Campaign Name *"
+                name="name"
+                placeholder='e.g. "Summer Lunch Offer"'
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                  if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
+                }}
+                error={errors.name}
+              />
 
-          {/* ── STEP 1: Campaign Details ── */}
-          {step === 1 && !success && (
-            <div className="cc-card" style={{ background: "white", border: "1px solid #efefef", borderRadius: "24px", padding: "36px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "24px" }}>
-                <div style={{ width: "40px", height: "40px", background: "#EAF7EF", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px" }}>📣</div>
-                <div>
-                  <h2 style={{ fontFamily: "'Sora', sans-serif", fontSize: "18px", fontWeight: "800", color: "#0a0a0a", letterSpacing: "-0.02em" }}>Campaign Details</h2>
-                  <p style={{ fontSize: "12px", color: "#aaa" }}>Name your campaign and define its scope.</p>
-                </div>
-              </div>
+              <Input
+                label="City *"
+                name="city"
+                placeholder="Pune"
+                value={city}
+                onChange={(e) => {
+                  setCity(e.target.value);
+                  if (errors.city) setErrors((prev) => ({ ...prev, city: "" }));
+                }}
+                error={errors.city}
+              />
 
-              <form onSubmit={handleNext}>
-                <div style={{ marginBottom: "16px" }}>
-                  <label style={labelStyle}>Campaign Name *</label>
-                  <input placeholder='e.g. "Summer Lunch Offer"' value={name}
-                    onChange={e => setName(e.target.value)} required
-                    style={inputStyle("name")}
-                    onFocus={() => setFocused("name")} onBlur={() => setFocused(null)} />
-                </div>
-
-                <div style={{ marginBottom: "16px" }}>
-                  <label style={labelStyle}>City *</label>
-                  <input placeholder="Pune" value={city}
-                    onChange={e => setCity(e.target.value)} required
-                    style={inputStyle("city")}
-                    onFocus={() => setFocused("city")} onBlur={() => setFocused(null)} />
-                </div>
-
-                <div style={{ marginBottom: "28px" }}>
-                  <label style={labelStyle}>Business Category</label>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "4px" }}>
-                    {CATEGORIES.map((cat) => (
-                      <button key={cat} type="button"
-                        className={`cat-pill ${category === cat ? "selected" : ""}`}
-                        onClick={() => setCategory(cat)}>{cat}</button>
-                    ))}
-                  </div>
-                </div>
-
-                <button type="submit" className="submit-btn">Continue →</button>
-              </form>
-            </div>
-          )}
-
-          {/* ── STEP 2: Targeting ── */}
-          {step === 2 && !success && (
-            <div className="cc-card" style={{ background: "white", border: "1px solid #efefef", borderRadius: "24px", padding: "36px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "24px" }}>
-                <div style={{ width: "40px", height: "40px", background: "#EAF7EF", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px" }}>🎯</div>
-                <div>
-                  <h2 style={{ fontFamily: "'Sora', sans-serif", fontSize: "18px", fontWeight: "800", color: "#0a0a0a", letterSpacing: "-0.02em" }}>Hyperlocal Targeting</h2>
-                  <p style={{ fontSize: "12px", color: "#aaa" }}>Choose how far your ads should reach.</p>
-                </div>
-              </div>
-
-              <label style={{ ...labelStyle, marginBottom: "12px" }}>Select Radius *</label>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "14px", marginBottom: "28px" }}>
-                {RADIUS_OPTIONS.map((opt) => (
-                  <div key={opt.value}
-                    className={`radius-pill ${radius === opt.value ? "selected" : ""}`}
-                    onClick={() => setRadius(opt.value)}
-                  >
-                    <span style={{ fontSize: "24px" }}>{opt.icon}</span>
-                    <span style={{ fontFamily: "'Sora', sans-serif", fontSize: "18px", fontWeight: "800", color: radius === opt.value ? "#1F7A4D" : "#0a0a0a", letterSpacing: "-0.02em" }}>{opt.label}</span>
-                    <span style={{ fontSize: "12px", color: "#888" }}>{opt.sub}</span>
-                    {radius === opt.value && (
-                      <span style={{ fontSize: "10px", fontWeight: "700", color: "#1F7A4D", background: "rgba(31,122,77,0.1)", padding: "2px 8px", borderRadius: "100px" }}>Selected ✓</span>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              {radius && (
-                <div style={{ background: "#EAF7EF", border: "1px solid rgba(31,122,77,0.2)", borderRadius: "12px", padding: "14px 16px", marginBottom: "24px", display: "flex", gap: "10px", alignItems: "center" }}>
-                  <span>📍</span>
-                  <span style={{ fontSize: "13px", color: "#1F7A4D", fontWeight: "500" }}>
-                    Your ads will appear on screens within <strong>{radius}km</strong> of your business in {city || "your city"}.
-                  </span>
-                </div>
-              )}
-
-              <div style={{ display: "flex", gap: "10px" }}>
-                <button className="back-btn" onClick={() => { setStep(1); setError(""); }}>← Back</button>
-                <button className="submit-btn" onClick={handleNext}>Continue →</button>
-              </div>
-            </div>
-          )}
-
-          {/* ── STEP 3: Schedule ── */}
-          {step === 3 && !success && (
-            <div className="cc-card" style={{ background: "white", border: "1px solid #efefef", borderRadius: "24px", padding: "36px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "24px" }}>
-                <div style={{ width: "40px", height: "40px", background: "#EAF7EF", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px" }}>📅</div>
-                <div>
-                  <h2 style={{ fontFamily: "'Sora', sans-serif", fontSize: "18px", fontWeight: "800", color: "#0a0a0a", letterSpacing: "-0.02em" }}>Campaign Schedule</h2>
-                  <p style={{ fontSize: "12px", color: "#aaa" }}>Set your campaign duration and time slots.</p>
-                </div>
-              </div>
-
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "24px" }}>
-                <div>
-                  <label style={labelStyle}>Start Date *</label>
-                  <input type="date" value={startDate}
-                    onChange={e => setStartDate(e.target.value)} required
-                    min={new Date().toISOString().split("T")[0]}
-                    style={inputStyle("startDate")}
-                    onFocus={() => setFocused("startDate")} onBlur={() => setFocused(null)} />
-                </div>
-                <div>
-                  <label style={labelStyle}>End Date *</label>
-                  <input type="date" value={endDate}
-                    onChange={e => setEndDate(e.target.value)} required
-                    min={startDate || new Date().toISOString().split("T")[0]}
-                    style={inputStyle("endDate")}
-                    onFocus={() => setFocused("endDate")} onBlur={() => setFocused(null)} />
-                </div>
-              </div>
-
-              <div style={{ marginBottom: "28px" }}>
-                <label style={{ ...labelStyle, marginBottom: "12px" }}>Time Slots (optional)</label>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
-                  {TIME_SLOTS.map((slot) => (
-                    <div key={slot.id}
-                      className={`slot-pill ${slots.includes(slot.id) ? "selected" : ""}`}
-                      onClick={() => toggleSlot(slot.id)}
+              <div>
+                <p className="mb-3 text-sm font-medium text-gray-700">Business Category</p>
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  {CATEGORIES.map((cat) => (
+                    <button
+                      key={cat.id}
+                      type="button"
+                      onClick={() => setCategory(cat.id)}
+                      className={`overflow-hidden rounded-xl border-2 text-left transition ${
+                        category === cat.id
+                          ? "border-admax-green ring-2 ring-admax-green/20"
+                          : "border-gray-200 hover:border-gray-300"
+                      }`}
                     >
-                      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                        <span style={{ fontSize: "18px" }}>{slot.icon}</span>
-                        <span style={{ fontSize: "14px", fontWeight: "700", color: slots.includes(slot.id) ? "#1F7A4D" : "#111" }}>{slot.label}</span>
-                        {slots.includes(slot.id) && <span style={{ marginLeft: "auto", color: "#1F7A4D", fontSize: "14px" }}>✓</span>}
-                      </div>
-                      <span style={{ fontSize: "12px", color: "#888", paddingLeft: "26px" }}>{slot.time}</span>
-                    </div>
+                      <img src={cat.image} alt="" className="h-20 w-full object-cover" />
+                      <p
+                        className={`px-2 py-2 text-xs font-semibold ${
+                          category === cat.id ? "bg-admax-green text-white" : "text-dark"
+                        }`}
+                      >
+                        {cat.label}
+                      </p>
+                    </button>
                   ))}
                 </div>
-                {slots.length === 0 && (
-                  <p style={{ fontSize: "12px", color: "#aaa", marginTop: "8px" }}>No slots selected — ads will run all day.</p>
-                )}
               </div>
 
-              <div style={{ display: "flex", gap: "10px" }}>
-                <button className="back-btn" onClick={() => { setStep(2); setError(""); }}>← Back</button>
-                <button className="submit-btn" onClick={handleNext}>Review →</button>
-              </div>
+              <Button type="submit" className="gap-2">
+                Continue
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </form>
+          </Card>
+        )}
+
+        {step === 2 && !success && (
+          <Card>
+            <h2 className="mb-1 font-display text-lg font-bold text-dark">Hyperlocal Targeting</h2>
+            <p className="mb-6 text-sm text-gray-500">Choose how far your ads should reach</p>
+
+            <p className="mb-3 text-sm font-medium text-gray-700">Select Radius *</p>
+            {errors.radius && (
+              <p className="mb-3 text-xs text-red-600" role="alert">
+                {errors.radius}
+              </p>
+            )}
+            <div className="mb-6 grid gap-4 sm:grid-cols-3">
+              {RADIUS_OPTIONS.map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => {
+                    setRadius(opt.value);
+                    if (errors.radius) setErrors((prev) => ({ ...prev, radius: "" }));
+                  }}
+                  className={`rounded-xl border-2 p-6 text-center transition ${
+                    radius === opt.value
+                      ? "border-admax-green bg-admax-green-light"
+                      : "border-gray-200 bg-surface hover:border-gray-300"
+                  }`}
+                >
+                  <p
+                    className={`mb-1 text-2xl font-bold ${
+                      radius === opt.value ? "text-admax-green" : "text-dark"
+                    }`}
+                  >
+                    {opt.label}
+                  </p>
+                  <p className="text-sm text-gray-500">{opt.sub}</p>
+                </button>
+              ))}
             </div>
-          )}
 
-          {/* ── STEP 4: Review ── */}
-          {step === 4 && !success && (
-            <div className="cc-card" style={{ background: "white", border: "1px solid #efefef", borderRadius: "24px", padding: "36px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "24px" }}>
-                <div style={{ width: "40px", height: "40px", background: "#EAF7EF", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px" }}>✅</div>
-                <div>
-                  <h2 style={{ fontFamily: "'Sora', sans-serif", fontSize: "18px", fontWeight: "800", color: "#0a0a0a", letterSpacing: "-0.02em" }}>Review & Launch</h2>
-                  <p style={{ fontSize: "12px", color: "#aaa" }}>Confirm your campaign details before going live.</p>
-                </div>
-              </div>
-
-              <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "28px" }}>
-                {[
-                  { label: "Campaign Name", value: name, icon: "📣" },
-                  { label: "City", value: city, icon: "🏙️" },
-                  { label: "Category", value: category || "Not specified", icon: "🏷️" },
-                  { label: "Radius", value: `${radius} km`, icon: "📍" },
-                  { label: "Start Date", value: startDate, icon: "📅" },
-                  { label: "End Date", value: endDate, icon: "🏁" },
-                  { label: "Time Slots", value: slots.length > 0 ? slots.map(s => TIME_SLOTS.find(t => t.id === s)?.label).join(", ") : "All day", icon: "⏰" },
-                ].map((row, i) => (
-                  <div key={i} style={{
-                    display: "flex", justifyContent: "space-between", alignItems: "center",
-                    padding: "14px 16px", borderRadius: "12px", background: "#fafafa",
-                    border: "1px solid #f3f3f3",
-                  }}>
-                    <span style={{ fontSize: "13px", color: "#888", display: "flex", alignItems: "center", gap: "8px" }}>
-                      <span>{row.icon}</span>{row.label}
-                    </span>
-                    <span style={{ fontSize: "14px", fontWeight: "600", color: "#111" }}>{row.value}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div style={{ background: "#EAF7EF", border: "1px solid rgba(31,122,77,0.2)", borderRadius: "12px", padding: "14px 16px", marginBottom: "24px", display: "flex", gap: "10px" }}>
-                <span>ℹ️</span>
-                <span style={{ fontSize: "13px", color: "#1F7A4D", lineHeight: "1.55" }}>
-                  Your campaign will be reviewed by our team and go live within 24 hours of approval.
+            {radius && (
+              <div className="mb-6 flex items-start gap-2 rounded-lg border border-admax-green bg-admax-green-light p-4 text-sm text-dark">
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-admax-green" />
+                <span>
+                  Your ads will appear on screens within <strong>{radius}km</strong> of your business
+                  in {city || "your city"}
                 </span>
               </div>
+            )}
 
-              <div style={{ display: "flex", gap: "10px" }}>
-                <button className="back-btn" onClick={() => { setStep(3); setError(""); }}>← Back</button>
-                <button className="submit-btn" onClick={handleSubmit} disabled={loading} style={{ flex: 1, justifyContent: "center" }}>
-                  {loading ? (
-                    <>
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ animation: "spin 0.8s linear infinite" }}>
-                        <circle cx="8" cy="8" r="6" stroke="rgba(255,255,255,0.3)" strokeWidth="2" />
-                        <path d="M14 8a6 6 0 0 0-6-6" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                      </svg>
-                      Launching...
-                    </>
-                  ) : "🚀 Launch Campaign"}
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* ── SUCCESS ── */}
-          {success && (
-            <div className="success-anim" style={{
-              background: "white", border: "1px solid #efefef",
-              borderRadius: "24px", padding: "56px 36px", textAlign: "center",
-            }}>
-              <div style={{
-                width: "80px", height: "80px", background: "#EAF7EF",
-                borderRadius: "50%", display: "flex", alignItems: "center",
-                justifyContent: "center", fontSize: "36px",
-                margin: "0 auto 24px",
-                boxShadow: "0 0 0 14px rgba(31,122,77,0.06)",
-              }}>🎉</div>
-              <h2 style={{ fontFamily: "'Sora', sans-serif", fontSize: "24px", fontWeight: "800", color: "#0a0a0a", letterSpacing: "-0.02em", marginBottom: "10px" }}>
-                Campaign launched!
-              </h2>
-              <p style={{ fontSize: "14px", color: "#666", lineHeight: "1.7", maxWidth: "340px", margin: "0 auto 32px" }}>
-                <strong>{name}</strong> has been submitted for review. You'll receive a confirmation once it goes live — usually within 24 hours.
-              </p>
-              <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
-                <Link to="/campaigns" style={{
-                  background: "#1F7A4D", color: "white", padding: "13px 28px",
-                  borderRadius: "12px", fontWeight: "700", fontSize: "14px",
-                  textDecoration: "none", transition: "all 0.2s ease",
+            <div className="flex gap-3">
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  setStep(1);
+                  setFormError("");
                 }}
-                  onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
-                  onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}
-                >View Campaigns →</Link>
-                <button onClick={() => { setSuccess(false); setStep(1); setName(""); setCity(""); setCategory(""); setRadius(null); setStartDate(""); setEndDate(""); setSlots([]); }}
-                  style={{
-                    background: "white", color: "#555", border: "1.5px solid #e5e7eb",
-                    padding: "12px 24px", borderRadius: "12px",
-                    fontWeight: "600", fontSize: "14px", cursor: "pointer",
-                    fontFamily: "'DM Sans', sans-serif", transition: "all 0.2s ease",
-                  }}
-                  onMouseEnter={e => e.currentTarget.style.borderColor = "#ccc"}
-                  onMouseLeave={e => e.currentTarget.style.borderColor = "#e5e7eb"}
-                >Create another</button>
+                className="gap-2"
+              >
+                <ChevronLeft className="h-4 w-4" />
+                Back
+              </Button>
+              <Button onClick={handleNext} className="gap-2">
+                Continue
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </Card>
+        )}
+
+        {step === 3 && !success && (
+          <Card>
+            <h2 className="mb-1 font-display text-lg font-bold text-dark">Campaign Schedule</h2>
+            <p className="mb-6 text-sm text-gray-500">Set your campaign duration and time slots</p>
+
+            <div className="mb-6 grid gap-4 sm:grid-cols-2">
+              <Input
+                label="Start Date *"
+                type="date"
+                name="startDate"
+                value={startDate}
+                min={new Date().toISOString().split("T")[0]}
+                onChange={(e) => {
+                  setStartDate(e.target.value);
+                  if (errors.startDate) setErrors((prev) => ({ ...prev, startDate: "" }));
+                }}
+                error={errors.startDate}
+              />
+              <Input
+                label="End Date *"
+                type="date"
+                name="endDate"
+                value={endDate}
+                min={startDate || new Date().toISOString().split("T")[0]}
+                onChange={(e) => {
+                  setEndDate(e.target.value);
+                  if (errors.endDate) setErrors((prev) => ({ ...prev, endDate: "" }));
+                }}
+                error={errors.endDate}
+              />
+            </div>
+
+            <div className="mb-6">
+              <p className="mb-3 text-sm font-medium text-gray-700">Time Slots (optional)</p>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {TIME_SLOTS.map((slot) => {
+                  const selected = slots.includes(slot.id);
+                  return (
+                    <button
+                      key={slot.id}
+                      type="button"
+                      onClick={() => toggleSlot(slot.id)}
+                      className={`rounded-lg border p-4 text-left transition ${
+                        selected
+                          ? "border-admax-green bg-admax-green-light"
+                          : "border-gray-200 bg-surface hover:border-gray-300"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span
+                          className={`text-sm font-semibold ${selected ? "text-admax-green" : "text-dark"}`}
+                        >
+                          {slot.label}
+                        </span>
+                        {selected && <Check className="h-4 w-4 text-admax-green" />}
+                      </div>
+                      <span className="text-xs text-gray-500">{slot.time}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
-          )}
-        </div>
+
+            <div className="flex gap-3">
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  setStep(2);
+                  setFormError("");
+                }}
+                className="gap-2"
+              >
+                <ChevronLeft className="h-4 w-4" />
+                Back
+              </Button>
+              <Button onClick={handleNext} className="gap-2">
+                Review
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </Card>
+        )}
+
+        {step === 4 && !success && (
+          <Card>
+            <h2 className="mb-1 font-display text-lg font-bold text-dark">Review & Launch</h2>
+            <p className="mb-6 text-sm text-gray-500">Confirm your campaign details before going live</p>
+
+            <div className="mb-6 space-y-3">
+              {[
+                { label: "Campaign Name", value: name },
+                { label: "City", value: city },
+                { label: "Category", value: categoryLabel },
+                { label: "Radius", value: `${radius} km` },
+                { label: "Start Date", value: startDate },
+                { label: "End Date", value: endDate },
+                {
+                  label: "Time Slots",
+                  value:
+                    slots.length > 0
+                      ? slots.map((s) => TIME_SLOTS.find((t) => t.id === s)?.label).join(", ")
+                      : "All day",
+                },
+              ].map((row) => (
+                <div
+                  key={row.label}
+                  className="flex items-center justify-between rounded-lg border border-gray-200 bg-surface px-4 py-3"
+                >
+                  <span className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+                    {row.label}
+                  </span>
+                  <span className="text-sm font-semibold text-dark">{row.value}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex gap-3">
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  setStep(3);
+                  setFormError("");
+                }}
+                className="gap-2"
+              >
+                <ChevronLeft className="h-4 w-4" />
+                Back
+              </Button>
+              <Button onClick={handleSubmit} loading={loading} className="flex-1 gap-2">
+                <Rocket className="h-4 w-4" />
+                Launch Campaign
+              </Button>
+            </div>
+          </Card>
+        )}
+
+        {success && (
+          <Card className="py-12 text-center">
+            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-admax-green-light">
+              <PartyPopper className="h-10 w-10 text-admax-green" />
+            </div>
+            <h2 className="mb-3 font-display text-2xl font-bold text-dark">Campaign launched!</h2>
+            <p className="mx-auto mb-8 max-w-md text-sm leading-relaxed text-gray-600">
+              <strong>{name}</strong> has been submitted for review. You will receive confirmation once
+              it goes live — usually within 24 hours.
+            </p>
+            <div className="flex flex-wrap justify-center gap-3">
+              <Link to="/campaigns">
+                <Button className="gap-2">
+                  View Campaigns
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </Link>
+              <Button variant="secondary" onClick={resetForm}>
+                Create another
+              </Button>
+            </div>
+          </Card>
+        )}
       </div>
-    </div>
+    </DashboardLayout>
   );
 }

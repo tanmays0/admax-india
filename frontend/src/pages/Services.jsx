@@ -1,84 +1,118 @@
-import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import {
+  ArrowRight,
+  BarChart3,
+  Bot,
+  Calendar,
+  Check,
+  Clapperboard,
+  Handshake,
+  Monitor,
+  Network,
+  Palette,
+  Radio,
+  Rocket,
+  Settings,
+  Target,
+  TrendingUp,
+} from "lucide-react";
 import PublicLayout from "../layouts/PublicLayout";
-
-function useInView(threshold = 0.15) {
-  const ref = useRef(null);
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setInView(true); },
-      { threshold }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
-  return [ref, inView];
-}
+import Button from "../components/ui/Button";
+import { images } from "../constants/images";
 
 const mainServices = [
   {
-    icon: "📺",
+    icon: Monitor,
     tag: "Core",
-    tagColor: "#1F7A4D",
-    tagBg: "#EAF7EF",
+    tagClass: "bg-admax-green-light text-admax-green",
     title: "Digital Screen Advertising",
     desc: "Get your brand on high-visibility TV screens inside busy restaurants, gyms, clinics, and salons — where your customers spend real time every day.",
-    features: ["HD display support", "Auto-optimised layouts", "Real-time ad delivery", "Screen health monitoring"],
+    image: images.hero.screens,
+    features: [
+      "HD display support",
+      "Auto-optimised layouts",
+      "Real-time ad delivery",
+      "Screen health monitoring",
+    ],
   },
   {
-    icon: "🎯",
+    icon: Target,
     tag: "Smart",
-    tagColor: "#2563eb",
-    tagBg: "#eff6ff",
+    tagClass: "bg-blue-50 text-blue-600",
     title: "Hyperlocal Campaign Management",
     desc: "Create and manage ad campaigns with precision radius targeting. Choose 1km, 3km, or 5km and control exactly where and when your ads appear.",
-    features: ["Radius-based targeting", "Time slot scheduling", "Multi-screen campaigns", "One-click pause / resume"],
+    image: images.categories.restaurant,
+    features: [
+      "Radius-based targeting",
+      "Time slot scheduling",
+      "Multi-screen campaigns",
+      "One-click pause / resume",
+    ],
   },
   {
-    icon: "🎬",
+    icon: Clapperboard,
     tag: "Premium",
-    tagColor: "#7c3aed",
-    tagBg: "#f5f3ff",
+    tagClass: "bg-violet-50 text-violet-600",
     title: "Creative Ad Production",
     desc: "Don't have an ad ready? Our in-house team creates professional video ads and static creatives tailored for local TV display formats.",
-    features: ["Script & storyboard", "Motion graphics", "Voice-over production", "TV-optimised output"],
+    image: images.placeholder.ad,
+    features: [
+      "Script & storyboard",
+      "Motion graphics",
+      "Voice-over production",
+      "TV-optimised output",
+    ],
   },
   {
-    icon: "📊",
+    icon: BarChart3,
     tag: "Insights",
-    tagColor: "#0891b2",
-    tagBg: "#ecfeff",
+    tagClass: "bg-cyan-50 text-cyan-600",
     title: "Real-Time Analytics",
     desc: "Track impressions, screen views, and campaign ROI with a live analytics dashboard. Know exactly what's working and where.",
-    features: ["Live impression tracking", "Screen-level breakdown", "Campaign comparison", "Exportable reports"],
+    image: images.blog[1],
+    features: [
+      "Live impression tracking",
+      "Screen-level breakdown",
+      "Campaign comparison",
+      "Exportable reports",
+    ],
   },
   {
-    icon: "🤖",
+    icon: Bot,
     tag: "AI-Powered",
-    tagColor: "#d97706",
-    tagBg: "#fffbeb",
+    tagClass: "bg-amber-50 text-amber-600",
     title: "AI Ad Suggestions",
     desc: "Our AI engine analyses your business type, location, and time patterns to suggest the best-performing screens, time slots, and ad formats.",
-    features: ["Best time slot suggestions", "Screen ranking by fit", "Budget optimisation", "Audience behaviour insights"],
+    image: images.blog[0],
+    features: [
+      "Best time slot suggestions",
+      "Screen ranking by fit",
+      "Budget optimisation",
+      "Audience behaviour insights",
+    ],
   },
   {
-    icon: "🖥️",
+    icon: Network,
     tag: "Network",
-    tagColor: "#1F7A4D",
-    tagBg: "#EAF7EF",
+    tagClass: "bg-admax-green-light text-admax-green",
     title: "Screen Network Access",
     desc: "Tap into AdMax's growing network of partner screens across Pune and beyond. New locations are added weekly — your reach grows with the network.",
-    features: ["150+ partner screens", "Interactive map view", "New screens weekly", "Screen status tracking"],
+    image: images.hero.overlay,
+    features: [
+      "150+ partner screens",
+      "Interactive map view",
+      "New screens weekly",
+      "Screen status tracking",
+    ],
   },
 ];
 
 const process = [
-  { num: "01", title: "Consult", desc: "We learn about your business, goals, and target audience.", icon: "🤝" },
-  { num: "02", title: "Create", desc: "You upload your ad or we produce one for you.", icon: "🎨" },
-  { num: "03", title: "Configure", desc: "Set your radius, time slots, and campaign duration.", icon: "⚙️" },
-  { num: "04", title: "Go Live", desc: "Your ads appear on nearby screens within 24 hours.", icon: "🚀" },
-  { num: "05", title: "Analyse", desc: "Track performance and optimise from your dashboard.", icon: "📈" },
+  { num: "01", title: "Consult", desc: "We learn about your business, goals, and target audience.", icon: Handshake },
+  { num: "02", title: "Create", desc: "You upload your ad or we produce one for you.", icon: Palette },
+  { num: "03", title: "Configure", desc: "Set your radius, time slots, and campaign duration.", icon: Settings },
+  { num: "04", title: "Go Live", desc: "Your ads appear on nearby screens within 24 hours.", icon: Rocket },
+  { num: "05", title: "Analyse", desc: "Track performance and optimise from your dashboard.", icon: TrendingUp },
 ];
 
 const plans = [
@@ -87,7 +121,13 @@ const plans = [
     price: "₹999",
     period: "/ campaign",
     desc: "Perfect for trying out AdMax.",
-    features: ["1 active campaign", "Up to 5 screens", "Basic analytics", "Image ads only", "Email support"],
+    features: [
+      "1 active campaign",
+      "Up to 5 screens",
+      "Basic analytics",
+      "Image ads only",
+      "Email support",
+    ],
     cta: "Get Started",
     highlight: false,
   },
@@ -96,7 +136,14 @@ const plans = [
     price: "₹3,499",
     period: "/ month",
     desc: "For businesses serious about local growth.",
-    features: ["5 active campaigns", "Unlimited screens", "Full analytics + exports", "Image & video ads", "AI suggestions", "Priority support"],
+    features: [
+      "5 active campaigns",
+      "Unlimited screens",
+      "Full analytics + exports",
+      "Image & video ads",
+      "AI suggestions",
+      "Priority support",
+    ],
     cta: "Start Free Trial",
     highlight: true,
   },
@@ -105,397 +152,231 @@ const plans = [
     price: "Custom",
     period: "",
     desc: "For chains, franchises & agencies.",
-    features: ["Unlimited campaigns", "Multi-city targeting", "Dedicated account manager", "Custom integrations", "White-label option", "SLA support"],
+    features: [
+      "Unlimited campaigns",
+      "Multi-city targeting",
+      "Dedicated account manager",
+      "Custom integrations",
+      "White-label option",
+      "SLA support",
+    ],
     cta: "Contact Sales",
     highlight: false,
   },
 ];
 
 export default function Services() {
-  const [servicesRef, servicesInView] = useInView();
-  const [processRef, processInView] = useInView();
-  const [plansRef, plansInView] = useInView();
-
   return (
     <PublicLayout>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
-        .svc-heading { font-family: 'Sora', sans-serif; }
-
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(28px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes shimmer {
-          0%   { background-position: -200% center; }
-          100% { background-position:  200% center; }
-        }
-
-        .anim-up {
-          opacity: 0; transform: translateY(28px);
-          transition: opacity 0.55s ease, transform 0.55s ease;
-        }
-        .anim-up.visible { opacity: 1; transform: translateY(0); }
-        .d1 { transition-delay: 0.04s; }
-        .d2 { transition-delay: 0.10s; }
-        .d3 { transition-delay: 0.16s; }
-        .d4 { transition-delay: 0.22s; }
-        .d5 { transition-delay: 0.28s; }
-        .d6 { transition-delay: 0.34s; }
-
-        .shimmer-text {
-          background: linear-gradient(90deg, #1F7A4D 0%, #2FA36B 40%, #1F7A4D 60%, #2FA36B 100%);
-          background-size: 200% auto;
-          -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-          background-clip: text; animation: shimmer 3s linear infinite;
-        }
-
-        .svc-card {
-          background: white; border: 1px solid #efefef;
-          border-radius: 22px; padding: 32px;
-          transition: transform 0.28s ease, box-shadow 0.28s ease;
-          display: flex; flex-direction: column; gap: 16px;
-        }
-        .svc-card:hover {
-          transform: translateY(-6px);
-          box-shadow: 0 20px 48px rgba(0,0,0,0.09);
-        }
-        .svc-card:hover .svc-icon {
-          transform: scale(1.1) rotate(5deg);
-        }
-        .svc-icon { transition: transform 0.25s ease; display: inline-block; }
-
-        .check-item {
-          display: flex; align-items: center;
-          gap: 8px; font-size: 13px; color: #555;
-        }
-
-        .process-step {
-          background: white; border: 1px solid #efefef;
-          border-radius: 18px; padding: 28px 24px;
-          text-align: center; position: relative;
-          transition: transform 0.25s ease, box-shadow 0.25s ease;
-        }
-        .process-step:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 16px 40px rgba(0,0,0,0.08);
-        }
-
-        .plan-card {
-          border-radius: 22px; padding: 36px 32px;
-          transition: transform 0.28s ease, box-shadow 0.28s ease;
-        }
-        .plan-card:hover { transform: translateY(-5px); }
-        .plan-card.featured { box-shadow: 0 20px 60px rgba(31,122,77,0.18); }
-        .plan-card.featured:hover { box-shadow: 0 28px 72px rgba(31,122,77,0.25); }
-
-        .plan-btn {
-          width: 100%; padding: 14px; border-radius: 12px;
-          font-size: 14px; font-weight: 700; cursor: pointer;
-          font-family: 'DM Sans', sans-serif; border: none;
-          transition: all 0.22s ease; text-decoration: none;
-          display: block; text-align: center;
-        }
-        .plan-btn:hover { transform: translateY(-2px); }
-      `}</style>
-
-      {/* ── HEADER ── */}
-      <section style={{
-        background: "linear-gradient(160deg, #f0faf5 0%, #ffffff 55%, #f7fffe 100%)",
-        padding: "96px 24px 80px", textAlign: "center",
-        position: "relative", overflow: "hidden",
-      }}>
-        <div style={{
-          position: "absolute", top: "-100px", right: "-60px",
-          width: "480px", height: "480px",
-          background: "radial-gradient(circle, rgba(47,163,107,0.08) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }} />
-        <div style={{ maxWidth: "680px", margin: "0 auto", position: "relative" }}>
-          <div style={{
-            display: "inline-flex", alignItems: "center", gap: "8px",
-            background: "#EAF7EF", border: "1px solid rgba(31,122,77,0.2)",
-            borderRadius: "100px", padding: "6px 16px", marginBottom: "24px",
-            animation: "fadeUp 0.5s ease both",
-          }}>
-            <span>📡</span>
-            <span style={{ fontSize: "13px", color: "#1F7A4D", fontWeight: "600" }}>
+      {/* Hero */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-admax-green-light via-white to-white py-20 sm:py-24">
+        <img
+          src={images.hero.main}
+          alt="Local business venue"
+          className="absolute inset-0 h-full w-full object-cover opacity-10"
+        />
+        <div className="container-page relative text-center">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-admax-green/20 bg-admax-green-light px-4 py-1.5">
+            <Radio className="h-4 w-4 text-admax-green" />
+            <span className="text-sm font-semibold text-admax-green">
               Everything local businesses need to grow
             </span>
           </div>
-
-          <h1 className="svc-heading" style={{
-            fontSize: "clamp(34px, 5vw, 56px)", fontWeight: "800",
-            letterSpacing: "-0.03em", color: "#0a0a0a", lineHeight: "1.1",
-            marginBottom: "18px", animation: "fadeUp 0.6s ease 0.1s both",
-          }}>
-            Services built for <span className="shimmer-text">hyperlocal reach</span>
+          <h1 className="font-display text-4xl font-extrabold text-dark sm:text-5xl lg:text-6xl">
+            Services built for <span className="text-admax-green">hyperlocal reach</span>
           </h1>
-
-          <p style={{
-            fontSize: "16px", color: "#555", lineHeight: "1.75",
-            animation: "fadeUp 0.6s ease 0.22s both",
-          }}>
-            From ad creation to live screen distribution — AdMax India handles every step
-            of your local advertising journey with smart, affordable tools.
+          <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-gray-600 sm:text-lg">
+            From ad creation to live screen distribution — AdMax India handles every step of your
+            local advertising journey with smart, affordable tools.
           </p>
         </div>
       </section>
 
-      {/* ── MAIN SERVICES GRID ── */}
-      <section style={{ padding: "88px 24px", background: "white" }}>
-        <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: "56px" }}>
-            <p style={{ fontSize: "12px", fontWeight: "700", color: "#1F7A4D", letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: "10px" }}>
-              WHAT WE OFFER
-            </p>
-            <h2 className="svc-heading" style={{
-              fontSize: "clamp(26px, 3.5vw, 40px)", fontWeight: "800",
-              letterSpacing: "-0.02em", color: "#0a0a0a", lineHeight: "1.15",
-            }}>Six ways AdMax grows your business</h2>
+      {/* Services grid */}
+      <section className="py-16 sm:py-20">
+        <div className="container-page">
+          <div className="text-center">
+            <p className="text-xs font-bold uppercase tracking-widest text-admax-green">What We Offer</p>
+            <h2 className="mt-3 font-display text-3xl font-extrabold text-dark sm:text-4xl">
+              Six ways AdMax grows your business
+            </h2>
           </div>
 
-          <div ref={servicesRef} style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-            gap: "20px",
-          }}>
-            {mainServices.map((svc, i) => (
-              <div key={i} className={`svc-card anim-up d${i + 1} ${servicesInView ? "visible" : ""}`}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                  <span className="svc-icon" style={{ fontSize: "32px" }}>{svc.icon}</span>
-                  <span style={{
-                    background: svc.tagBg, color: svc.tagColor,
-                    fontSize: "10px", fontWeight: "700",
-                    padding: "4px 10px", borderRadius: "100px",
-                    letterSpacing: "0.06em",
-                  }}>{svc.tag}</span>
-                </div>
-
-                <div>
-                  <h3 style={{
-                    fontSize: "17px", fontWeight: "700",
-                    color: "#111", marginBottom: "8px", letterSpacing: "-0.01em",
-                  }}>{svc.title}</h3>
-                  <p style={{ fontSize: "14px", color: "#666", lineHeight: "1.65" }}>{svc.desc}</p>
-                </div>
-
-                <div style={{ display: "flex", flexDirection: "column", gap: "7px", marginTop: "4px" }}>
-                  {svc.features.map((f, j) => (
-                    <div key={j} className="check-item">
-                      <span style={{
-                        width: "16px", height: "16px", borderRadius: "50%",
-                        background: "#EAF7EF", display: "flex",
-                        alignItems: "center", justifyContent: "center",
-                        fontSize: "9px", color: "#1F7A4D", flexShrink: 0,
-                      }}>✓</span>
-                      {f}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── HOW THE PROCESS WORKS ── */}
-      <section style={{
-        padding: "88px 24px",
-        background: "linear-gradient(180deg, #F7FBF9 0%, #ffffff 100%)",
-      }}>
-        <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: "56px" }}>
-            <p style={{ fontSize: "12px", fontWeight: "700", color: "#1F7A4D", letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: "10px" }}>
-              THE PROCESS
-            </p>
-            <h2 className="svc-heading" style={{
-              fontSize: "clamp(26px, 3.5vw, 40px)", fontWeight: "800",
-              letterSpacing: "-0.02em", color: "#0a0a0a", lineHeight: "1.15",
-            }}>How it works, start to finish</h2>
-          </div>
-
-          <div ref={processRef} style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-            gap: "16px",
-          }}>
-            {process.map((step, i) => (
-              <div key={i} className={`process-step anim-up d${i + 1} ${processInView ? "visible" : ""}`}>
-                <div style={{
-                  position: "absolute", top: "14px", right: "16px",
-                  fontFamily: "'Sora', sans-serif", fontSize: "36px",
-                  fontWeight: "800", color: "#f3f4f6",
-                  lineHeight: "1", userSelect: "none",
-                }}>{step.num}</div>
-                <div style={{ fontSize: "28px", marginBottom: "12px" }}>{step.icon}</div>
-                <h3 style={{
-                  fontSize: "15px", fontWeight: "700",
-                  color: "#111", marginBottom: "8px",
-                }}>{step.title}</h3>
-                <p style={{ fontSize: "13px", color: "#777", lineHeight: "1.6" }}>{step.desc}</p>
-
-                {i < process.length - 1 && (
-                  <div style={{
-                    position: "absolute", right: "-10px", top: "50%",
-                    transform: "translateY(-50%)", color: "#d1d5db",
-                    fontSize: "16px", zIndex: 1,
-                  }}>→</div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── PRICING ── */}
-      <section style={{ padding: "88px 24px", background: "white" }}>
-        <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: "56px" }}>
-            <p style={{ fontSize: "12px", fontWeight: "700", color: "#1F7A4D", letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: "10px" }}>
-              PRICING
-            </p>
-            <h2 className="svc-heading" style={{
-              fontSize: "clamp(26px, 3.5vw, 40px)", fontWeight: "800",
-              letterSpacing: "-0.02em", color: "#0a0a0a", lineHeight: "1.15",
-              marginBottom: "12px",
-            }}>Simple, transparent pricing</h2>
-            <p style={{ fontSize: "15px", color: "#777" }}>No contracts. No hidden fees. Cancel anytime.</p>
-          </div>
-
-          <div ref={plansRef} style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-            gap: "20px",
-            alignItems: "start",
-          }}>
-            {plans.map((plan, i) => (
-              <div key={i} className={`plan-card anim-up d${i + 1} ${plansRef && plansInView ? "visible" : ""} ${plan.highlight ? "featured" : ""}`}
-                style={{
-                  background: plan.highlight
-                    ? "linear-gradient(145deg, #1F7A4D, #155c39)"
-                    : "white",
-                  border: plan.highlight ? "none" : "1px solid #efefef",
-                  position: "relative",
-                  overflow: "hidden",
-                }}>
-
-                {plan.highlight && (
-                  <>
-                    <div style={{
-                      position: "absolute", top: "16px", right: "20px",
-                      background: "rgba(255,255,255,0.15)",
-                      color: "white", fontSize: "10px",
-                      fontWeight: "700", padding: "4px 10px",
-                      borderRadius: "100px", letterSpacing: "0.06em",
-                    }}>MOST POPULAR</div>
-                    <div style={{
-                      position: "absolute", bottom: "-40px", right: "-40px",
-                      width: "160px", height: "160px",
-                      border: "1px solid rgba(255,255,255,0.07)",
-                      borderRadius: "50%",
-                    }} />
-                  </>
-                )}
-
-                <div style={{ marginBottom: "24px" }}>
-                  <h3 className="svc-heading" style={{
-                    fontSize: "18px", fontWeight: "800",
-                    color: plan.highlight ? "white" : "#111",
-                    marginBottom: "6px", letterSpacing: "-0.01em",
-                  }}>{plan.name}</h3>
-                  <p style={{ fontSize: "13px", color: plan.highlight ? "rgba(255,255,255,0.65)" : "#888", marginBottom: "16px" }}>{plan.desc}</p>
-                  <div style={{ display: "flex", alignItems: "baseline", gap: "4px" }}>
-                    <span className="svc-heading" style={{
-                      fontSize: "36px", fontWeight: "800",
-                      color: plan.highlight ? "white" : "#0a0a0a",
-                      letterSpacing: "-0.03em",
-                    }}>{plan.price}</span>
-                    {plan.period && (
-                      <span style={{ fontSize: "13px", color: plan.highlight ? "rgba(255,255,255,0.6)" : "#999" }}>{plan.period}</span>
-                    )}
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {mainServices.map((svc) => (
+              <div
+                key={svc.title}
+                className="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card transition hover:-translate-y-1 hover:shadow-lg"
+              >
+                <img
+                  src={svc.image}
+                  alt={svc.title}
+                  className="h-40 w-full object-cover transition duration-300 group-hover:scale-105"
+                />
+                <div className="flex flex-1 flex-col gap-4 p-6">
+                  <div className="flex items-start justify-between">
+                    <svc.icon className="h-8 w-8 text-admax-green" />
+                    <span className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide ${svc.tagClass}`}>
+                      {svc.tag}
+                    </span>
                   </div>
+                  <div>
+                    <h3 className="font-display text-lg font-bold text-dark">{svc.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-gray-600">{svc.desc}</p>
+                  </div>
+                  <ul className="mt-auto space-y-2">
+                    {svc.features.map((f) => (
+                      <li key={f} className="flex items-center gap-2 text-sm text-gray-600">
+                        <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-admax-green-light">
+                          <Check className="h-2.5 w-2.5 text-admax-green" />
+                        </span>
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-                <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "28px" }}>
-                  {plan.features.map((f, j) => (
-                    <div key={j} style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                      <span style={{
-                        width: "18px", height: "18px", borderRadius: "50%",
-                        background: plan.highlight ? "rgba(255,255,255,0.15)" : "#EAF7EF",
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        fontSize: "9px", color: plan.highlight ? "white" : "#1F7A4D",
-                        flexShrink: 0,
-                      }}>✓</span>
-                      <span style={{ fontSize: "13px", color: plan.highlight ? "rgba(255,255,255,0.85)" : "#555" }}>{f}</span>
-                    </div>
+      {/* Process */}
+      <section className="bg-surface py-16 sm:py-20">
+        <div className="container-page">
+          <div className="text-center">
+            <p className="text-xs font-bold uppercase tracking-widest text-admax-green">The Process</p>
+            <h2 className="mt-3 font-display text-3xl font-extrabold text-dark sm:text-4xl">
+              How it works, start to finish
+            </h2>
+          </div>
+
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+            {process.map((step) => (
+              <div
+                key={step.num}
+                className="relative rounded-2xl border border-gray-200 bg-white p-6 text-center transition hover:-translate-y-1 hover:shadow-lg"
+              >
+                <span className="absolute right-4 top-4 font-display text-3xl font-extrabold text-gray-100">
+                  {step.num}
+                </span>
+                <step.icon className="mx-auto mb-3 h-8 w-8 text-admax-green" />
+                <h3 className="font-display text-sm font-bold text-dark">{step.title}</h3>
+                <p className="mt-2 text-xs leading-relaxed text-gray-500">{step.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing preview */}
+      <section className="py-16 sm:py-20">
+        <div className="container-page">
+          <div className="text-center">
+            <p className="text-xs font-bold uppercase tracking-widest text-admax-green">Pricing</p>
+            <h2 className="mt-3 font-display text-3xl font-extrabold text-dark sm:text-4xl">
+              Simple, transparent pricing
+            </h2>
+            <p className="mt-3 text-gray-600">No contracts. No hidden fees. Cancel anytime.</p>
+          </div>
+
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
+            {plans.map((plan) => (
+              <div
+                key={plan.name}
+                className={`relative overflow-hidden rounded-2xl p-8 transition hover:-translate-y-1 ${
+                  plan.highlight
+                    ? "bg-gradient-to-br from-admax-green to-admax-green-dark text-white shadow-xl"
+                    : "border border-gray-200 bg-white shadow-card"
+                }`}
+              >
+                {plan.highlight && (
+                  <span className="absolute right-5 top-5 rounded-full bg-white/15 px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
+                    Most Popular
+                  </span>
+                )}
+                <h3 className={`font-display text-lg font-extrabold ${plan.highlight ? "text-white" : "text-dark"}`}>
+                  {plan.name}
+                </h3>
+                <p className={`mt-1 text-sm ${plan.highlight ? "text-white/70" : "text-gray-500"}`}>
+                  {plan.desc}
+                </p>
+                <div className="mt-4 flex items-baseline gap-1">
+                  <span className={`font-display text-4xl font-extrabold ${plan.highlight ? "text-white" : "text-dark"}`}>
+                    {plan.price}
+                  </span>
+                  {plan.period && (
+                    <span className={`text-sm ${plan.highlight ? "text-white/60" : "text-gray-400"}`}>
+                      {plan.period}
+                    </span>
+                  )}
+                </div>
+                <ul className="mt-6 space-y-3">
+                  {plan.features.map((f) => (
+                    <li key={f} className="flex items-center gap-2.5 text-sm">
+                      <span
+                        className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${
+                          plan.highlight ? "bg-white/15" : "bg-admax-green-light"
+                        }`}
+                      >
+                        <Check className={`h-3 w-3 ${plan.highlight ? "text-white" : "text-admax-green"}`} />
+                      </span>
+                      <span className={plan.highlight ? "text-white/90" : "text-gray-600"}>{f}</span>
+                    </li>
                   ))}
-                </div>
-
-                <Link to={plan.name === "Enterprise" ? "/contact" : "/register"}
-                  className="plan-btn"
-                  style={{
-                    background: plan.highlight ? "white" : "#1F7A4D",
-                    color: plan.highlight ? "#1F7A4D" : "white",
-                    boxShadow: plan.highlight ? "none" : "0 4px 16px rgba(31,122,77,0.2)",
-                  }}>
-                  {plan.cta} →
+                </ul>
+                <Link
+                  to={plan.name === "Enterprise" ? "/contact" : "/register"}
+                  className={`mt-8 block w-full rounded-lg py-3 text-center text-sm font-bold transition hover:-translate-y-0.5 ${
+                    plan.highlight
+                      ? "bg-white text-admax-green hover:bg-gray-100"
+                      : "bg-admax-green text-white hover:bg-admax-green-dark"
+                  }`}
+                >
+                  {plan.cta} <ArrowRight className="inline h-4 w-4" />
                 </Link>
               </div>
             ))}
           </div>
+
+          <p className="mt-8 text-center text-sm text-gray-500">
+            Need more detail?{" "}
+            <Link to="/pricing" className="font-semibold text-admax-green hover:underline">
+              View full pricing page
+            </Link>
+          </p>
         </div>
       </section>
 
-      {/* ── CTA ── */}
-      <section style={{
-        margin: "0 24px 80px",
-        background: "linear-gradient(135deg, #1F7A4D 0%, #155c39 100%)",
-        borderRadius: "28px", padding: "72px 40px", textAlign: "center",
-        position: "relative", overflow: "hidden",
-        maxWidth: "1100px", marginLeft: "auto", marginRight: "auto",
-      }}>
-        {[300, 500].map((size, i) => (
-          <div key={i} style={{
-            position: "absolute", top: "50%", left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: `${size}px`, height: `${size}px`,
-            border: "1px solid rgba(255,255,255,0.06)",
-            borderRadius: "50%", pointerEvents: "none",
-          }} />
-        ))}
-        <p style={{ fontSize: "12px", fontWeight: "700", color: "rgba(255,255,255,0.5)", letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: "14px" }}>
-          READY TO ADVERTISE?
-        </p>
-        <h2 className="svc-heading" style={{
-          fontSize: "clamp(26px, 4vw, 44px)", fontWeight: "800",
-          color: "white", letterSpacing: "-0.02em", lineHeight: "1.15", marginBottom: "16px",
-        }}>
-          Start reaching local customers today
-        </h2>
-        <p style={{ color: "rgba(255,255,255,0.7)", fontSize: "15px", marginBottom: "36px", maxWidth: "440px", margin: "0 auto 36px", lineHeight: "1.7" }}>
-          Join AdMax India's hyperlocal TV network and put your brand in front of the right people.
-        </p>
-        <div style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap" }}>
-          <Link to="/register" style={{
-            background: "white", color: "#1F7A4D",
-            padding: "14px 32px", borderRadius: "12px",
-            fontWeight: "700", fontSize: "15px", textDecoration: "none",
-            transition: "transform 0.2s ease", display: "inline-block",
-          }}
-            onMouseEnter={e => e.target.style.transform = "translateY(-2px)"}
-            onMouseLeave={e => e.target.style.transform = "translateY(0)"}
-          >Get Started →</Link>
-          <Link to="/contact" style={{
-            background: "transparent", color: "white",
-            border: "1.5px solid rgba(255,255,255,0.35)",
-            padding: "13px 32px", borderRadius: "12px",
-            fontWeight: "600", fontSize: "15px", textDecoration: "none",
-            transition: "all 0.2s ease", display: "inline-block",
-          }}
-            onMouseEnter={e => { e.target.style.background = "rgba(255,255,255,0.1)"; e.target.style.transform = "translateY(-2px)"; }}
-            onMouseLeave={e => { e.target.style.background = "transparent"; e.target.style.transform = "translateY(0)"; }}
-          >📅 Book Demo</Link>
+      {/* CTA */}
+      <section className="pb-16 sm:pb-20">
+        <div className="container-page">
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-admax-green to-admax-green-dark px-8 py-14 text-center sm:px-12">
+            <div className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/5" />
+            <p className="text-xs font-bold uppercase tracking-widest text-white/50">Ready to Advertise?</p>
+            <h2 className="mt-3 font-display text-2xl font-extrabold text-white sm:text-3xl lg:text-4xl">
+              Start reaching local customers today
+            </h2>
+            <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-white/80 sm:text-base">
+              Join AdMax India's hyperlocal TV network and put your brand in front of the right people.
+            </p>
+            <div className="mt-8 flex flex-wrap justify-center gap-4">
+              <Link to="/register">
+                <Button size="lg" className="bg-white text-admax-green hover:bg-gray-100">
+                  Get Started <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+              <Link to="/contact">
+                <Button
+                  size="lg"
+                  variant="secondary"
+                  className="border-white/35 bg-transparent text-white hover:border-white hover:bg-white/10"
+                >
+                  <Calendar className="h-4 w-4" /> Book Demo
+                </Button>
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
     </PublicLayout>

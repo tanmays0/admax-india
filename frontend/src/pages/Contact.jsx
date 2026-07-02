@@ -1,23 +1,64 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import {
+  ArrowRight,
+  Calendar,
+  CheckCircle,
+  ChevronDown,
+  Clock,
+  Lock,
+  Mail,
+  MapPin,
+  MessageSquare,
+  Phone,
+  Send,
+} from "lucide-react";
 import PublicLayout from "../layouts/PublicLayout";
+import Button from "../components/ui/Button";
+import { images } from "../constants/images";
 
 const contactInfo = [
-  { icon: "📍", label: "Our Office", value: "Sterling Towers, Amanora Park Town, Hadapsar, Pune, Maharashtra - 411028" },
-  { icon: "📧", label: "Email Us", value: "hello@admaxindia.com" },
-  { icon: "📞", label: "Call Us", value: "+91 9923191542" },
-  { icon: "🕐", label: "Working Hours", value: "Mon–Sat, 9am – 7pm IST" },
+  {
+    icon: MapPin,
+    label: "Our Office",
+    value: "Sterling Towers, Amanora Park Town, Hadapsar, Pune, Maharashtra - 411028",
+  },
+  { icon: Mail, label: "Email Us", value: "sales@admaxindia.com" },
+  { icon: Phone, label: "Call Us", value: "+91 9923191542" },
+  { icon: Clock, label: "Working Hours", value: "Mon–Sat, 9am – 7pm IST" },
 ];
 
 const faqs = [
-  { q: "How quickly can my ad go live?", a: "Once your campaign is approved by our team, ads typically go live within 24 hours." },
-  { q: "What ad formats do you support?", a: "We support JPG, PNG images and MP4 videos. Our system auto-optimises for TV screen resolution." },
-  { q: "Can I choose which screens to advertise on?", a: "Yes — our interactive map lets you hand-pick screens or target by radius from your location." },
-  { q: "Is there a minimum campaign budget?", a: "No minimum. Our Starter plan lets you run campaigns from as little as ₹999." },
+  {
+    q: "How quickly can my ad go live?",
+    a: "Once your campaign is approved by our team, ads typically go live within 24 hours.",
+  },
+  {
+    q: "What ad formats do you support?",
+    a: "We support JPG, PNG images and MP4 videos. Our system auto-optimises for TV screen resolution.",
+  },
+  {
+    q: "Can I choose which screens to advertise on?",
+    a: "Yes — our interactive map lets you hand-pick screens or target by radius from your location.",
+  },
+  {
+    q: "Is there a minimum campaign budget?",
+    a: "No minimum. Our Starter plan lets you run campaigns from as little as ₹999.",
+  },
 ];
 
+const inputClass =
+  "w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-dark outline-none transition focus:border-admax-green focus:bg-admax-green-light/30 focus:ring-4 focus:ring-admax-green/10";
+
 export default function Contact() {
-  const [form, setForm] = useState({ name: "", email: "", phone: "", business: "", city: "", message: "" });
-  const [focused, setFocused] = useState(null);
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    business: "",
+    city: "",
+    message: "",
+  });
   const [submitted, setSubmitted] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
 
@@ -28,328 +69,195 @@ export default function Contact() {
     setSubmitted(true);
   };
 
-  const inputStyle = (name) => ({
-    width: "100%",
-    padding: "13px 16px",
-    borderRadius: "12px",
-    border: `1.5px solid ${focused === name ? "#1F7A4D" : "#e5e7eb"}`,
-    fontSize: "14px",
-    color: "#111",
-    outline: "none",
-    background: focused === name ? "#f9fffe" : "white",
-    transition: "all 0.2s ease",
-    boxSizing: "border-box",
-    fontFamily: "'DM Sans', sans-serif",
-    boxShadow: focused === name ? "0 0 0 4px rgba(31,122,77,0.08)" : "none",
-  });
-
-  const labelStyle = {
-    fontSize: "13px",
-    fontWeight: "600",
-    color: "#333",
-    marginBottom: "6px",
-    display: "block",
-    letterSpacing: "-0.01em",
+  const resetForm = () => {
+    setSubmitted(false);
+    setForm({ name: "", email: "", phone: "", business: "", city: "", message: "" });
   };
 
   return (
     <PublicLayout>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
-
-        .contact-heading { font-family: 'Sora', sans-serif; }
-
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(24px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes shimmer {
-          0%   { background-position: -200% center; }
-          100% { background-position:  200% center; }
-        }
-        @keyframes scaleIn {
-          from { opacity: 0; transform: scale(0.9); }
-          to   { opacity: 1; transform: scale(1); }
-        }
-
-        .hero-anim { animation: fadeUp 0.6s ease both; }
-        .delay-1   { animation-delay: 0.1s; }
-        .delay-2   { animation-delay: 0.22s; }
-        .delay-3   { animation-delay: 0.34s; }
-
-        .shimmer-text {
-          background: linear-gradient(90deg, #1F7A4D 0%, #2FA36B 40%, #1F7A4D 60%, #2FA36B 100%);
-          background-size: 200% auto;
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          animation: shimmer 3s linear infinite;
-        }
-
-        .info-card {
-          transition: transform 0.25s ease, box-shadow 0.25s ease;
-        }
-        .info-card:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 12px 32px rgba(0,0,0,0.08);
-        }
-
-        .faq-item {
-          border-bottom: 1px solid #f0f0f0;
-          cursor: pointer;
-          transition: background 0.2s;
-        }
-        .faq-item:last-child { border-bottom: none; }
-
-        .submit-btn {
-          width: 100%;
-          background: #1F7A4D;
-          color: white;
-          border: none;
-          padding: 15px;
-          border-radius: 12px;
-          font-size: 15px;
-          font-weight: 700;
-          cursor: pointer;
-          font-family: 'DM Sans', sans-serif;
-          letter-spacing: -0.01em;
-          transition: all 0.25s ease;
-          position: relative;
-          overflow: hidden;
-        }
-        .submit-btn::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
-          opacity: 0;
-          transition: opacity 0.25s;
-        }
-        .submit-btn:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 12px 28px rgba(31,122,77,0.3);
-        }
-        .submit-btn:hover::before { opacity: 1; }
-        .submit-btn:active { transform: translateY(0); }
-
-        .success-anim { animation: scaleIn 0.4s ease both; }
-      `}</style>
-
-      {/* ── HEADER ── */}
-      <section style={{
-        background: "linear-gradient(160deg, #f0faf5 0%, #ffffff 55%, #f7fffe 100%)",
-        padding: "96px 24px 72px",
-        textAlign: "center",
-        position: "relative",
-        overflow: "hidden",
-      }}>
-        <div style={{
-          position: "absolute", top: "-100px", right: "-60px",
-          width: "450px", height: "450px",
-          background: "radial-gradient(circle, rgba(47,163,107,0.07) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }} />
-        <div style={{
-          position: "absolute", bottom: "-60px", left: "-60px",
-          width: "300px", height: "300px",
-          background: "radial-gradient(circle, rgba(31,122,77,0.05) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }} />
-
-        <div style={{ maxWidth: "640px", margin: "0 auto", position: "relative" }}>
-          <div className="hero-anim delay-1" style={{
-            display: "inline-flex", alignItems: "center", gap: "8px",
-            background: "#EAF7EF", border: "1px solid rgba(31,122,77,0.2)",
-            borderRadius: "100px", padding: "6px 16px", marginBottom: "24px",
-          }}>
-            <span style={{ fontSize: "14px" }}>💬</span>
-            <span style={{ fontSize: "13px", color: "#1F7A4D", fontWeight: "600" }}>
+      {/* Hero */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-admax-green-light via-white to-white py-20 sm:py-24">
+        <img
+          src={images.about.office}
+          alt="AdMax India office"
+          className="absolute inset-0 h-full w-full object-cover opacity-10"
+        />
+        <div className="container-page relative text-center">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-admax-green/20 bg-admax-green-light px-4 py-1.5">
+            <MessageSquare className="h-4 w-4 text-admax-green" />
+            <span className="text-sm font-semibold text-admax-green">
               We reply within 4 business hours
             </span>
           </div>
-
-          <h1 className="contact-heading hero-anim delay-2" style={{
-            fontSize: "clamp(34px, 5vw, 54px)",
-            fontWeight: "800",
-            letterSpacing: "-0.03em",
-            color: "#0a0a0a",
-            lineHeight: "1.1",
-            marginBottom: "16px",
-          }}>
-            Let's <span className="shimmer-text">talk business</span>
+          <h1 className="font-display text-4xl font-extrabold text-dark sm:text-5xl lg:text-6xl">
+            Let's <span className="text-admax-green">talk business</span>
           </h1>
-
-          <p className="hero-anim delay-3" style={{
-            fontSize: "16px", color: "#555",
-            lineHeight: "1.75", fontWeight: "400",
-          }}>
-            Whether you want to advertise, join our screen network,
-            or just have a question — we're all ears.
+          <p className="mx-auto mt-5 max-w-lg text-base leading-relaxed text-gray-600 sm:text-lg">
+            Whether you want to advertise, join our screen network, or just have a question — we're
+            all ears.
           </p>
         </div>
       </section>
 
-      {/* ── CONTACT INFO CARDS ── */}
-      <section style={{ padding: "56px 24px 0", background: "white" }}>
-        <div style={{
-          maxWidth: "1000px", margin: "0 auto",
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))",
-          gap: "16px",
-        }}>
-          {contactInfo.map((item, i) => (
-            <div key={i} className="info-card" style={{
-              background: "#FAFAFA",
-              border: "1px solid #efefef",
-              borderRadius: "18px",
-              padding: "24px 20px",
-              display: "flex",
-              alignItems: "flex-start",
-              gap: "14px",
-            }}>
-              <div style={{
-                fontSize: "20px",
-                background: "#EAF7EF",
-                borderRadius: "10px",
-                width: "42px", height: "42px",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                flexShrink: 0,
-              }}>{item.icon}</div>
+      {/* Contact info cards */}
+      <section className="border-b border-gray-200 bg-white py-12">
+        <div className="container-page grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {contactInfo.map((item) => (
+            <div
+              key={item.label}
+              className="flex gap-4 rounded-2xl border border-gray-200 bg-surface p-5 transition hover:-translate-y-1 hover:shadow-md"
+            >
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-admax-green-light">
+                <item.icon className="h-5 w-5 text-admax-green" />
+              </div>
               <div>
-                <div style={{ fontSize: "11px", fontWeight: "700", color: "#999", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "4px" }}>
+                <p className="text-[11px] font-bold uppercase tracking-wider text-gray-400">
                   {item.label}
-                </div>
-                <div style={{ fontSize: "13px", fontWeight: "500", color: "#333", lineHeight: "1.5" }}>{item.value}</div>
+                </p>
+                <p className="mt-1 text-sm font-medium leading-snug text-gray-700">{item.value}</p>
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ── MAIN CONTENT: FORM + FAQ ── */}
-      <section style={{ padding: "56px 24px 96px", background: "white" }}>
-        <div style={{
-          maxWidth: "1000px", margin: "0 auto",
-          display: "grid",
-          gridTemplateColumns: "1.1fr 0.9fr",
-          gap: "32px",
-          alignItems: "start",
-        }}>
-
-          {/* ── FORM ── */}
-          <div style={{
-            background: "white",
-            border: "1px solid #efefef",
-            borderRadius: "24px",
-            padding: "40px",
-            boxShadow: "0 4px 24px rgba(0,0,0,0.05)",
-          }}>
+      {/* Form + FAQ */}
+      <section className="py-12 sm:py-16 lg:py-20">
+        <div className="container-page grid gap-10 lg:grid-cols-5">
+          {/* Form */}
+          <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-card sm:p-8 lg:col-span-3">
             {!submitted ? (
               <>
-                <h2 className="contact-heading" style={{
-                  fontSize: "22px", fontWeight: "800",
-                  letterSpacing: "-0.02em", color: "#0a0a0a",
-                  marginBottom: "6px",
-                }}>Send us a message</h2>
-                <p style={{ fontSize: "13px", color: "#888", marginBottom: "28px" }}>
+                <h2 className="font-display text-xl font-extrabold text-dark sm:text-2xl">
+                  Send us a message
+                </h2>
+                <p className="mt-1 text-sm text-gray-500">
                   Fill in the details below and we'll get back to you shortly.
                 </p>
 
-                <form onSubmit={handleSubmit}>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", marginBottom: "14px" }}>
+                <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+                  <div className="grid gap-4 sm:grid-cols-2">
                     <div>
-                      <label style={labelStyle}>Full Name *</label>
+                      <label htmlFor="name" className="mb-1.5 block text-sm font-semibold text-gray-700">
+                        Full Name *
+                      </label>
                       <input
-                        name="name" value={form.name} onChange={handleChange}
-                        placeholder="Rajan Mehta" required style={inputStyle("name")}
-                        onFocus={() => setFocused("name")} onBlur={() => setFocused(null)}
+                        id="name"
+                        name="name"
+                        value={form.name}
+                        onChange={handleChange}
+                        placeholder="Rajan Mehta"
+                        required
+                        className={inputClass}
                       />
                     </div>
                     <div>
-                      <label style={labelStyle}>Email Address *</label>
+                      <label htmlFor="email" className="mb-1.5 block text-sm font-semibold text-gray-700">
+                        Email Address *
+                      </label>
                       <input
-                        type="email" name="email" value={form.email} onChange={handleChange}
-                        placeholder="rajan@example.com" required style={inputStyle("email")}
-                        onFocus={() => setFocused("email")} onBlur={() => setFocused(null)}
-                      />
-                    </div>
-                  </div>
-
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", marginBottom: "14px" }}>
-                    <div>
-                      <label style={labelStyle}>Phone Number</label>
-                      <input
-                        name="phone" value={form.phone} onChange={handleChange}
-                        placeholder="+91 98765 43210" style={inputStyle("phone")}
-                        onFocus={() => setFocused("phone")} onBlur={() => setFocused(null)}
-                      />
-                    </div>
-                    <div>
-                      <label style={labelStyle}>City</label>
-                      <input
-                        name="city" value={form.city} onChange={handleChange}
-                        placeholder="Pune" style={inputStyle("city")}
-                        onFocus={() => setFocused("city")} onBlur={() => setFocused(null)}
+                        id="email"
+                        type="email"
+                        name="email"
+                        value={form.email}
+                        onChange={handleChange}
+                        placeholder="rajan@example.com"
+                        required
+                        className={inputClass}
                       />
                     </div>
                   </div>
 
-                  <div style={{ marginBottom: "14px" }}>
-                    <label style={labelStyle}>Business Name</label>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div>
+                      <label htmlFor="phone" className="mb-1.5 block text-sm font-semibold text-gray-700">
+                        Phone Number
+                      </label>
+                      <input
+                        id="phone"
+                        name="phone"
+                        value={form.phone}
+                        onChange={handleChange}
+                        placeholder="+91 98765 43210"
+                        className={inputClass}
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="city" className="mb-1.5 block text-sm font-semibold text-gray-700">
+                        City
+                      </label>
+                      <input
+                        id="city"
+                        name="city"
+                        value={form.city}
+                        onChange={handleChange}
+                        placeholder="Pune"
+                        className={inputClass}
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label htmlFor="business" className="mb-1.5 block text-sm font-semibold text-gray-700">
+                      Business Name
+                    </label>
                     <input
-                      name="business" value={form.business} onChange={handleChange}
-                      placeholder="Your business name" style={inputStyle("business")}
-                      onFocus={() => setFocused("business")} onBlur={() => setFocused(null)}
+                      id="business"
+                      name="business"
+                      value={form.business}
+                      onChange={handleChange}
+                      placeholder="Your business name"
+                      className={inputClass}
                     />
                   </div>
 
-                  <div style={{ marginBottom: "24px" }}>
-                    <label style={labelStyle}>Message *</label>
+                  <div>
+                    <label htmlFor="message" className="mb-1.5 block text-sm font-semibold text-gray-700">
+                      Message *
+                    </label>
                     <textarea
-                      name="message" value={form.message} onChange={handleChange}
-                      placeholder="Tell us what you're looking for..." required
+                      id="message"
+                      name="message"
+                      value={form.message}
+                      onChange={handleChange}
+                      placeholder="Tell us what you're looking for..."
+                      required
                       rows={4}
-                      style={{ ...inputStyle("message"), resize: "vertical", lineHeight: "1.6" }}
-                      onFocus={() => setFocused("message")} onBlur={() => setFocused(null)}
+                      className={`${inputClass} resize-y leading-relaxed`}
                     />
                   </div>
 
-                  <button type="submit" className="submit-btn">
-                    Send Message →
+                  <button
+                    type="submit"
+                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-admax-green py-3.5 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-admax-green-dark hover:shadow-lg"
+                  >
+                    Send Message <Send className="h-4 w-4" />
                   </button>
 
-                  <p style={{ fontSize: "12px", color: "#aaa", textAlign: "center", marginTop: "14px" }}>
-                    🔒 Your data is safe with us. We never share your details.
+                  <p className="flex items-center justify-center gap-1.5 text-center text-xs text-gray-400">
+                    <Lock className="h-3.5 w-3.5" />
+                    Your data is safe with us. We never share your details.
                   </p>
                 </form>
               </>
             ) : (
-              <div className="success-anim" style={{ textAlign: "center", padding: "40px 20px" }}>
-                <div style={{
-                  width: "72px", height: "72px",
-                  background: "#EAF7EF",
-                  borderRadius: "50%",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: "32px",
-                  margin: "0 auto 20px",
-                }}>✅</div>
-                <h3 className="contact-heading" style={{
-                  fontSize: "22px", fontWeight: "800",
-                  color: "#0a0a0a", marginBottom: "10px",
-                }}>Message sent!</h3>
-                <p style={{ fontSize: "14px", color: "#666", lineHeight: "1.7", marginBottom: "28px" }}>
-                  Thanks for reaching out, <strong>{form.name || "there"}</strong>.<br />
+              <div className="py-10 text-center">
+                <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-admax-green-light">
+                  <CheckCircle className="h-8 w-8 text-admax-green" />
+                </div>
+                <h3 className="font-display text-xl font-extrabold text-dark sm:text-2xl">
+                  Message sent!
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-gray-600">
+                  Thanks for reaching out, <strong>{form.name || "there"}</strong>.
+                  <br />
                   Our team will get back to you within 4 business hours.
                 </p>
                 <button
-                  onClick={() => { setSubmitted(false); setForm({ name: "", email: "", phone: "", business: "", city: "", message: "" }); }}
-                  style={{
-                    background: "white", color: "#1F7A4D",
-                    border: "1.5px solid #1F7A4D",
-                    padding: "11px 28px", borderRadius: "10px",
-                    fontWeight: "600", fontSize: "14px",
-                    cursor: "pointer", fontFamily: "'DM Sans', sans-serif",
-                  }}
+                  type="button"
+                  onClick={resetForm}
+                  className="mt-6 rounded-lg border border-admax-green px-6 py-2.5 text-sm font-semibold text-admax-green transition hover:bg-admax-green-light"
                 >
                   Send another message
                 </button>
@@ -357,99 +265,54 @@ export default function Contact() {
             )}
           </div>
 
-          {/* ── FAQ ── */}
-          <div>
-            <h2 className="contact-heading" style={{
-              fontSize: "22px", fontWeight: "800",
-              letterSpacing: "-0.02em", color: "#0a0a0a",
-              marginBottom: "6px",
-            }}>Common questions</h2>
-            <p style={{ fontSize: "13px", color: "#888", marginBottom: "24px" }}>
-              Quick answers to things people usually ask us.
-            </p>
+          {/* FAQ + demo */}
+          <div className="lg:col-span-2">
+            <h2 className="font-display text-xl font-extrabold text-dark sm:text-2xl">
+              Common questions
+            </h2>
+            <p className="mt-1 text-sm text-gray-500">Quick answers to things people usually ask us.</p>
 
-            <div style={{
-              background: "white",
-              border: "1px solid #efefef",
-              borderRadius: "20px",
-              overflow: "hidden",
-              boxShadow: "0 4px 24px rgba(0,0,0,0.04)",
-            }}>
+            <div className="mt-6 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
               {faqs.map((faq, i) => (
-                <div
-                  key={i}
-                  className="faq-item"
-                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  style={{ padding: "20px 24px" }}
-                >
-                  <div style={{
-                    display: "flex", justifyContent: "space-between",
-                    alignItems: "center", gap: "12px",
-                  }}>
-                    <span style={{
-                      fontSize: "14px", fontWeight: "600",
-                      color: openFaq === i ? "#1F7A4D" : "#111",
-                      lineHeight: "1.4",
-                      transition: "color 0.2s",
-                    }}>{faq.q}</span>
-                    <span style={{
-                      fontSize: "18px", color: "#aaa",
-                      transform: openFaq === i ? "rotate(45deg)" : "rotate(0deg)",
-                      transition: "transform 0.25s ease",
-                      flexShrink: 0,
-                    }}>+</span>
-                  </div>
-                  <div style={{
-                    overflow: "hidden",
-                    maxHeight: openFaq === i ? "120px" : "0",
-                    transition: "max-height 0.3s ease",
-                  }}>
-                    <p style={{
-                      fontSize: "13px", color: "#666",
-                      lineHeight: "1.7", paddingTop: "10px",
-                      margin: 0,
-                    }}>{faq.a}</p>
-                  </div>
+                <div key={faq.q} className="border-b border-gray-100 last:border-b-0">
+                  <button
+                    type="button"
+                    onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                    className="flex w-full items-center justify-between gap-3 px-5 py-4 text-left transition hover:bg-surface"
+                  >
+                    <span
+                      className={`text-sm font-semibold leading-snug ${
+                        openFaq === i ? "text-admax-green" : "text-dark"
+                      }`}
+                    >
+                      {faq.q}
+                    </span>
+                    <ChevronDown
+                      className={`h-5 w-5 shrink-0 text-gray-400 transition-transform ${
+                        openFaq === i ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+                  {openFaq === i && (
+                    <p className="px-5 pb-4 text-sm leading-relaxed text-gray-600">{faq.a}</p>
+                  )}
                 </div>
               ))}
             </div>
 
-            {/* Book demo card */}
-            <div style={{
-              marginTop: "20px",
-              background: "linear-gradient(135deg, #1F7A4D, #155c39)",
-              borderRadius: "20px",
-              padding: "28px 24px",
-              color: "white",
-              position: "relative",
-              overflow: "hidden",
-            }}>
-              <div style={{
-                position: "absolute", top: "-30px", right: "-30px",
-                width: "120px", height: "120px",
-                border: "1px solid rgba(255,255,255,0.08)",
-                borderRadius: "50%",
-              }} />
-              <div style={{ fontSize: "28px", marginBottom: "12px" }}>📅</div>
-              <h3 className="contact-heading" style={{
-                fontSize: "17px", fontWeight: "800",
-                marginBottom: "8px", letterSpacing: "-0.01em",
-              }}>Book a live demo</h3>
-              <p style={{ fontSize: "13px", opacity: "0.8", lineHeight: "1.65", marginBottom: "20px" }}>
-                See AdMax in action. We'll walk you through the platform and answer all your questions live.
+            <div className="relative mt-5 overflow-hidden rounded-2xl bg-gradient-to-br from-admax-green to-admax-green-dark p-6 text-white">
+              <div className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full border border-white/10" />
+              <Calendar className="mb-3 h-7 w-7" />
+              <h3 className="font-display text-lg font-extrabold">Book a live demo</h3>
+              <p className="mt-2 text-sm leading-relaxed text-white/80">
+                See AdMax in action. We'll walk you through the platform and answer all your
+                questions live.
               </p>
-              <a href="/book-demo" style={{
-                background: "white", color: "#1F7A4D",
-                padding: "10px 22px", borderRadius: "10px",
-                fontWeight: "700", fontSize: "13px",
-                textDecoration: "none", display: "inline-block",
-                transition: "transform 0.2s ease",
-              }}
-                onMouseEnter={e => e.target.style.transform = "translateY(-2px)"}
-                onMouseLeave={e => e.target.style.transform = "translateY(0)"}
-              >
-                Schedule Demo →
-              </a>
+              <Link to="/book-demo" className="mt-5 inline-block">
+                <Button size="sm" className="bg-white text-admax-green hover:bg-gray-100">
+                  Schedule Demo <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

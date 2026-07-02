@@ -1,7 +1,47 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    @apply box-border;
+  }
+
+  body {
+    @apply bg-surface font-sans text-dark antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display font-bold tracking-tight;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .nav-link {
+    @apply relative text-sm font-medium text-gray-600 transition-colors hover:text-admax-green;
+  }
+
+  .nav-link::after {
+    @apply absolute -bottom-1 left-0 h-0.5 w-0 bg-admax-green transition-all duration-300 content-[''];
+  }
+
+  .nav-link:hover::after {
+    @apply w-full;
+  }
+}
+
+.leaflet-container {
+  z-index: 0;
+  font-family: inherit;
 }

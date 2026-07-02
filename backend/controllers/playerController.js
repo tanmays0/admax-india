@@ -1,7 +1,6 @@
 const db = require("../config/db");
 
 exports.getScreenAds = (req, res) => {
-
   const screenId = req.params.screen_id;
 
   const sql = `
@@ -12,13 +11,10 @@ exports.getScreenAds = (req, res) => {
   `;
 
   db.query(sql, [screenId], (err, result) => {
-
     if (err) {
       return res.status(500).json(err);
     }
 
     res.json(result);
-
   });
-
 };
