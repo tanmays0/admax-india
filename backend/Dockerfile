@@ -13,7 +13,6 @@ COPY server.js ./
 COPY config ./config
 COPY controllers ./controllers
 COPY middleware ./middleware
-COPY models ./models
 COPY routes ./routes
 COPY scripts ./scripts
 COPY schema.sql ./
