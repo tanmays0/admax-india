@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ArrowRight, Ban, Check, Lightbulb, X } from "lucide-react";
 import PublicLayout from "../layouts/PublicLayout";
+import { images } from "../constants/images";
 
 const sections = [
   { id: "formats", label: "File Formats" },
@@ -106,6 +107,12 @@ export default function AdGuidelines() {
   return (
     <PublicLayout>
       <section className="relative overflow-hidden bg-dark py-14 lg:py-16">
+        <img
+          src={images.pages.guidelines}
+          alt="Digital screen ad example"
+          className="absolute inset-0 h-full w-full object-cover opacity-20"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-dark via-dark/95 to-dark/70" />
         <div className="pointer-events-none absolute right-0 top-0 h-full w-1/3 bg-admax-orange opacity-[0.03] [clip-path:polygon(20%_0,100%_0,100%_100%,0_100%)]" />
         <div className="container-page relative">
           <p className="mb-3 text-xs font-bold uppercase tracking-widest text-admax-green">
@@ -205,6 +212,28 @@ export default function AdGuidelines() {
           {activeSection === "design" && (
             <div>
               <h2 className="font-display text-2xl font-bold text-dark">Design Rules</h2>
+              <div className="mt-8 grid gap-6 lg:grid-cols-2">
+                <div className="overflow-hidden rounded-xl border border-gray-200">
+                  <img
+                    src={images.guidelines.good}
+                    alt="Example of a well-designed screen ad"
+                    className="h-48 w-full object-cover"
+                  />
+                  <p className="bg-admax-green-light px-4 py-2 text-xs font-semibold text-admax-green">
+                    Good example — clear headline, strong contrast, visible CTA
+                  </p>
+                </div>
+                <div className="overflow-hidden rounded-xl border border-gray-200">
+                  <img
+                    src={images.guidelines.bad}
+                    alt="Example of cluttered ad creative"
+                    className="h-48 w-full object-cover opacity-80"
+                  />
+                  <p className="bg-red-50 px-4 py-2 text-xs font-semibold text-red-600">
+                    Avoid — small text, low contrast, too much information
+                  </p>
+                </div>
+              </div>
               <div className="mt-8 grid gap-6 lg:grid-cols-2">
                 <div className="rounded-xl border border-gray-200 bg-white p-7">
                   <div className="mb-5 flex items-center gap-2.5">

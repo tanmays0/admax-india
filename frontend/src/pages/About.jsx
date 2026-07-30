@@ -324,7 +324,7 @@ export default function About() {
               network.
             </p>
             <Link to="/register" className="mt-8 inline-block">
-              <Button size="lg" className="bg-white text-admax-green hover:bg-gray-100">
+              <Button size="lg" variant="inverse">
                 Get Started <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>

@@ -5,6 +5,9 @@ import API from "../services/api";
 import { images } from "../constants/images";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
+import BackButton from "../components/BackButton";
+import Logo from "../components/Logo";
+import OAuthButtons from "../components/OAuthButtons";
 
 const CATEGORIES = [
   "Restaurant",
@@ -70,14 +73,17 @@ export default function Register() {
         name: form.name,
         email: form.email,
         password: form.password,
+        role: form.accountType,
         business_name: form.businessName,
         category: form.category,
         location: form.city,
       });
       toast.success("Account created! Please sign in.");
       navigate("/login");
-    } catch {
-      setErrors({ form: "Registration failed. Email may already be in use." });
+    } catch (err) {
+      setErrors({
+        form: err?.response?.data?.message || "Registration failed. Email may already be in use.",
+      });
     } finally {
       setLoading(false);
     }
@@ -85,11 +91,11 @@ export default function Register() {
 
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
-      <div className="flex flex-col justify-center px-4 py-12 sm:px-8 lg:px-12">
-        <Link to="/" className="mb-8 flex items-center gap-2">
-          <img src={images.logo} alt="AdMax" className="h-8 w-8 rounded-lg" />
-          <span className="font-display text-xl font-bold">AdMax India</span>
-        </Link>
+      <div className="relative flex flex-col justify-center px-4 pb-12 pt-16 sm:px-8 lg:px-12 lg:py-12">
+        <div className="absolute left-4 top-4">
+          <BackButton mode="home" variant="pill" />
+        </div>
+        <Logo size="lg" className="mb-8" />
 
         <div className="mb-6 flex gap-2">
           {[1, 2].map((s) => (
@@ -157,6 +163,7 @@ export default function Register() {
                 Continue
               </Button>
             </form>
+            <OAuthButtons />
           </>
         ) : (
           <>

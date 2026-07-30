@@ -1,7 +1,9 @@
-import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, Home, MonitorOff } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Home, MonitorOff } from "lucide-react";
 import PublicLayout from "../layouts/PublicLayout";
 import Button from "../components/ui/Button";
+import useBackNavigation from "../hooks/useBackNavigation";
+import { images } from "../constants/images";
 
 const quickLinks = [
   { label: "Campaigns", to: "/campaigns" },
@@ -11,11 +13,17 @@ const quickLinks = [
 ];
 
 export default function NotFound() {
-  const navigate = useNavigate();
+  const { goBack } = useBackNavigation();
 
   return (
     <PublicLayout>
       <div className="relative flex min-h-[70vh] items-center justify-center overflow-hidden bg-dark px-4 py-20">
+        <img
+          src={images.pages.notFound}
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover opacity-15"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-dark/90 via-dark/80 to-dark" />
         <div className="pointer-events-none absolute right-0 top-0 h-3/5 w-2/5 bg-admax-green opacity-[0.04] [clip-path:polygon(20%_0,100%_0,100%_100%,0_80%)]" />
         <div className="pointer-events-none absolute bottom-0 left-0 h-1/2 w-[35%] bg-admax-orange opacity-[0.03] [clip-path:polygon(0_20%,100%_0,80%_100%,0_100%)]" />
 
@@ -49,8 +57,7 @@ export default function NotFound() {
                 Go Home
               </Button>
             </Link>
-            <Button variant="secondary" className="gap-2 border-gray-600 bg-transparent text-gray-400 hover:bg-white/10 hover:text-white" onClick={() => navigate(-1)}>
-              <ArrowLeft className="h-4 w-4" />
+            <Button variant="outlineLight" className="gap-2" onClick={goBack}>
               Go Back
             </Button>
           </div>

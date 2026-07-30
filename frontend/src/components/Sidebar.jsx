@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import { images } from "../constants/images";
+import Logo from "./Logo";
 
 const advertiserNav = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
@@ -51,18 +52,14 @@ export default function Sidebar({ activePage }) {
   };
 
   return (
-    <aside className="flex w-64 min-h-screen shrink-0 flex-col border-r border-gray-800 bg-dark text-white">
-      <div className="flex items-center gap-3 border-b border-gray-800 p-5">
-        <img src={images.logo} alt="AdMax India" className="h-9 w-9 rounded-lg" />
-        <div>
-          <div className="font-display text-base font-extrabold tracking-tight">AdMax</div>
-          <div className="text-[10px] font-semibold uppercase tracking-widest text-admax-green">
-            India
-          </div>
+    <aside className="sticky top-0 flex h-screen w-64 shrink-0 flex-col overflow-y-auto border-r border-gray-800 bg-dark text-white">
+      <div className="border-b border-gray-800 p-4">
+        <div className="mb-4">
+          <Logo size="xl" darkBg className="mx-auto" />
         </div>
       </div>
 
-      <nav className="flex-1 space-y-1 p-3">
+      <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-3">
         {navItems.map((item) => {
           const active = activePage === item.path;
           const ItemIcon = item.icon;
@@ -83,10 +80,10 @@ export default function Sidebar({ activePage }) {
         })}
       </nav>
 
-      <div className="border-t border-gray-800 p-4">
+      <div className="mt-auto shrink-0 border-t border-gray-800 p-4">
         <div className="mb-3 flex items-center gap-3">
           <img
-            src={images.placeholder.avatar}
+            src={user?.avatar_url || images.placeholder.avatar}
             alt=""
             className="h-9 w-9 rounded-full object-cover"
           />

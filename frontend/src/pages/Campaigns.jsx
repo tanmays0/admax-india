@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 import { Plus, Calendar, MapPin } from "lucide-react";
 import DashboardLayout from "../components/DashboardLayout";
 import Card from "../components/ui/Card";
@@ -8,6 +9,7 @@ import SearchInput, { Pagination } from "../components/ui/SearchPagination";
 import { paginate } from "../utils/pagination";
 import QueryBoundary from "../components/QueryBoundary";
 import { useFetch } from "../hooks/useFetch";
+import API from "../services/api";
 import { images } from "../constants/images";
 
 const categoryImages = {
@@ -34,6 +36,21 @@ export default function Campaigns() {
   const [page, setPage] = useState(1);
 
   const campaigns = Array.isArray(data) ? data : [];
+  const [busyId, setBusyId] = useState(null);
+
+  const toggleStatus = async (campaign) => {
+    const next = campaign.status === "active" ? "paused" : "active";
+    setBusyId(campaign.id);
+    try {
+      await API.patch(`/campaigns/${campaign.id}/status`, { status: next });
+      toast.success(next === "paused" ? "Campaign paused" : "Campaign resumed");
+      refetch();
+    } catch {
+      toast.error("Failed to update campaign");
+    } finally {
+      setBusyId(null);
+    }
+  };
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase();
@@ -121,12 +138,22 @@ export default function Campaigns() {
                         {c.start_date || "—"} → {c.end_date || "—"}
                       </p>
                     </div>
-                    <Link
-                      to={`/campaigns/${c.id}/assign`}
-                      className="mt-4 text-sm font-semibold text-admax-green hover:underline"
-                    >
-                      Assign to screens →
-                    </Link>
+                    <div className="mt-4 flex flex-wrap gap-3">
+                      <Link
+                        to={`/campaigns/${c.id}/assign`}
+                        className="text-sm font-semibold text-admax-green hover:underline"
+                      >
+                        Assign to screens →
+                      </Link>
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        loading={busyId === c.id}
+                        onClick={() => toggleStatus(c)}
+                      >
+                        {c.status === "active" ? "Pause" : "Resume"}
+                      </Button>
+                    </div>
                   </div>
                 </Card>
               ))}

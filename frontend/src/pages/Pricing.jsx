@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowRight,
   Check,
@@ -7,12 +7,16 @@ import {
   GraduationCap,
   IndianRupee,
 } from "lucide-react";
+import toast from "react-hot-toast";
 import PublicLayout from "../layouts/PublicLayout";
 import Button from "../components/ui/Button";
 import { images } from "../constants/images";
+import { useAuth } from "../hooks/useAuth";
+import { startStripeCheckout } from "../services/stripe";
 
 const plans = [
   {
+    id: "starter",
     name: "Starter",
     price: 999,
     period: "/ campaign",
@@ -30,6 +34,7 @@ const plans = [
     badge: null,
   },
   {
+    id: "business",
     name: "Business",
     price: 3499,
     period: "/ month",
@@ -49,6 +54,7 @@ const plans = [
     badge: "MOST POPULAR",
   },
   {
+    id: "enterprise",
     name: "Enterprise",
     price: null,
     period: "",
@@ -76,11 +82,11 @@ const faqs = [
   },
   {
     q: "Can I cancel anytime?",
-    a: "Yes, there are no contracts. Cancel your subscription anytime from your dashboard.",
+    a: "Yes, there are no contracts. Cancel your subscription anytime from Billing → Manage subscription.",
   },
   {
     q: "What payment methods do you accept?",
-    a: "We accept all major credit/debit cards, UPI, and bank transfers via Razorpay.",
+    a: "We accept major credit/debit cards via Stripe. Razorpay (UPI, net banking) remains available for campaign checkout when configured.",
   },
   {
     q: "Do you offer refunds?",
@@ -89,14 +95,17 @@ const faqs = [
   { q: "Is there a setup fee?", a: "No setup fees. What you see is what you pay." },
   {
     q: "Can I upgrade or downgrade?",
-    a: "Yes, you can change your plan anytime. Changes take effect immediately.",
+    a: "Yes, you can change your plan anytime from the Stripe customer portal in Billing.",
   },
 ];
 
 export default function Pricing() {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   const [screenCount, setScreenCount] = useState(10);
   const [duration, setDuration] = useState(7);
   const [openFaq, setOpenFaq] = useState(null);
+  const [checkoutPlan, setCheckoutPlan] = useState(null);
 
   const calculatePrice = () => {
     const basePrice = 50;
@@ -106,9 +115,33 @@ export default function Pricing() {
 
   const estimated = calculatePrice();
 
+  const handlePlanClick = async (plan) => {
+    if (plan.id === "enterprise") {
+      navigate("/contact");
+      return;
+    }
+
+    if (!isAuthenticated) {
+      navigate("/login", { state: { from: "/pricing", plan: plan.id } });
+      toast("Sign in to continue to checkout");
+      return;
+    }
+
+    setCheckoutPlan(plan.id);
+    try {
+      await startStripeCheckout({
+        plan: plan.id,
+        successPath: "/payment-success",
+        cancelPath: "/pricing",
+      });
+    } catch (err) {
+      toast.error(err?.response?.data?.message || "Could not start Stripe checkout");
+      setCheckoutPlan(null);
+    }
+  };
+
   return (
     <PublicLayout>
-      {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-br from-admax-green-light via-white to-white py-20 sm:py-24 lg:py-28">
         <img
           src={images.hero.overlay}
@@ -131,7 +164,6 @@ export default function Pricing() {
         </div>
       </section>
 
-      {/* Pricing cards */}
       <section className="py-12 sm:py-16 lg:py-20">
         <div className="container-page">
           <div className="grid gap-6 md:grid-cols-3">
@@ -192,16 +224,19 @@ export default function Pricing() {
                   ))}
                 </ul>
 
-                <Link
-                  to={plan.name === "Enterprise" ? "/contact" : "/register"}
-                  className={`mt-8 block w-full rounded-lg py-3.5 text-center text-sm font-bold transition hover:-translate-y-0.5 ${
+                <button
+                  type="button"
+                  disabled={checkoutPlan === plan.id}
+                  onClick={() => handlePlanClick(plan)}
+                  className={`mt-8 block w-full rounded-lg py-3.5 text-center text-sm font-bold transition hover:-translate-y-0.5 disabled:cursor-wait disabled:opacity-70 ${
                     plan.highlight
                       ? "bg-white text-admax-green hover:bg-gray-100"
                       : "bg-admax-green text-white hover:bg-admax-green-dark"
                   }`}
                 >
-                  {plan.cta} <ArrowRight className="inline h-4 w-4" />
-                </Link>
+                  {checkoutPlan === plan.id ? "Redirecting…" : plan.cta}{" "}
+                  <ArrowRight className="inline h-4 w-4" />
+                </button>
               </div>
             ))}
           </div>
@@ -220,7 +255,6 @@ export default function Pricing() {
         </div>
       </section>
 
-      {/* Calculator */}
       <section className="bg-surface py-12 sm:py-16 lg:py-20">
         <div className="container-page max-w-3xl">
           <div className="text-center">
@@ -292,7 +326,6 @@ export default function Pricing() {
         </div>
       </section>
 
-      {/* FAQ */}
       <section className="py-12 sm:py-16 lg:py-20">
         <div className="container-page max-w-3xl">
           <div className="text-center">

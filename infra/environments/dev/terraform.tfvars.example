@@ -1,0 +1,5 @@
+aws_region         = "ap-south-1"
+project_name       = "admax-india"
+environment        = "dev"
+vpc_cidr_block     = "10.20.0.0/16"
+db_instance_class  = "db.t4g.micro"

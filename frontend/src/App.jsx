@@ -8,6 +8,7 @@ import Contact from "./pages/Contact";
 import Services from "./pages/Services";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import AuthCallback from "./pages/AuthCallback";
 import Dashboard from "./pages/Dashboard";
 import Campaigns from "./pages/Campaigns";
 import CreateCampaign from "./pages/CreateCampaign";
@@ -38,7 +39,14 @@ import AdGuidelines from "./pages/AdGuidelines";
 import APIDocumentation from "./pages/APIDocumentation";
 
 function ProtectedRoute({ children, roles }) {
-  const { isAuthenticated, role } = useAuth();
+  const { isAuthenticated, role, bootstrapping } = useAuth();
+  if (bootstrapping) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-surface text-sm text-gray-500">
+        Loading…
+      </div>
+    );
+  }
   if (!isAuthenticated) return <Navigate to="/login" replace />;
   if (roles && !roles.includes(role)) {
     return <Navigate to={getRoleHome(role)} replace />;
@@ -47,7 +55,14 @@ function ProtectedRoute({ children, roles }) {
 }
 
 function GuestRoute({ children }) {
-  const { isAuthenticated, role } = useAuth();
+  const { isAuthenticated, role, bootstrapping } = useAuth();
+  if (bootstrapping) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-surface text-sm text-gray-500">
+        Loading…
+      </div>
+    );
+  }
   if (isAuthenticated) return <Navigate to={getRoleHome(role)} replace />;
   return children;
 }
@@ -77,6 +92,7 @@ function App() {
             </GuestRoute>
           }
         />
+        <Route path="/auth/callback" element={<AuthCallback />} />
 
         <Route
           path="/dashboard"

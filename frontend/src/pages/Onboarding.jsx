@@ -16,9 +16,12 @@ import {
   UtensilsCrossed,
 } from "lucide-react";
 import API from "../services/api";
+import { useAuth } from "../hooks/useAuth";
 import { images } from "../constants/images";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
+import BackButton from "../components/BackButton";
+import Logo from "../components/Logo";
 
 const steps = [
   { id: 1, title: "Business Info", icon: Building2 },
@@ -83,6 +86,7 @@ const progressWidth = { 1: "w-0", 2: "w-1/3", 3: "w-2/3", 4: "w-full" };
 
 export default function Onboarding() {
   const navigate = useNavigate();
+  const { updateUser } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -149,7 +153,8 @@ export default function Onboarding() {
 
     setLoading(true);
     try {
-      await API.post("/onboarding/complete", formData);
+      const res = await API.post("/onboarding/complete", formData);
+      if (res.data?.user) updateUser(res.data.user);
       toast.success("Onboarding complete! Welcome to AdMax.");
       navigate("/dashboard");
     } catch {
@@ -163,13 +168,14 @@ export default function Onboarding() {
     <div className="flex min-h-screen flex-col bg-surface">
       <header className="border-b border-gray-200 bg-white px-4 py-5 sm:px-8">
         <div className="mx-auto flex max-w-3xl items-center justify-between">
-          <Link to="/" className="flex items-center gap-3">
-            <img src={images.logo} alt="AdMax" className="h-10 w-10 rounded-lg" />
+          <div className="flex items-center gap-4">
+            <BackButton variant="pill" />
+            <Logo size="md" />
             <div>
               <div className="font-display text-lg font-extrabold text-dark">AdMax India</div>
               <div className="text-xs text-gray-500">Business Onboarding</div>
             </div>
-          </Link>
+          </div>
           <div className="text-sm text-gray-500">
             Step{" "}
             <span className="font-mono font-bold text-admax-green">{currentStep}</span> of 4

@@ -8,3 +8,23 @@ uploads/
 *.log
 .DS_Store
 Thumbs.db
+
+# Terraform / OpenTofu
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+tfplan
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+terraform.tfvars
+*.tfvars
+!*.tfvars.example
+backend.hcl
+
+# Kubernetes local secrets
+k8s/secret.yaml

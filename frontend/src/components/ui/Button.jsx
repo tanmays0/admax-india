@@ -3,6 +3,10 @@ const variants = {
     "bg-admax-green text-white hover:bg-admax-green-dark focus-visible:ring-admax-green",
   secondary:
     "border border-gray-300 bg-white text-dark hover:border-admax-green hover:text-admax-green",
+  outlineLight:
+    "border-2 border-white/70 bg-white/10 text-white backdrop-blur-sm hover:border-white hover:bg-white/20",
+  inverse:
+    "border border-white bg-white text-admax-green-dark hover:bg-admax-green-light focus-visible:ring-white",
   dark: "bg-dark text-white hover:bg-gray-800",
   ghost: "text-gray-600 hover:bg-gray-100 hover:text-admax-green",
 };

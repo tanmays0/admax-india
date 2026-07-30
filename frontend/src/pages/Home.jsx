@@ -16,19 +16,19 @@ const features = [
     icon: MapPin,
     title: "Hyperlocal targeting",
     desc: "Reach customers within 1–5 km of your business with radius-based campaigns.",
-    image: images.categories.restaurant,
+    image: images.home.featureTargeting,
   },
   {
     icon: Monitor,
     title: "Premium screen network",
     desc: "Ads run on TVs in cafes, gyms, salons, and clinics where dwell time is high.",
-    image: images.categories.gym,
+    image: images.home.featureScreens,
   },
   {
     icon: TrendingUp,
     title: "Measurable results",
     desc: "Track impressions, screen coverage, and campaign performance in real time.",
-    image: images.categories.retail,
+    image: images.home.featureAnalytics,
   },
 ];
 
@@ -48,23 +48,18 @@ export default function Home() {
 
       {/* Hero */}
       <section className="relative overflow-hidden bg-dark text-white">
-        <img
-          src={images.hero.main}
-          alt="Restaurant interior with digital display"
-          className="absolute inset-0 h-full w-full object-cover opacity-40"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-dark via-dark/90 to-dark/60" />
-        <div className="container-page relative py-20 lg:py-32">
-          <div className="grid items-center gap-12 lg:grid-cols-2">
-            <div>
+        <div className="absolute inset-0 bg-gradient-to-br from-dark via-dark/95 to-admax-green-dark/30" />
+        <div className="container-page relative py-16 lg:py-24">
+          <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
+            <div className="order-2 lg:order-1">
               <p className="mb-4 text-sm font-semibold uppercase tracking-widest text-admax-green">
-                Hyperlocal B2B Advertising
+                AdMax India Advertising
               </p>
               <h1 className="font-display text-4xl font-extrabold leading-tight sm:text-5xl lg:text-6xl">
                 Put your brand on screens where India shops &amp; dines
               </h1>
               <p className="mt-6 max-w-lg text-lg text-gray-300">
-                AdMax India connects local businesses with premium in-venue screens. Launch
+                AdMax India Advertising connects local businesses with premium in-venue screens. Launch
                 campaigns in minutes, target by neighbourhood, and pay only for real impressions.
               </p>
               <div className="mt-8 flex flex-wrap gap-4">
@@ -74,7 +69,7 @@ export default function Home() {
                   </Button>
                 </Link>
                 <Link to="/screen-map">
-                  <Button size="lg" variant="secondary" className="border-gray-600 bg-transparent text-white hover:bg-white/10">
+                  <Button size="lg" variant="outlineLight">
                     View screen map
                   </Button>
                 </Link>
@@ -88,12 +83,14 @@ export default function Home() {
                 ))}
               </ul>
             </div>
-            <div className="relative hidden lg:block">
-              <img
-                src={images.hero.screens}
-                alt="Digital signage in venue"
-                className="rounded-2xl shadow-2xl ring-1 ring-white/10"
-              />
+            <div className="order-1 lg:order-2">
+              <div className="overflow-hidden rounded-2xl shadow-2xl ring-1 ring-white/15">
+                <img
+                  src={images.home.hero}
+                  alt="Hyperlocal TV advertising across India — local presence, powerful impact"
+                  className="aspect-[4/3] w-full object-cover lg:aspect-[16/11]"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -115,7 +112,7 @@ export default function Home() {
       <section className="py-20">
         <div className="container-page">
           <h2 className="font-display text-center text-3xl font-bold sm:text-4xl">
-            Why local brands choose AdMax
+            Why local brands choose AdMax India 
           </h2>
           <div className="mt-14 grid gap-8 md:grid-cols-3">
             {features.map((f) => (
@@ -159,9 +156,9 @@ export default function Home() {
         <div className="container-page">
           <div className="grid items-center gap-10 overflow-hidden rounded-2xl bg-admax-green-light lg:grid-cols-2">
             <img
-              src={images.partner.apply}
-              alt="Screen partner setup"
-              className="h-full min-h-[280px] w-full object-cover"
+              src={images.home.partner}
+              alt="In-venue digital screen displaying a local ad"
+              className="h-full min-h-[280px] w-full object-cover lg:min-h-[360px]"
             />
             <div className="p-8 lg:p-12">
               <Users className="mb-4 h-10 w-10 text-admax-green" />

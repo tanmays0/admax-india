@@ -1,19 +1,22 @@
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import { images } from "../constants/images";
+import BackButton from "../components/BackButton";
+import Logo from "../components/Logo";
 
 export default function PublicLayout({ children }) {
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar />
-      <main className="flex-1">{children}</main>
+      <main className="flex-1">
+        <div className="container-page pt-4">
+          <BackButton variant="pill" />
+        </div>
+        {children}
+      </main>
       <footer className="border-t border-gray-200 bg-dark text-gray-400">
         <div className="container-page grid gap-10 py-14 md:grid-cols-4">
           <div className="md:col-span-1">
-            <div className="flex items-center gap-2">
-              <img src={images.logo} alt="" className="h-8 w-8 rounded-lg" />
-              <span className="font-display text-lg font-bold text-white">AdMax India</span>
-            </div>
+            <Logo size="lg" darkBg />
             <p className="mt-4 text-sm leading-relaxed">
               Hyperlocal digital advertising for Indian businesses. Reach customers where they live,
               work, and spend time.

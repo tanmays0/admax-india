@@ -17,6 +17,9 @@ import {
 } from "lucide-react";
 import PublicLayout from "../layouts/PublicLayout";
 import Button from "../components/ui/Button";
+import { images } from "../constants/images";
+
+const categoryImages = images.helpCategories;
 
 const categories = [
   {
@@ -146,6 +149,11 @@ export default function HelpCenter() {
   return (
     <PublicLayout>
       <section className="relative overflow-hidden bg-gradient-to-b from-admax-green-light to-white py-20 text-center lg:py-28">
+        <img
+          src={images.pages.help}
+          alt="AdMax support team"
+          className="absolute inset-0 h-full w-full object-cover opacity-10"
+        />
         <div className="container-page relative max-w-2xl">
           <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-admax-green/20 bg-admax-green-light px-4 py-1.5 text-xs font-semibold text-admax-green">
             <BookOpen className="h-3.5 w-3.5" />
@@ -194,6 +202,11 @@ export default function HelpCenter() {
                       : "border-gray-200 bg-white hover:border-admax-green"
                   }`}
                 >
+                  <img
+                    src={categoryImages[cat.id]}
+                    alt=""
+                    className="mb-4 h-24 w-full rounded-lg object-cover"
+                  />
                   {active && (
                     <div className="absolute right-0 top-0 h-12 w-12 bg-admax-green opacity-5 [clip-path:polygon(100%_0,100%_100%,0_0)]" />
                   )}

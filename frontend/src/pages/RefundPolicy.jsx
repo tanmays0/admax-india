@@ -1,5 +1,6 @@
 import { BadgeCheck, Phone } from "lucide-react";
 import PublicLayout from "../layouts/PublicLayout";
+import { images } from "../constants/images";
 
 const sections = [
   {
@@ -68,8 +69,13 @@ export default function RefundPolicy() {
   return (
     <PublicLayout>
       <div className="min-h-screen bg-surface">
-        <div className="border-b border-gray-200 bg-white py-16 lg:py-20">
-          <div className="container-page max-w-3xl">
+        <div className="relative border-b border-gray-200 bg-white py-16 lg:py-20">
+          <img
+            src={images.pages.legal}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover opacity-10"
+          />
+          <div className="container-page relative max-w-3xl">
             <div className="mb-4 text-xs font-bold uppercase tracking-widest text-admax-green">
               Legal
             </div>

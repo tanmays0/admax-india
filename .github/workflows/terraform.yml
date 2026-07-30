@@ -1,0 +1,154 @@
+name: Terraform
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - "infra/**"
+      - ".github/workflows/terraform.yml"
+  pull_request:
+    paths:
+      - "infra/**"
+      - ".github/workflows/terraform.yml"
+
+concurrency:
+  group: terraform-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  TF_IN_AUTOMATION: "true"
+  TF_WORKING_DIR: infra/environments/dev
+
+jobs:
+  validate:
+    name: Fmt / Validate / Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.8
+          terraform_wrapper: false
+
+      - name: Terraform fmt
+        run: terraform fmt -check -recursive
+        working-directory: infra
+
+      - name: Terraform init (no backend)
+        run: terraform init -backend=false
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+      - name: Terraform validate
+        run: terraform validate
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+      - uses: terraform-linters/setup-tflint@v4
+        with:
+          tflint_version: v0.53.0
+
+      - name: TFLint init
+        run: tflint --init
+        working-directory: infra
+
+      - name: TFLint
+        run: tflint --recursive
+        working-directory: infra
+
+  plan:
+    name: Plan (dev)
+    needs: validate
+    runs-on: ubuntu-latest
+    # Set repository variable ENABLE_TF_PLAN=true and secret AWS_ROLE_ARN (OIDC) to enable.
+    if: ${{ vars.ENABLE_TF_PLAN == 'true' }}
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.8
+          terraform_wrapper: false
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ap-south-1
+
+      - name: Terraform init
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: |
+          cp backend.hcl.example backend.hcl
+          if [ -n "${{ vars.TF_STATE_BUCKET }}" ]; then
+            sed -i "s|admax-india-tfstate-ACCOUNT_ID|${{ vars.TF_STATE_BUCKET }}|" backend.hcl
+          fi
+          if [ -n "${{ vars.TF_LOCK_TABLE }}" ]; then
+            sed -i "s|admax-india-tf-locks|${{ vars.TF_LOCK_TABLE }}|" backend.hcl
+          fi
+          terraform init -backend-config=backend.hcl
+
+      - name: Terraform plan
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: |
+          cp terraform.tfvars.example terraform.tfvars
+          terraform plan -out=tfplan
+          terraform show -no-color tfplan > plan.txt
+
+      - name: Upload plan artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan-dev
+          path: |
+            infra/environments/dev/tfplan
+            infra/environments/dev/plan.txt
+          retention-days: 14
+
+  apply:
+    name: Apply (dev, main only)
+    needs: plan
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push' && vars.ENABLE_TF_PLAN == 'true'
+    runs-on: ubuntu-latest
+    environment: development
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.8
+          terraform_wrapper: false
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ap-south-1
+
+      - name: Download plan
+        uses: actions/download-artifact@v4
+        with:
+          name: tfplan-dev
+          path: infra/environments/dev
+
+      - name: Terraform init + apply saved plan
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: |
+          cp backend.hcl.example backend.hcl
+          if [ -n "${{ vars.TF_STATE_BUCKET }}" ]; then
+            sed -i "s|admax-india-tfstate-ACCOUNT_ID|${{ vars.TF_STATE_BUCKET }}|" backend.hcl
+          fi
+          if [ -n "${{ vars.TF_LOCK_TABLE }}" ]; then
+            sed -i "s|admax-india-tf-locks|${{ vars.TF_LOCK_TABLE }}|" backend.hcl
+          fi
+          terraform init -backend-config=backend.hcl
+          terraform apply -auto-approve tfplan

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import { Check, ImageIcon, Monitor, Link2 } from "lucide-react";
 import API from "../services/api";
@@ -9,6 +10,7 @@ import { PageLoader } from "../components/ui/Loading";
 import { images } from "../constants/images";
 
 export default function AssignAds() {
+  const { id: campaignId } = useParams();
   const [ads, setAds] = useState([]);
   const [screens, setScreens] = useState([]);
   const [selectedAd, setSelectedAd] = useState("");
@@ -49,8 +51,9 @@ export default function AssignAds() {
     try {
       setSubmitting(true);
       await API.post("/assign/assign", {
-        ad_id: selectedAd,
-        screen_ids: selectedScreens,
+        ad_id: Number(selectedAd),
+        screen_ids: selectedScreens.map(Number),
+        campaign_id: campaignId ? Number(campaignId) : null,
       });
       toast.success("Ads assigned successfully");
       setSelectedAd("");

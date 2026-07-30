@@ -16,19 +16,16 @@ import DashboardLayout from "../components/DashboardLayout";
 import Card from "../components/ui/Card";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
+import { useFetch } from "../hooks/useFetch";
 import { images } from "../constants/images";
 
 const ACCEPTED = { "image/jpeg": "JPG", "image/png": "PNG", "video/mp4": "MP4" };
 const MAX_SIZE = 50 * 1024 * 1024;
 
-const existingAds = [
-  { id: 1, title: "Summer Promo", type: "image", status: "active", views: "2.4k" },
-  { id: 2, title: "Grand Opening", type: "video", status: "active", views: "5.1k" },
-  { id: 3, title: "Weekend Deal", type: "image", status: "pending", views: "—" },
-];
-
 export default function UploadAd() {
   const fileInputRef = useRef(null);
+  const { data: adsData, refetch: refetchAds } = useFetch("/ads", { fallback: [] });
+  const recentAds = (Array.isArray(adsData) ? adsData : []).slice(0, 5);
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [title, setTitle] = useState("");
@@ -93,13 +90,13 @@ export default function UploadAd() {
 
     try {
       await API.post("/ads/upload", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
         onUploadProgress: (ev) => {
-          setProgress(Math.round((ev.loaded * 100) / ev.total));
+          if (ev.total) setProgress(Math.round((ev.loaded * 100) / ev.total));
         },
       });
       setSuccess(true);
       toast.success("Ad uploaded successfully!");
+      refetchAds();
     } catch (err) {
       const message = err?.response?.data?.message || "Upload failed. Please try again.";
       toast.error(message);
@@ -350,33 +347,41 @@ export default function UploadAd() {
                   </Link>
                 </div>
                 <div className="space-y-3">
-                  {existingAds.map((ad) => (
-                    <div
-                      key={ad.id}
-                      className="flex items-center gap-3 rounded-lg bg-surface p-3 transition hover:bg-gray-100"
-                    >
+                  {recentAds.length === 0 ? (
+                    <p className="text-xs text-gray-500">No ads uploaded yet.</p>
+                  ) : (
+                    recentAds.map((ad) => (
                       <div
-                        className={`h-10 w-1 shrink-0 rounded-full ${
-                          ad.status === "active" ? "bg-admax-green" : "bg-amber-400"
-                        }`}
-                      />
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm font-bold text-dark">{ad.title}</p>
-                        <p className="text-[11px] uppercase text-gray-400">
-                          {ad.type} · {ad.views} views
-                        </p>
-                      </div>
-                      <span
-                        className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${
-                          ad.status === "active"
-                            ? "bg-green-100 text-green-700"
-                            : "bg-amber-100 text-amber-700"
-                        }`}
+                        key={ad.id}
+                        className="flex items-center gap-3 rounded-lg bg-surface p-3 transition hover:bg-gray-100"
                       >
-                        {ad.status}
-                      </span>
-                    </div>
-                  ))}
+                        <div
+                          className={`h-10 w-1 shrink-0 rounded-full ${
+                            ad.status === "approved" || ad.status === "active"
+                              ? "bg-admax-green"
+                              : "bg-amber-400"
+                          }`}
+                        />
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-bold text-dark">
+                            {ad.title || `Ad #${ad.id}`}
+                          </p>
+                          <p className="text-[11px] uppercase text-gray-400">
+                            {ad.media_type || "image"} · {ad.duration || 15}s
+                          </p>
+                        </div>
+                        <span
+                          className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${
+                            ad.status === "approved" || ad.status === "active"
+                              ? "bg-green-100 text-green-700"
+                              : "bg-amber-100 text-amber-700"
+                          }`}
+                        >
+                          {ad.status || "pending"}
+                        </span>
+                      </div>
+                    ))
+                  )}
                 </div>
               </Card>
             </div>

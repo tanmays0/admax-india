@@ -1,0 +1,24 @@
+{
+  "name": "admax-india",
+  "private": true,
+  "version": "1.0.0",
+  "description": "AdMax India — hyperlocal advertising platform (React + Express + MySQL)",
+  "scripts": {
+    "dev": "concurrently -n api,web -c green,cyan \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "seed": "npm run seed --prefix backend",
+    "schema:ensure": "npm run schema:ensure --prefix backend",
+    "install:all": "npm install && npm install --prefix backend && npm install --prefix frontend",
+    "build": "npm run build --prefix frontend",
+    "start": "npm run start --prefix backend",
+    "lint": "npm run lint --prefix frontend && npm run lint --prefix backend",
+    "docker:build": "docker compose build",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

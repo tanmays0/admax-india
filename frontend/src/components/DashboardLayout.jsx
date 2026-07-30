@@ -1,4 +1,5 @@
 import Sidebar from "./Sidebar";
+import BackButton from "./BackButton";
 
 export default function DashboardLayout({ children, activePage, title, subtitle }) {
   return (
@@ -13,7 +14,10 @@ export default function DashboardLayout({ children, activePage, title, subtitle 
             {subtitle && <p className="mt-1 text-sm text-gray-500">{subtitle}</p>}
           </div>
         )}
-        <div className="p-4 sm:p-6 lg:p-8">{children}</div>
+        <div className="p-4 sm:p-6 lg:p-8">
+          <BackButton variant="pill" className="mb-4" />
+          {children}
+        </div>
       </main>
     </div>
   );

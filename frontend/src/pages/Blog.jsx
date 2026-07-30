@@ -113,6 +113,12 @@ export default function Blog() {
   return (
     <PublicLayout>
       <section className="relative overflow-hidden bg-dark py-16 lg:py-20">
+        <img
+          src={images.pages.blog}
+          alt="Modern workspace"
+          className="absolute inset-0 h-full w-full object-cover opacity-20"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-dark via-dark/95 to-dark/70" />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-admax-green/10" />
         <div className="container-page relative">
           <p className="mb-4 text-xs font-bold uppercase tracking-widest text-admax-green">

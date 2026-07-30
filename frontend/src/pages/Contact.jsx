@@ -309,7 +309,7 @@ export default function Contact() {
                 questions live.
               </p>
               <Link to="/book-demo" className="mt-5 inline-block">
-                <Button size="sm" className="bg-white text-admax-green hover:bg-gray-100">
+                <Button size="sm" variant="inverse">
                   Schedule Demo <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>

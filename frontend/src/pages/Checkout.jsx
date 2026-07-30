@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
@@ -13,6 +13,10 @@ import {
 import API from "../services/api";
 import { images } from "../constants/images";
 import Button from "../components/ui/Button";
+import BackButton from "../components/BackButton";
+import Logo from "../components/Logo";
+import { useAuth } from "../hooks/useAuth";
+import { startStripeCheckout } from "../services/stripe";
 
 const paymentMethods = [
   {
@@ -29,12 +33,14 @@ const paymentMethods = [
 export default function Checkout() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { isAuthenticated } = useAuth();
   const campaignData = location.state || {};
 
   const [loading, setLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [termsError, setTermsError] = useState("");
+  const [stripeEnabled, setStripeEnabled] = useState(false);
 
   const orderSummary = {
     campaignName: campaignData.campaignName || "Summer Campaign",
@@ -47,6 +53,20 @@ export default function Checkout() {
   const tax = subtotal * 0.18;
   const total = subtotal + tax;
 
+  useEffect(() => {
+    let cancelled = false;
+    API.get("/stripe/config")
+      .then((res) => {
+        if (!cancelled) setStripeEnabled(Boolean(res.data?.configured));
+      })
+      .catch(() => {
+        if (!cancelled) setStripeEnabled(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const handlePayment = async () => {
     if (!agreeTerms) {
       setTermsError("Please accept the terms and conditions");
@@ -55,16 +75,44 @@ export default function Checkout() {
     }
     setTermsError("");
 
+    if (!isAuthenticated) {
+      toast.error("Please sign in to complete payment");
+      navigate("/login", { state: { from: "/checkout" } });
+      return;
+    }
+
     setLoading(true);
 
     try {
+      // Prefer Stripe Checkout when configured
+      if (stripeEnabled) {
+        await startStripeCheckout({
+          amount: Math.round(total),
+          campaignId: campaignData.campaignId,
+          successPath: "/payment-success",
+          cancelPath: "/checkout",
+        });
+        return;
+      }
+
       const { data } = await API.post("/payments/create-order", {
         amount: total,
         campaignId: campaignData.campaignId,
       });
 
+      // Dev / no Razorpay key — complete payment through backend mock
+      if (data.mock || !import.meta.env.VITE_RAZORPAY_KEY || !window.Razorpay) {
+        await API.post("/payments/verify", {
+          order_id: data.orderId,
+          payment_id: `pay_mock_${Date.now()}`,
+        });
+        toast.success("Payment recorded (dev mode)");
+        navigate("/payment-success", { state: { orderId: data.orderId } });
+        return;
+      }
+
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY,
+        key: import.meta.env.VITE_RAZORPAY_KEY || data.key,
         amount: data.amount,
         currency: "INR",
         name: "AdMax India",
@@ -102,16 +150,36 @@ export default function Checkout() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-surface">
+    <div className="flex min-h-screen flex-col bg-surface lg:grid lg:grid-cols-2">
+      <div className="relative hidden lg:block">
+        <img
+          src={images.pages.checkout}
+          alt="Your campaign on local screens"
+          className="h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-dark/90 via-dark/40 to-transparent" />
+        <div className="absolute bottom-10 left-10 right-10 text-white">
+          <p className="text-sm font-semibold uppercase tracking-widest text-admax-green">
+            Campaign checkout
+          </p>
+          <h2 className="mt-2 font-display text-3xl font-bold">{orderSummary.campaignName}</h2>
+          <p className="mt-2 text-sm text-gray-300">
+            {orderSummary.screens} screens · {orderSummary.duration} days
+          </p>
+        </div>
+      </div>
+
+      <div className="flex min-h-screen flex-col">
       <header className="border-b border-gray-200 bg-white px-4 py-5 sm:px-8">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
-          <Link to="/" className="flex items-center gap-3">
-            <img src={images.logo} alt="AdMax" className="h-10 w-10 rounded-lg" />
+          <div className="flex items-center gap-4">
+            <BackButton variant="pill" />
+            <Logo size="md" />
             <div>
               <div className="font-display text-lg font-extrabold text-dark">AdMax India</div>
               <div className="text-xs text-gray-500">Secure Checkout</div>
             </div>
-          </Link>
+          </div>
           <div className="flex items-center gap-2 text-sm text-gray-500">
             <ShieldCheck className="h-4 w-4 text-emerald-500" />
             SSL Secured Payment
@@ -281,12 +349,13 @@ export default function Checkout() {
               </Button>
 
               <p className="mt-4 text-center text-xs text-gray-400">
-                Powered by Razorpay · 100% Secure
+                Powered by {stripeEnabled ? "Stripe" : "Razorpay"} · 100% Secure
               </p>
             </div>
           </div>
         </div>
       </main>
+      </div>
     </div>
   );
 }

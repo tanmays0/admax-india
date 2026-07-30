@@ -27,7 +27,7 @@ const mainServices = [
     tagClass: "bg-admax-green-light text-admax-green",
     title: "Digital Screen Advertising",
     desc: "Get your brand on high-visibility TV screens inside busy restaurants, gyms, clinics, and salons — where your customers spend real time every day.",
-    image: images.hero.screens,
+    image: images.services.screens,
     features: [
       "HD display support",
       "Auto-optimised layouts",
@@ -55,7 +55,7 @@ const mainServices = [
     tagClass: "bg-violet-50 text-violet-600",
     title: "Creative Ad Production",
     desc: "Don't have an ad ready? Our in-house team creates professional video ads and static creatives tailored for local TV display formats.",
-    image: images.placeholder.ad,
+    image: images.services.creative,
     features: [
       "Script & storyboard",
       "Motion graphics",
@@ -69,7 +69,7 @@ const mainServices = [
     tagClass: "bg-cyan-50 text-cyan-600",
     title: "Real-Time Analytics",
     desc: "Track impressions, screen views, and campaign ROI with a live analytics dashboard. Know exactly what's working and where.",
-    image: images.blog[1],
+    image: images.services.analytics,
     features: [
       "Live impression tracking",
       "Screen-level breakdown",
@@ -83,7 +83,7 @@ const mainServices = [
     tagClass: "bg-amber-50 text-amber-600",
     title: "AI Ad Suggestions",
     desc: "Our AI engine analyses your business type, location, and time patterns to suggest the best-performing screens, time slots, and ad formats.",
-    image: images.blog[0],
+    image: images.services.ai,
     features: [
       "Best time slot suggestions",
       "Screen ranking by fit",
@@ -362,16 +362,12 @@ export default function Services() {
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <Link to="/register">
-                <Button size="lg" className="bg-white text-admax-green hover:bg-gray-100">
+                <Button size="lg" variant="inverse">
                   Get Started <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
               <Link to="/contact">
-                <Button
-                  size="lg"
-                  variant="secondary"
-                  className="border-white/35 bg-transparent text-white hover:border-white hover:bg-white/10"
-                >
+                <Button size="lg" variant="outlineLight">
                   <Calendar className="h-4 w-4" /> Book Demo
                 </Button>
               </Link>

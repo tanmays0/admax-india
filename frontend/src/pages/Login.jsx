@@ -8,6 +8,9 @@ import { getRoleHome } from "../utils/auth";
 import { images } from "../constants/images";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
+import BackButton from "../components/BackButton";
+import Logo from "../components/Logo";
+import OAuthButtons from "../components/OAuthButtons";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -34,12 +37,7 @@ export default function Login() {
     setLoading(true);
     try {
       const res = await API.post("/auth/login", { email, password });
-      const user = {
-        ...res.data.user,
-        role:
-          res.data.user?.role ||
-          (email.includes("admin@") ? "admin" : email.includes("partner@") ? "partner" : "advertiser"),
-      };
+      const user = res.data.user;
       login(res.data.token, user);
       toast.success("Welcome back!");
       navigate(getRoleHome(user.role));
@@ -58,9 +56,12 @@ export default function Login() {
           alt="Local business advertising"
           className="h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-dark/90 to-dark/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-dark/90 via-dark/50 to-dark/20" />
+        <div className="absolute left-6 top-6 z-10">
+          <BackButton mode="home" variant="dark" />
+        </div>
         <div className="absolute bottom-12 left-12 max-w-md text-white">
-          <img src={images.logo} alt="" className="mb-6 h-12 w-12 rounded-xl" />
+          <Logo size="hero" darkBg className="mb-6" linkTo={null} />
           <h2 className="font-display text-4xl font-bold">Reach customers next door</h2>
           <p className="mt-3 text-lg text-gray-300">
             Run hyperlocal campaigns on screens where your audience already spends time.
@@ -68,12 +69,12 @@ export default function Login() {
         </div>
       </div>
 
-      <div className="flex items-center justify-center px-4 py-12">
+      <div className="relative flex items-center justify-center px-4 pb-12 pt-16 lg:py-12">
+        <div className="absolute left-4 top-4 lg:hidden">
+          <BackButton mode="home" variant="pill" />
+        </div>
         <div className="w-full max-w-md">
-          <Link to="/" className="mb-8 flex items-center gap-2 lg:hidden">
-            <img src={images.logo} alt="AdMax" className="h-8 w-8 rounded-lg" />
-            <span className="font-display text-xl font-bold">AdMax India</span>
-          </Link>
+          <Logo size="lg" className="mb-8" />
 
           <h1 className="font-display text-3xl font-bold text-dark">Sign in</h1>
           <p className="mt-2 text-gray-500">
@@ -134,6 +135,8 @@ export default function Login() {
               Sign in
             </Button>
           </form>
+
+          <OAuthButtons />
 
           <p className="mt-6 text-center text-xs text-gray-400">
             Demo: use <span className="font-mono">admin@admax.in</span> or{" "}

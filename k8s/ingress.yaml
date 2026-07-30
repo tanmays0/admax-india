@@ -1,0 +1,50 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: admax-india
+  namespace: admax-india
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/proxy-body-size: "25m"
+spec:
+  tls:
+    - hosts:
+        - admax.example.com
+        - api.admax.example.com
+      secretName: admax-tls
+  rules:
+    - host: admax.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: admax-web
+                port:
+                  number: 80
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: admax-api
+                port:
+                  number: 80
+          - path: /uploads
+            pathType: Prefix
+            backend:
+              service:
+                name: admax-api
+                port:
+                  number: 80
+    - host: api.admax.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: admax-api
+                port:
+                  number: 80

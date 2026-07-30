@@ -1,15 +1,28 @@
-/** Curated Unsplash images — hyperlocal India / retail / DOOH context */
+/** Curated images — each URL is unique and context-specific */
 export const images = {
-  logo: "/logo.svg",
+  logo: "/logo.png",
+  logoIcon: "/logo-icon.svg",
+
   hero: {
-    main: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1600&q=80",
-    overlay: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200&q=80",
-    screens: "https://images.unsplash.com/photo-1593359673503-f8f4ee2f6f0f?w=1200&q=80",
+    main: "/hero-home.png",
+    standout: "/hero-home.png",
+    screens: "/hero-digital-signage.png",
+    overlay: "https://images.unsplash.com/photo-1533750349088-cd871a92f312?w=1400&q=85",
   },
+
+  home: {
+    hero: "/hero-home.png",
+    featureTargeting: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=900&q=85",
+    featureScreens: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=85",
+    featureAnalytics: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&q=85",
+    partner: "/partner-screen-display.png",
+  },
+
   auth: {
-    login: "https://images.unsplash.com/photo-1556745750-6826f49a4d4d?w=1200&q=80",
+    login: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1400&q=90",
     register: "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1200&q=80",
   },
+
   categories: {
     restaurant: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80",
     gym: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80",
@@ -20,6 +33,7 @@ export const images = {
     dental: "https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=800&q=80",
     retail: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80",
   },
+
   caseStudies: [
     {
       id: 1,
@@ -37,19 +51,21 @@ export const images = {
       title: "Glow Salon",
     },
   ],
+
   blog: [
-    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&q=80",
-    "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&q=80",
     "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=900&q=80",
-    "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=900&q=80",
+    "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&q=80",
+    "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=900&q=80",
+    "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=900&q=80",
   ],
+
   screens: [
     {
       id: 1,
       name: "Bean & Brew Cafe",
       lat: 18.5204,
       lng: 73.8567,
-      image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80",
+      image: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&q=80",
       city: "Pune",
     },
     {
@@ -57,7 +73,7 @@ export const images = {
       name: "IronFit Gym",
       lat: 18.5314,
       lng: 73.8446,
-      image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&q=80",
+      image: "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=600&q=80",
       city: "Pune",
     },
     {
@@ -85,16 +101,55 @@ export const images = {
       city: "Pune",
     },
   ],
+
   about: {
     team: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=80",
     office: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&q=80",
   },
+
   partner: {
-    apply: "https://images.unsplash.com/photo-1593359673503-f8f4ee2f6f0f?w=1200&q=80",
+    shop: "/partner-screen-display.png",
+    apply: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&q=85",
+    setup: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1200&q=85",
     dashboard: "https://images.unsplash.com/photo-1556745750-6826f49a4d4d?w=800&q=80",
+    earnings: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&q=80",
   },
+
+  pages: {
+    help: "https://images.unsplash.com/photo-1521737710484-8659fc94710d?w=1400&q=85",
+    api: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1400&q=85",
+    legal: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1400&q=85",
+    guidelines: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=1400&q=85",
+    blog: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1400&q=85",
+    caseStudies: "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1400&q=85",
+    notFound: "https://images.unsplash.com/photo-1611162617474-5b21e939e184?w=1400&q=85",
+    checkout: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=1400&q=85",
+    paymentSuccess: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=1400&q=85",
+  },
+
+  services: {
+    screens: "/hero-digital-signage.png",
+    creative: "https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=900&q=85",
+    analytics: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&q=85",
+    ai: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=900&q=85",
+  },
+
+  helpCategories: {
+    "getting-started": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&q=85",
+    campaigns: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&q=85",
+    billing: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=600&q=85",
+    analytics: "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=600&q=85",
+    technical: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&q=85",
+    partners: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=85",
+  },
+
+  guidelines: {
+    good: "/partner-screen-display.png",
+    bad: "https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=900&q=80",
+  },
+
   placeholder: {
-    ad: "https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=800&q=80",
-    avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&q=80",
+    ad: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=80",
+    avatar: "/default-avatar.svg",
   },
 };

@@ -18,26 +18,27 @@ import QueryBoundary from "../components/QueryBoundary";
 import { useFetch } from "../hooks/useFetch";
 import { images } from "../constants/images";
 
-const impressionData = [
-  { day: "Mon", views: 420 },
-  { day: "Tue", views: 680 },
-  { day: "Wed", views: 540 },
-  { day: "Thu", views: 920 },
-  { day: "Fri", views: 1100 },
-  { day: "Sat", views: 860 },
-  { day: "Sun", views: 740 },
-];
-
 export default function Dashboard() {
-  const { data: campaigns, loading, error, refetch } = useFetch("/campaigns", { fallback: [] });
+  const { data, loading, error, refetch } = useFetch("/analytics/summary?period=7d", {
+    fallback: null,
+  });
 
-  const list = Array.isArray(campaigns) ? campaigns : [];
-  const activeCount = list.filter((c) => c.status === "active").length;
+  const summary = data || {};
+  const list = summary.recentCampaigns || [];
+  const impressionData = (summary.impressionsSeries || []).map((p) => ({
+    day: p.date?.slice(5) || p.date,
+    views: p.views,
+  }));
+  const topScreens = summary.topScreens || [];
 
   const stats = [
-    { label: "Active campaigns", value: activeCount, icon: Megaphone },
-    { label: "Total campaigns", value: list.length, icon: Monitor },
-    { label: "Est. weekly views", value: "4.2k", icon: Eye },
+    { label: "Active campaigns", value: summary.activeCampaigns ?? 0, icon: Megaphone },
+    { label: "Total campaigns", value: summary.totalCampaigns ?? 0, icon: Monitor },
+    {
+      label: "Est. weekly views",
+      value: (summary.estimatedWeeklyViews ?? 0).toLocaleString(),
+      icon: Eye,
+    },
   ];
 
   return (
@@ -46,7 +47,7 @@ export default function Dashboard() {
       title="Dashboard"
       subtitle="Overview of your advertising performance"
     >
-      <QueryBoundary loading={loading} error={error} onRetry={refetch} label="Loading dashboard...">
+      <QueryBoundary loading={loading && !data} error={error} onRetry={refetch} label="Loading dashboard...">
         <div className="mb-8 grid gap-4 sm:grid-cols-3">
           {stats.map((s) => (
             <Card key={s.label} className="flex items-center gap-4">
@@ -77,7 +78,7 @@ export default function Dashboard() {
 
         <div className="grid gap-6 lg:grid-cols-2">
           <Card>
-            <h3 className="mb-4 font-display font-bold">Weekly impressions</h3>
+            <h3 className="mb-4 font-display font-bold">Weekly impressions (est.)</h3>
             <ResponsiveContainer width="100%" height={240}>
               <AreaChart data={impressionData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -115,7 +116,9 @@ export default function Dashboard() {
                   <li key={c.id} className="flex items-center justify-between py-3">
                     <div>
                       <p className="font-medium text-dark">{c.name}</p>
-                      <p className="text-xs text-gray-500">{c.city || "—"} · {c.category}</p>
+                      <p className="text-xs text-gray-500">
+                        {c.city || "—"} · {c.category || "General"}
+                      </p>
                     </div>
                     <span
                       className={`rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize ${
@@ -135,21 +138,19 @@ export default function Dashboard() {
 
         <Card className="mt-6">
           <h3 className="mb-4 font-display font-bold">Top screens (est.)</h3>
-          <ResponsiveContainer width="100%" height={200}>
-            <BarChart
-              data={[
-                { name: "IronFit", views: 340 },
-                { name: "Bean&Brew", views: 290 },
-                { name: "CityClinic", views: 210 },
-              ]}
-            >
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-              <YAxis tick={{ fontSize: 12 }} />
-              <Tooltip />
-              <Bar dataKey="views" fill="#1F7A4D" radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
+          {topScreens.length === 0 ? (
+            <p className="py-8 text-center text-sm text-gray-500">No screens in the network yet</p>
+          ) : (
+            <ResponsiveContainer width="100%" height={200}>
+              <BarChart data={topScreens}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                <YAxis tick={{ fontSize: 12 }} />
+                <Tooltip />
+                <Bar dataKey="views" fill="#1F7A4D" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          )}
         </Card>
       </QueryBoundary>
     </DashboardLayout>

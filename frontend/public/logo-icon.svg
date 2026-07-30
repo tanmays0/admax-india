@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="admaxGrad" x1="8" y1="56" x2="56" y2="8" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#006837" />
+      <stop offset="45%" stop-color="#39B54A" />
+      <stop offset="100%" stop-color="#8CC63F" />
+    </linearGradient>
+  </defs>
+  <path
+    d="M12 52 L32 12 L40 12 L22 52 Z"
+    fill="url(#admaxGrad)"
+  />
+  <path
+    d="M28 38 L36 26 L44 30 L52 18 L56 20 L46 36 L38 32 L32 42 Z"
+    fill="url(#admaxGrad)"
+  />
+  <path
+    d="M52 18 L56 12 L60 18 L56 20 Z"
+    fill="#8CC63F"
+  />
+</svg>

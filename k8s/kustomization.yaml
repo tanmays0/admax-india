@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: admax-india
+resources:
+  - namespace.yaml
+  - configmap.yaml
+  - secret.example.yaml
+  - mysql.yaml
+  - api-deployment.yaml
+  - web-deployment.yaml
+  - ingress.yaml
+images:
+  - name: ghcr.io/EXAMPLE/admax-india-api
+    newTag: 1.0.0
+  - name: ghcr.io/EXAMPLE/admax-india-web
+    newTag: 1.0.0

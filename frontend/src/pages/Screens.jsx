@@ -39,7 +39,7 @@ export default function Screens() {
       { label: "Total Screens", value: screens.length, color: "text-admax-green" },
       {
         label: "Online",
-        value: screens.filter((s) => s.status !== "offline").length,
+        value: screens.filter((s) => s.status === "active" || s.status === "online").length,
         color: "text-green-600",
       },
       {
@@ -151,7 +151,7 @@ export default function Screens() {
             <>
               <div className="space-y-4">
                 {items.map((screen, idx) => {
-                  const isOnline = screen.status !== "offline";
+                  const isOnline = screen.status === "active" || screen.status === "online";
                   const globalIndex = (safePage - 1) * PER_PAGE + idx;
 
                   return (

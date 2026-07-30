@@ -109,8 +109,13 @@ export default function CaseStudies() {
 
   return (
     <PublicLayout>
-      <section className="bg-gradient-to-b from-admax-green-light to-white py-20 text-center lg:py-28">
-        <div className="container-page max-w-3xl">
+      <section className="relative overflow-hidden bg-gradient-to-b from-admax-green-light to-white py-20 text-center lg:py-28">
+        <img
+          src={images.pages.caseStudies}
+          alt="Business growth analytics"
+          className="absolute inset-0 h-full w-full object-cover opacity-10"
+        />
+        <div className="container-page relative max-w-3xl">
           <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-admax-green/20 bg-admax-green-light px-4 py-1.5 text-xs font-semibold text-admax-green">
             <TrendingUp className="h-3.5 w-3.5" />
             Real businesses, real results
@@ -288,10 +293,7 @@ export default function CaseStudies() {
             Join hundreds of businesses growing with AdMax India
           </p>
           <Link to="/register" className="mt-8 inline-block">
-            <Button
-              size="lg"
-              className="gap-2 bg-white text-admax-green hover:bg-gray-100"
-            >
+            <Button size="lg" variant="inverse" className="gap-2">
               Get Started Today <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>

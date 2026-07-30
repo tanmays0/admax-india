@@ -1,20 +1,22 @@
 const db = require("../config/db");
 
-exports.getScreenAds = (req, res) => {
-  const screenId = req.params.screen_id;
+exports.getPlayerAds = async (req, res) => {
+  try {
+    const { screenId } = req.params;
 
-  const sql = `
-  SELECT ads.media_url, ads.media_type, ads.duration
-  FROM screen_ads
-  JOIN ads ON screen_ads.ad_id = ads.id
-  WHERE screen_ads.screen_id = ?
-  `;
+    const [ads] = await db.query(
+      `SELECT a.id, a.title, a.media_url, a.media_type, a.duration, a.status
+       FROM ads a
+       JOIN screen_ads sa ON a.id = sa.ad_id
+       WHERE sa.screen_id = ?
+         AND a.status IN ('approved', 'active', 'pending')
+       ORDER BY sa.assigned_at DESC`,
+      [screenId]
+    );
 
-  db.query(sql, [screenId], (err, result) => {
-    if (err) {
-      return res.status(500).json(err);
-    }
-
-    res.json(result);
-  });
+    return res.json(ads);
+  } catch (error) {
+    console.error("Player error:", error);
+    return res.status(500).json({ message: "Failed to load ads" });
+  }
 };

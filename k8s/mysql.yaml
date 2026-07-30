@@ -1,0 +1,89 @@
+# Optional in-cluster MySQL for non-prod / demos.
+# Prefer managed RDS (see infra/modules/database) for production.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admax-mysql
+  namespace: admax-india
+  labels:
+    app: admax-mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admax-mysql
+  template:
+    metadata:
+      labels:
+        app: admax-mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.4
+          ports:
+            - containerPort: 3306
+              name: mysql
+          env:
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: admax-config
+                  key: DB_NAME
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: admax-secrets
+                  key: DB_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: admax-secrets
+                  key: DB_PASSWORD
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: admax-secrets
+                  key: MYSQL_ROOT_PASSWORD
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+          readinessProbe:
+            exec:
+              command: ["mysqladmin", "ping", "-h", "127.0.0.1"]
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: admax-mysql-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: admax-mysql-pvc
+  namespace: admax-india
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: admax-mysql
+  namespace: admax-india
+spec:
+  selector:
+    app: admax-mysql
+  ports:
+    - port: 3306
+      targetPort: mysql
+  type: ClusterIP

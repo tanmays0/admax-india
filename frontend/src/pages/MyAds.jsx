@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { Plus, Film, ImageIcon, Eye, Megaphone } from "lucide-react";
+import toast from "react-hot-toast";
+import { Plus, Film, ImageIcon, Eye, Megaphone, Trash2 } from "lucide-react";
 import DashboardLayout from "../components/DashboardLayout";
 import Card from "../components/ui/Card";
 import Button from "../components/ui/Button";
@@ -8,6 +9,7 @@ import SearchInput, { Pagination } from "../components/ui/SearchPagination";
 import { paginate } from "../utils/pagination";
 import QueryBoundary from "../components/QueryBoundary";
 import { useFetch } from "../hooks/useFetch";
+import API from "../services/api";
 import { images } from "../constants/images";
 
 const PER_PAGE = 9;
@@ -24,6 +26,7 @@ function getAdImage(ad) {
 }
 
 function getAdName(ad) {
+  if (ad.title) return ad.title;
   if (ad.name) return ad.name;
   if (ad.media_url) {
     const parts = ad.media_url.split("/");
@@ -39,6 +42,21 @@ export default function MyAds() {
   const [page, setPage] = useState(1);
 
   const ads = Array.isArray(data) ? data : [];
+  const [deletingId, setDeletingId] = useState(null);
+
+  const handleDelete = async (ad) => {
+    if (!window.confirm(`Delete “${getAdName(ad)}”?`)) return;
+    setDeletingId(ad.id);
+    try {
+      await API.delete(`/ads/${ad.id}`);
+      toast.success("Ad deleted");
+      refetch();
+    } catch {
+      toast.error("Failed to delete ad");
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   const stats = useMemo(
     () => [
@@ -196,16 +214,26 @@ export default function MyAds() {
                           <p className="mb-2 text-sm text-gray-500">{ad.duration}s duration</p>
                         )}
 
-                        <div className="flex items-center justify-between text-sm text-gray-400">
+                        <div className="mt-3 flex items-center justify-between text-sm text-gray-400">
                           <span className="flex items-center gap-1">
                             <Megaphone className="h-3.5 w-3.5" />
-                            {ad.campaigns ?? 0} campaigns
+                            {ad.duration ? `${ad.duration}s` : "—"}
                           </span>
                           <span className="flex items-center gap-1 font-mono">
                             <Eye className="h-3.5 w-3.5" />
-                            {ad.views ?? "0"}
+                            #{ad.id}
                           </span>
                         </div>
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          className="mt-3 w-full gap-2 text-red-600"
+                          loading={deletingId === ad.id}
+                          onClick={() => handleDelete(ad)}
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                          Delete
+                        </Button>
                       </div>
                     </div>
                   );

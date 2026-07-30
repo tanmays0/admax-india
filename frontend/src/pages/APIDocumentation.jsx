@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ChevronDown, ChevronUp, Copy } from "lucide-react";
 import PublicLayout from "../layouts/PublicLayout";
+import { images } from "../constants/images";
 
 const sections = [
   { id: "overview", label: "Overview" },
@@ -121,6 +122,12 @@ export default function APIDocumentation() {
   return (
     <PublicLayout>
       <section className="relative overflow-hidden bg-dark py-14 lg:py-16">
+        <img
+          src={images.pages.api}
+          alt="Developer analytics dashboard"
+          className="absolute inset-0 h-full w-full object-cover opacity-15"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-dark via-dark/95 to-dark/80" />
         <div className="pointer-events-none absolute right-0 top-0 h-full w-2/5 bg-admax-green opacity-[0.04] [clip-path:polygon(20%_0,100%_0,100%_100%,0_100%)]" />
         <div className="container-page relative">
           <p className="mb-3 text-xs font-bold uppercase tracking-widest text-admax-green">
