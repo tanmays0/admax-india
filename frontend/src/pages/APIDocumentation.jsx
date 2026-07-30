@@ -189,16 +189,11 @@ export default function APIDocumentation() {
                   { label: "Pagination", value: "Cursor-based", mono: false },
                   { label: "Encoding", value: "UTF-8 / JSON", mono: true },
                 ].map(({ label, value, mono }) => (
-                  <div
-                    key={label}
-                    className="rounded-xl border border-gray-200 bg-white p-5"
-                  >
+                  <div key={label} className="rounded-xl border border-gray-200 bg-white p-5">
                     <div className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-gray-500">
                       {label}
                     </div>
-                    <div
-                      className={`text-base font-bold text-dark ${mono ? "font-mono" : ""}`}
-                    >
+                    <div className={`text-base font-bold text-dark ${mono ? "font-mono" : ""}`}>
                       {value}
                     </div>
                   </div>
@@ -261,7 +256,11 @@ Content-Type: application/json`}
                       type: "string",
                       desc: "Filter by status: active, paused, completed",
                     },
-                    { name: "limit", type: "number", desc: "Results per page (max 100, default 20)" },
+                    {
+                      name: "limit",
+                      type: "number",
+                      desc: "Results per page (max 100, default 20)",
+                    },
                     {
                       name: "cursor",
                       type: "string",

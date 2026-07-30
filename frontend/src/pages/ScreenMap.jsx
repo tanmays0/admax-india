@@ -84,9 +84,7 @@ export default function ScreenMap() {
           </div>
 
           <div className="space-y-4">
-            <h2 className="font-display font-bold text-dark">
-              {filtered.length} screens found
-            </h2>
+            <h2 className="font-display font-bold text-dark">{filtered.length} screens found</h2>
             {filtered.map((screen) => (
               <button
                 key={screen.id}

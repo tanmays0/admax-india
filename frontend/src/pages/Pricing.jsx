@@ -1,12 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  ArrowRight,
-  Check,
-  ChevronDown,
-  GraduationCap,
-  IndianRupee,
-} from "lucide-react";
+import { ArrowRight, Check, ChevronDown, GraduationCap, IndianRupee } from "lucide-react";
 import toast from "react-hot-toast";
 import PublicLayout from "../layouts/PublicLayout";
 import Button from "../components/ui/Button";
@@ -151,7 +145,9 @@ export default function Pricing() {
         <div className="container-page relative text-center">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-admax-green/20 bg-admax-green-light px-4 py-1.5">
             <IndianRupee className="h-4 w-4 text-admax-green" />
-            <span className="text-sm font-semibold text-admax-green">Simple, transparent pricing</span>
+            <span className="text-sm font-semibold text-admax-green">
+              Simple, transparent pricing
+            </span>
           </div>
           <h1 className="font-display text-4xl font-extrabold text-dark sm:text-5xl lg:text-6xl">
             Plans that scale with your business
@@ -185,7 +181,9 @@ export default function Pricing() {
                   <div className="pointer-events-none absolute -bottom-10 -right-10 h-40 w-40 rounded-full border border-white/10" />
                 )}
 
-                <h3 className={`font-display text-xl font-extrabold ${plan.highlight ? "text-white" : "text-dark"}`}>
+                <h3
+                  className={`font-display text-xl font-extrabold ${plan.highlight ? "text-white" : "text-dark"}`}
+                >
                   {plan.name}
                 </h3>
                 <p className={`mt-1 text-sm ${plan.highlight ? "text-white/70" : "text-gray-500"}`}>
@@ -195,15 +193,21 @@ export default function Pricing() {
                 <div className="mt-5 flex items-baseline gap-1">
                   {plan.price ? (
                     <>
-                      <span className={`font-display text-4xl font-extrabold ${plan.highlight ? "text-white" : "text-dark"}`}>
+                      <span
+                        className={`font-display text-4xl font-extrabold ${plan.highlight ? "text-white" : "text-dark"}`}
+                      >
                         ₹{plan.price.toLocaleString()}
                       </span>
-                      <span className={`text-sm ${plan.highlight ? "text-white/60" : "text-gray-400"}`}>
+                      <span
+                        className={`text-sm ${plan.highlight ? "text-white/60" : "text-gray-400"}`}
+                      >
                         {plan.period}
                       </span>
                     </>
                   ) : (
-                    <span className={`font-display text-4xl font-extrabold ${plan.highlight ? "text-white" : "text-dark"}`}>
+                    <span
+                      className={`font-display text-4xl font-extrabold ${plan.highlight ? "text-white" : "text-dark"}`}
+                    >
                       Custom
                     </span>
                   )}
@@ -217,9 +221,13 @@ export default function Pricing() {
                           plan.highlight ? "bg-white/15" : "bg-admax-green-light"
                         }`}
                       >
-                        <Check className={`h-3 w-3 ${plan.highlight ? "text-white" : "text-admax-green"}`} />
+                        <Check
+                          className={`h-3 w-3 ${plan.highlight ? "text-white" : "text-admax-green"}`}
+                        />
                       </span>
-                      <span className={plan.highlight ? "text-white/90" : "text-gray-600"}>{f}</span>
+                      <span className={plan.highlight ? "text-white/90" : "text-gray-600"}>
+                        {f}
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -248,7 +256,10 @@ export default function Pricing() {
                 <strong>Special offer for startups:</strong> Get 25% off for the first 3 months
               </span>
             </p>
-            <Link to="/contact" className="mt-2 inline-block text-sm font-semibold text-admax-green hover:underline">
+            <Link
+              to="/contact"
+              className="mt-2 inline-block text-sm font-semibold text-admax-green hover:underline"
+            >
               Contact us to claim <ArrowRight className="inline h-4 w-4" />
             </Link>
           </div>

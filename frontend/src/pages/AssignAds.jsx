@@ -116,9 +116,7 @@ export default function AssignAds() {
                             >
                               Ad #{ad.id}
                             </p>
-                            {ad.name && (
-                              <p className="text-xs text-gray-500">{ad.name}</p>
-                            )}
+                            {ad.name && <p className="text-xs text-gray-500">{ad.name}</p>}
                             {ad.title && !ad.name && (
                               <p className="text-xs text-gray-500">{ad.title}</p>
                             )}

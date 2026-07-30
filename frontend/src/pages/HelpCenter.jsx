@@ -182,9 +182,7 @@ export default function HelpCenter() {
         <div className="container-page">
           <div className="mb-12 text-center">
             <h2 className="font-display text-3xl font-extrabold text-dark">Browse by category</h2>
-            <p className="mt-3 text-sm text-gray-500">
-              Find guides and answers organized by topic
-            </p>
+            <p className="mt-3 text-sm text-gray-500">Find guides and answers organized by topic</p>
           </div>
 
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -210,13 +208,20 @@ export default function HelpCenter() {
                   {active && (
                     <div className="absolute right-0 top-0 h-12 w-12 bg-admax-green opacity-5 [clip-path:polygon(100%_0,100%_100%,0_0)]" />
                   )}
-                  <Icon className={`mb-4 h-8 w-8 ${active ? "text-admax-green" : "text-gray-400"}`} />
-                  <h3 className={`mb-4 text-base font-bold ${active ? "text-admax-green" : "text-dark"}`}>
+                  <Icon
+                    className={`mb-4 h-8 w-8 ${active ? "text-admax-green" : "text-gray-400"}`}
+                  />
+                  <h3
+                    className={`mb-4 text-base font-bold ${active ? "text-admax-green" : "text-dark"}`}
+                  >
                     {cat.name}
                   </h3>
                   <div className="space-y-2.5">
                     {cat.articles.slice(0, 3).map((article) => (
-                      <div key={article.title} className="flex items-center justify-between text-xs">
+                      <div
+                        key={article.title}
+                        className="flex items-center justify-between text-xs"
+                      >
                         <span className="text-gray-500">{article.title}</span>
                         <span className="font-mono text-[11px] text-gray-400">{article.views}</span>
                       </div>

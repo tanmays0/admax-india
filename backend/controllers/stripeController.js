@@ -1,10 +1,5 @@
 const db = require("../config/db");
-const {
-  getStripe,
-  isStripeConfigured,
-  frontendBase,
-  PLAN_CATALOG,
-} = require("../config/stripe");
+const { getStripe, isStripeConfigured, frontendBase, PLAN_CATALOG } = require("../config/stripe");
 
 async function getUserRow(userId) {
   const [rows] = await db.query("SELECT * FROM users WHERE id = ?", [userId]);
@@ -25,10 +20,7 @@ async function ensureStripeCustomer(user) {
     metadata: { userId: String(user.id) },
   });
 
-  await db.query("UPDATE users SET stripe_customer_id = ? WHERE id = ?", [
-    customer.id,
-    user.id,
-  ]);
+  await db.query("UPDATE users SET stripe_customer_id = ? WHERE id = ?", [customer.id, user.id]);
 
   return customer.id;
 }
@@ -56,15 +48,7 @@ exports.createCheckoutSession = async (req, res) => {
     const user = await getUserRow(req.user.id);
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    const {
-      plan,
-      mode,
-      amount,
-      campaignId,
-      campaign_id,
-      successPath,
-      cancelPath,
-    } = req.body;
+    const { plan, mode, amount, campaignId, campaign_id, successPath, cancelPath } = req.body;
 
     const campaignIdValue = campaignId || campaign_id || null;
     const customerId = await ensureStripeCustomer(user);
@@ -128,9 +112,7 @@ exports.createCheckoutSession = async (req, res) => {
             unit_amount: Math.round(payAmount * 100),
             product_data: {
               name: "AdMax campaign payment",
-              description: campaignIdValue
-                ? `Campaign #${campaignIdValue}`
-                : "Campaign checkout",
+              description: campaignIdValue ? `Campaign #${campaignIdValue}` : "Campaign checkout",
             },
           },
           quantity: 1,
@@ -262,17 +244,13 @@ exports.getCheckoutSession = async (req, res) => {
 };
 
 async function upsertSubscriptionFromStripe(subscription, userIdHint) {
-  const userId =
-    userIdHint ||
-    Number(subscription.metadata?.userId) ||
-    null;
+  const userId = userIdHint || Number(subscription.metadata?.userId) || null;
 
   let resolvedUserId = userId;
   if (!resolvedUserId && subscription.customer) {
-    const [users] = await db.query(
-      "SELECT id FROM users WHERE stripe_customer_id = ? LIMIT 1",
-      [subscription.customer]
-    );
+    const [users] = await db.query("SELECT id FROM users WHERE stripe_customer_id = ? LIMIT 1", [
+      subscription.customer,
+    ]);
     resolvedUserId = users[0]?.id || null;
   }
 

@@ -59,8 +59,9 @@ export default function Home() {
                 Put your brand on screens where India shops &amp; dines
               </h1>
               <p className="mt-6 max-w-lg text-lg text-gray-300">
-                AdMax India Advertising connects local businesses with premium in-venue screens. Launch
-                campaigns in minutes, target by neighbourhood, and pay only for real impressions.
+                AdMax India Advertising connects local businesses with premium in-venue screens.
+                Launch campaigns in minutes, target by neighbourhood, and pay only for real
+                impressions.
               </p>
               <div className="mt-8 flex flex-wrap gap-4">
                 <Link to="/register">
@@ -112,11 +113,14 @@ export default function Home() {
       <section className="py-20">
         <div className="container-page">
           <h2 className="font-display text-center text-3xl font-bold sm:text-4xl">
-            Why local brands choose AdMax India 
+            Why local brands choose AdMax India
           </h2>
           <div className="mt-14 grid gap-8 md:grid-cols-3">
             {features.map((f) => (
-              <div key={f.title} className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
+              <div
+                key={f.title}
+                className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card"
+              >
                 <img src={f.image} alt={f.title} className="h-48 w-full object-cover" />
                 <div className="p-6">
                   <f.icon className="mb-3 h-8 w-8 text-admax-green" />
@@ -132,7 +136,9 @@ export default function Home() {
       {/* Categories */}
       <section className="bg-dark py-20 text-white">
         <div className="container-page">
-          <h2 className="font-display text-center text-3xl font-bold">Built for every local vertical</h2>
+          <h2 className="font-display text-center text-3xl font-bold">
+            Built for every local vertical
+          </h2>
           <p className="mx-auto mt-3 max-w-xl text-center text-gray-400">
             From chai tapris to premium gyms — reach the right audience in the right context.
           </p>

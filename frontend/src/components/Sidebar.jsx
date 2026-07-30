@@ -43,8 +43,7 @@ export default function Sidebar({ activePage }) {
   const navigate = useNavigate();
   const { user, role, logout } = useAuth();
 
-  const navItems =
-    role === "admin" ? adminNav : role === "partner" ? partnerNav : advertiserNav;
+  const navItems = role === "admin" ? adminNav : role === "partner" ? partnerNav : advertiserNav;
 
   const handleLogout = () => {
     logout();

@@ -24,21 +24,15 @@ const passport = configurePassport();
 
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "http://127.0.0.1:5173",
-      process.env.FRONTEND_URL,
-    ].filter(Boolean),
+    origin: ["http://localhost:5173", "http://127.0.0.1:5173", process.env.FRONTEND_URL].filter(
+      Boolean
+    ),
     credentials: true,
   })
 );
 
 // Stripe webhooks need the raw body for signature verification
-app.post(
-  "/api/stripe/webhook",
-  express.raw({ type: "application/json" }),
-  handleStripeWebhook
-);
+app.post("/api/stripe/webhook", express.raw({ type: "application/json" }), handleStripeWebhook);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

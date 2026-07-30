@@ -15,8 +15,16 @@ import { images } from "../constants/images";
 const PER_PAGE = 9;
 
 const statusConfig = {
-  approved: { className: "bg-green-100 text-green-700", label: "Approved", border: "border-green-500" },
-  pending: { className: "bg-yellow-100 text-yellow-700", label: "Pending", border: "border-yellow-500" },
+  approved: {
+    className: "bg-green-100 text-green-700",
+    label: "Approved",
+    border: "border-green-500",
+  },
+  pending: {
+    className: "bg-yellow-100 text-yellow-700",
+    label: "Pending",
+    border: "border-yellow-500",
+  },
   rejected: { className: "bg-red-100 text-red-700", label: "Rejected", border: "border-red-500" },
 };
 
@@ -161,9 +169,7 @@ export default function MyAds() {
                 className="mx-auto mb-4 h-40 w-64 rounded-xl object-cover"
               />
               <p className="text-gray-500">
-                {search || filter !== "all"
-                  ? "No ads match your filters."
-                  : "No ads uploaded yet."}
+                {search || filter !== "all" ? "No ads match your filters." : "No ads uploaded yet."}
               </p>
               {!search && filter === "all" && (
                 <Link to="/ads/upload" className="mt-4 inline-block">
@@ -220,8 +226,7 @@ export default function MyAds() {
                             {ad.duration ? `${ad.duration}s` : "—"}
                           </span>
                           <span className="flex items-center gap-1 font-mono">
-                            <Eye className="h-3.5 w-3.5" />
-                            #{ad.id}
+                            <Eye className="h-3.5 w-3.5" />#{ad.id}
                           </span>
                         </div>
                         <Button

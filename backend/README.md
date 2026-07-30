@@ -29,34 +29,34 @@ npm run dev
 node scripts/seed.js
 ```
 
-| Email | Password | Role |
-|-------|----------|------|
+| Email                 | Password      | Role       |
+| --------------------- | ------------- | ---------- |
 | `advertiser@admax.in` | `password123` | advertiser |
-| `partner@admax.in` | `password123` | partner |
-| `admin@admax.in` | `password123` | admin |
+| `partner@admax.in`    | `password123` | partner    |
+| `admin@admax.in`      | `password123` | admin      |
 
 API base: `http://localhost:5000/api`
 
 ## Endpoints
 
-| Method | Path | Auth | Description |
-|--------|------|------|-------------|
-| POST | `/auth/register` | — | Create account |
-| POST | `/auth/login` | — | Login → JWT + user |
-| GET | `/auth/me` | ✓ | Current user |
-| GET | `/ads` | ✓ | List ads (own / all for admin) |
-| POST | `/ads/upload` | ✓ | Multipart upload (`media`, `title`, `duration`) |
-| DELETE | `/ads/:id` | ✓ | Delete own ad |
-| GET | `/campaigns` | ✓ | List campaigns |
-| POST | `/campaigns/create` | ✓ | Create campaign |
-| GET | `/campaigns/:id` | ✓ | Campaign detail |
-| GET | `/screens` | ✓ | List screens |
-| POST | `/screens/add` | ✓ | Add screen |
-| POST | `/assign/assign` | ✓ | Assign ad → screens |
-| GET | `/player/:screenId` | — | Playlist for a screen |
-| POST | `/payments/create-order` | ✓ | Create payment order |
-| POST | `/payments/verify` | ✓ | Verify payment |
-| GET | `/payments` | ✓ | Payment history |
-| POST | `/onboarding/complete` | ✓ | Save onboarding profile |
+| Method | Path                     | Auth | Description                                     |
+| ------ | ------------------------ | ---- | ----------------------------------------------- |
+| POST   | `/auth/register`         | —    | Create account                                  |
+| POST   | `/auth/login`            | —    | Login → JWT + user                              |
+| GET    | `/auth/me`               | ✓    | Current user                                    |
+| GET    | `/ads`                   | ✓    | List ads (own / all for admin)                  |
+| POST   | `/ads/upload`            | ✓    | Multipart upload (`media`, `title`, `duration`) |
+| DELETE | `/ads/:id`               | ✓    | Delete own ad                                   |
+| GET    | `/campaigns`             | ✓    | List campaigns                                  |
+| POST   | `/campaigns/create`      | ✓    | Create campaign                                 |
+| GET    | `/campaigns/:id`         | ✓    | Campaign detail                                 |
+| GET    | `/screens`               | ✓    | List screens                                    |
+| POST   | `/screens/add`           | ✓    | Add screen                                      |
+| POST   | `/assign/assign`         | ✓    | Assign ad → screens                             |
+| GET    | `/player/:screenId`      | —    | Playlist for a screen                           |
+| POST   | `/payments/create-order` | ✓    | Create payment order                            |
+| POST   | `/payments/verify`       | ✓    | Verify payment                                  |
+| GET    | `/payments`              | ✓    | Payment history                                 |
+| POST   | `/onboarding/complete`   | ✓    | Save onboarding profile                         |
 
 Uploaded media is served from `/uploads/...` when Cloudinary is not configured.

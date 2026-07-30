@@ -47,7 +47,12 @@ export default function Dashboard() {
       title="Dashboard"
       subtitle="Overview of your advertising performance"
     >
-      <QueryBoundary loading={loading && !data} error={error} onRetry={refetch} label="Loading dashboard...">
+      <QueryBoundary
+        loading={loading && !data}
+        error={error}
+        onRetry={refetch}
+        label="Loading dashboard..."
+      >
         <div className="mb-8 grid gap-4 sm:grid-cols-3">
           {stats.map((s) => (
             <Card key={s.label} className="flex items-center gap-4">

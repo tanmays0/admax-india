@@ -12,11 +12,7 @@ const {
   deleteAccount,
   listUsers,
 } = require("../controllers/authController");
-const {
-  oauthSuccess,
-  oauthFailure,
-  getOAuthProviders,
-} = require("../controllers/oauthController");
+const { oauthSuccess, oauthFailure, getOAuthProviders } = require("../controllers/oauthController");
 const { authenticate, authorize } = require("../middleware/auth");
 const { upload } = require("../middleware/upload");
 

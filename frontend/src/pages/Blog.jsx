@@ -153,7 +153,9 @@ export default function Blog() {
                 </h2>
                 <p className="mt-3 text-sm leading-relaxed text-gray-300">{featured.excerpt}</p>
                 <div className="mt-6">
-                  <div className="font-mono text-3xl font-bold text-admax-green">{featured.stat}</div>
+                  <div className="font-mono text-3xl font-bold text-admax-green">
+                    {featured.stat}
+                  </div>
                   <div className="mt-1 text-xs text-gray-400">{featured.statLabel}</div>
                 </div>
                 <div className="mt-6 flex items-center gap-3">
@@ -170,7 +172,9 @@ export default function Blog() {
               </div>
             </div>
             <div className="flex flex-col justify-center p-8 lg:p-10">
-              <span className={`mb-4 inline-block w-fit rounded px-2.5 py-1 text-xs font-bold uppercase tracking-wider ${tagColors[featured.tag]}`}>
+              <span
+                className={`mb-4 inline-block w-fit rounded px-2.5 py-1 text-xs font-bold uppercase tracking-wider ${tagColors[featured.tag]}`}
+              >
                 {featured.category} · {featured.tag}
               </span>
               <p className="mb-8 text-base leading-relaxed text-gray-600">
@@ -224,7 +228,9 @@ export default function Blog() {
               </div>
               <div className="p-6">
                 <div className="mb-3 flex items-center gap-2">
-                  <span className={`rounded px-2.5 py-0.5 text-[11px] font-bold tracking-wide ${tagColors[post.tag]}`}>
+                  <span
+                    className={`rounded px-2.5 py-0.5 text-[11px] font-bold tracking-wide ${tagColors[post.tag]}`}
+                  >
                     {post.tag}
                   </span>
                   <span className="flex items-center gap-1 text-xs text-gray-400">
@@ -266,11 +272,7 @@ export default function Blog() {
             </p>
           </div>
           <div className="relative mt-6 flex flex-col gap-2 sm:flex-row lg:mt-0">
-            <Input
-              type="email"
-              placeholder="your@email.com"
-              className="sm:w-72"
-            />
+            <Input type="email" placeholder="your@email.com" className="sm:w-72" />
             <Button className="gap-2 shrink-0">
               <Mail className="h-4 w-4" />
               Subscribe

@@ -39,13 +39,8 @@ exports.createOrder = async (req, res) => {
 
 exports.verifyPayment = async (req, res) => {
   try {
-    const {
-      razorpay_order_id,
-      razorpay_payment_id,
-      razorpay_signature,
-      order_id,
-      payment_id,
-    } = req.body;
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, order_id, payment_id } =
+      req.body;
 
     const orderId = razorpay_order_id || order_id;
     const paymentId = razorpay_payment_id || payment_id || `pay_mock_${Date.now()}`;
@@ -74,10 +69,10 @@ exports.verifyPayment = async (req, res) => {
       }
     }
 
-    await db.query(
-      `UPDATE payments SET payment_id = ?, status = 'paid' WHERE order_id = ?`,
-      [paymentId, orderId]
-    );
+    await db.query(`UPDATE payments SET payment_id = ?, status = 'paid' WHERE order_id = ?`, [
+      paymentId,
+      orderId,
+    ]);
 
     return res.json({
       message: "Payment verified",

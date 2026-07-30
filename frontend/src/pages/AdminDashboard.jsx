@@ -337,7 +337,10 @@ export default function AdminDashboard() {
                     </p>
                     {platformData.length > 0 ? (
                       <ResponsiveContainer width="100%" height={240}>
-                        <BarChart data={platformData} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
+                        <BarChart
+                          data={platformData}
+                          margin={{ top: 4, right: 4, left: -20, bottom: 0 }}
+                        >
                           <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" vertical={false} />
                           <XAxis
                             dataKey="name"
@@ -355,7 +358,9 @@ export default function AdminDashboard() {
                         </BarChart>
                       </ResponsiveContainer>
                     ) : (
-                      <p className="py-16 text-center text-sm text-gray-400">No analytics data yet</p>
+                      <p className="py-16 text-center text-sm text-gray-400">
+                        No analytics data yet
+                      </p>
                     )}
                   </div>
 
@@ -392,7 +397,9 @@ export default function AdminDashboard() {
                         </div>
                       </>
                     ) : (
-                      <p className="py-16 text-center text-sm text-gray-400">No category data yet</p>
+                      <p className="py-16 text-center text-sm text-gray-400">
+                        No category data yet
+                      </p>
                     )}
                   </div>
                 </div>
@@ -470,8 +477,12 @@ export default function AdminDashboard() {
             {activeTab === "approvals" && (
               <div>
                 <div className="mb-6">
-                  <h3 className="font-display text-base font-bold text-dark">Pending Ad Approvals</h3>
-                  <p className="text-xs text-gray-400">Review and approve ads before they go live</p>
+                  <h3 className="font-display text-base font-bold text-dark">
+                    Pending Ad Approvals
+                  </h3>
+                  <p className="text-xs text-gray-400">
+                    Review and approve ads before they go live
+                  </p>
                 </div>
                 {pendingAds.length === 0 ? (
                   <div className="rounded-xl bg-surface px-6 py-12 text-center">

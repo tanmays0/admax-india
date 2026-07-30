@@ -218,11 +218,13 @@ export default function PartnerApplication() {
                       className={selectClass(errors.screenSize)}
                     >
                       <option value="">Select size</option>
-                      {['< 32"', '32"–55"', '55"–80"', '80"–120"', '> 120" / Billboard'].map((v) => (
-                        <option key={v} value={v}>
-                          {v}
-                        </option>
-                      ))}
+                      {['< 32"', '32"–55"', '55"–80"', '80"–120"', '> 120" / Billboard'].map(
+                        (v) => (
+                          <option key={v} value={v}>
+                            {v}
+                          </option>
+                        )
+                      )}
                     </select>
                   </SelectField>
                   <SelectField label="Resolution">
@@ -336,13 +338,16 @@ export default function PartnerApplication() {
                       className={selectClass(false)}
                     >
                       <option value="">Select</option>
-                      {["24/7 Stable", "Business Hours Only", "Solar Hybrid", "Generator Backup"].map(
-                        (v) => (
-                          <option key={v} value={v}>
-                            {v}
-                          </option>
-                        )
-                      )}
+                      {[
+                        "24/7 Stable",
+                        "Business Hours Only",
+                        "Solar Hybrid",
+                        "Generator Backup",
+                      ].map((v) => (
+                        <option key={v} value={v}>
+                          {v}
+                        </option>
+                      ))}
                     </select>
                   </SelectField>
                   <div className="sm:col-span-2">

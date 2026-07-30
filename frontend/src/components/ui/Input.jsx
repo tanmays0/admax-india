@@ -1,11 +1,4 @@
-export default function Input({
-  label,
-  error,
-  hint,
-  id,
-  className = "",
-  ...props
-}) {
+export default function Input({ label, error, hint, id, className = "", ...props }) {
   const inputId = id || props.name;
 
   return (

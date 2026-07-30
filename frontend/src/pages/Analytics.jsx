@@ -62,7 +62,7 @@ export default function Analytics() {
     () => [
       {
         label: "Active Campaigns",
-        value: loading ? "—" : summary.activeCampaigns ?? 0,
+        value: loading ? "—" : (summary.activeCampaigns ?? 0),
         color: "text-admax-green",
         icon: TrendingUp,
       },
@@ -74,7 +74,7 @@ export default function Analytics() {
       },
       {
         label: "Total Ads",
-        value: loading ? "—" : summary.totalAds ?? 0,
+        value: loading ? "—" : (summary.totalAds ?? 0),
         color: "text-violet-600",
         icon: Clock,
       },
@@ -117,12 +117,17 @@ export default function Analytics() {
 
       {summary.estimated && (
         <p className="mb-4 text-xs text-gray-500">
-          Views are estimated from your live campaigns, ads, and screen inventory until play logs are
-          enabled.
+          Views are estimated from your live campaigns, ads, and screen inventory until play logs
+          are enabled.
         </p>
       )}
 
-      <QueryBoundary loading={loading && !data} error={error} onRetry={refetch} label="Loading analytics...">
+      <QueryBoundary
+        loading={loading && !data}
+        error={error}
+        onRetry={refetch}
+        label="Loading analytics..."
+      >
         <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat) => (
             <Card key={stat.label} className="flex items-center gap-4">
@@ -195,7 +200,9 @@ export default function Analytics() {
           {loading ? (
             <ChartSkeleton height="h-72" />
           ) : campaignPerformance.length === 0 ? (
-            <p className="py-12 text-center text-sm text-gray-500">Create a campaign to see performance</p>
+            <p className="py-12 text-center text-sm text-gray-500">
+              Create a campaign to see performance
+            </p>
           ) : (
             <ResponsiveContainer width="100%" height={280}>
               <BarChart data={campaignPerformance}>

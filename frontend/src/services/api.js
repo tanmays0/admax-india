@@ -24,8 +24,7 @@ API.interceptors.response.use(
       "Something went wrong";
 
     const isAuthRoute =
-      window.location.pathname.includes("/login") ||
-      window.location.pathname.includes("/register");
+      window.location.pathname.includes("/login") || window.location.pathname.includes("/register");
 
     if (error.response?.status === 401) {
       localStorage.removeItem("token");

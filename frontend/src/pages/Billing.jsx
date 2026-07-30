@@ -74,7 +74,8 @@ export default function Billing() {
       id: p.order_id,
       date: formatDate(p.created_at),
       rawDate: p.created_at,
-      campaign: p.campaign_name || (p.provider === "stripe" ? "Stripe payment" : "Campaign payment"),
+      campaign:
+        p.campaign_name || (p.provider === "stripe" ? "Stripe payment" : "Campaign payment"),
       amount: Number(p.amount) || 0,
       status: p.status === "created" ? "pending" : p.status,
       provider: p.provider || "mock",
@@ -82,9 +83,7 @@ export default function Billing() {
   }, [data]);
 
   const totalSpent = invoices.filter((i) => i.status === "paid").reduce((s, i) => s + i.amount, 0);
-  const pending = invoices
-    .filter((i) => i.status === "pending")
-    .reduce((s, i) => s + i.amount, 0);
+  const pending = invoices.filter((i) => i.status === "pending").reduce((s, i) => s + i.amount, 0);
   const now = new Date();
   const thisMonth = invoices
     .filter((i) => {
@@ -94,8 +93,18 @@ export default function Billing() {
     .reduce((s, i) => s + i.amount, 0);
 
   const stats = [
-    { label: "Total Spent", value: formatCurrency(totalSpent), icon: IndianRupee, color: "text-admax-green" },
-    { label: "This Month", value: formatCurrency(thisMonth), icon: Calendar, color: "text-blue-600" },
+    {
+      label: "Total Spent",
+      value: formatCurrency(totalSpent),
+      icon: IndianRupee,
+      color: "text-admax-green",
+    },
+    {
+      label: "This Month",
+      value: formatCurrency(thisMonth),
+      icon: Calendar,
+      color: "text-blue-600",
+    },
     { label: "Pending", value: formatCurrency(pending), icon: Receipt, color: "text-yellow-600" },
     { label: "Invoices", value: invoices.length, icon: FileText, color: "text-purple-600" },
   ];
@@ -232,11 +241,15 @@ export default function Billing() {
                 <div className="space-y-2 text-sm text-gray-600">
                   <div className="flex items-center justify-between">
                     <span>Plan</span>
-                    <span className="font-semibold capitalize text-dark">{subscription.plan_name}</span>
+                    <span className="font-semibold capitalize text-dark">
+                      {subscription.plan_name}
+                    </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span>Status</span>
-                    <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${subStatusUi.className}`}>
+                    <span
+                      className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${subStatusUi.className}`}
+                    >
                       {subStatusUi.label}
                     </span>
                   </div>
@@ -304,7 +317,10 @@ export default function Billing() {
                 <h3 className="font-display font-bold text-dark">Need help?</h3>
               </div>
               <p className="text-sm text-gray-600">Questions about invoices or refunds?</p>
-              <Link to="/help" className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-admax-green">
+              <Link
+                to="/help"
+                className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-admax-green"
+              >
                 Visit Help Center <Download className="h-3.5 w-3.5 rotate-[-90deg]" />
               </Link>
             </Card>

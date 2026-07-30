@@ -163,9 +163,7 @@ export default function Player() {
           AdMax India
         </p>
         <h1 className="mt-2 font-display text-4xl font-bold md:text-5xl">{ad.title}</h1>
-        {ad.subtitle && (
-          <p className="mt-2 max-w-xl text-lg text-gray-300">{ad.subtitle}</p>
-        )}
+        {ad.subtitle && <p className="mt-2 max-w-xl text-lg text-gray-300">{ad.subtitle}</p>}
       </div>
 
       {/* Top bar */}

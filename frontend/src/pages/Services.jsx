@@ -108,11 +108,36 @@ const mainServices = [
 ];
 
 const process = [
-  { num: "01", title: "Consult", desc: "We learn about your business, goals, and target audience.", icon: Handshake },
-  { num: "02", title: "Create", desc: "You upload your ad or we produce one for you.", icon: Palette },
-  { num: "03", title: "Configure", desc: "Set your radius, time slots, and campaign duration.", icon: Settings },
-  { num: "04", title: "Go Live", desc: "Your ads appear on nearby screens within 24 hours.", icon: Rocket },
-  { num: "05", title: "Analyse", desc: "Track performance and optimise from your dashboard.", icon: TrendingUp },
+  {
+    num: "01",
+    title: "Consult",
+    desc: "We learn about your business, goals, and target audience.",
+    icon: Handshake,
+  },
+  {
+    num: "02",
+    title: "Create",
+    desc: "You upload your ad or we produce one for you.",
+    icon: Palette,
+  },
+  {
+    num: "03",
+    title: "Configure",
+    desc: "Set your radius, time slots, and campaign duration.",
+    icon: Settings,
+  },
+  {
+    num: "04",
+    title: "Go Live",
+    desc: "Your ads appear on nearby screens within 24 hours.",
+    icon: Rocket,
+  },
+  {
+    num: "05",
+    title: "Analyse",
+    desc: "Track performance and optimise from your dashboard.",
+    icon: TrendingUp,
+  },
 ];
 
 const plans = [
@@ -196,7 +221,9 @@ export default function Services() {
       <section className="py-16 sm:py-20">
         <div className="container-page">
           <div className="text-center">
-            <p className="text-xs font-bold uppercase tracking-widest text-admax-green">What We Offer</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-admax-green">
+              What We Offer
+            </p>
             <h2 className="mt-3 font-display text-3xl font-extrabold text-dark sm:text-4xl">
               Six ways AdMax grows your business
             </h2>
@@ -216,7 +243,9 @@ export default function Services() {
                 <div className="flex flex-1 flex-col gap-4 p-6">
                   <div className="flex items-start justify-between">
                     <svc.icon className="h-8 w-8 text-admax-green" />
-                    <span className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide ${svc.tagClass}`}>
+                    <span
+                      className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide ${svc.tagClass}`}
+                    >
                       {svc.tag}
                     </span>
                   </div>
@@ -245,7 +274,9 @@ export default function Services() {
       <section className="bg-surface py-16 sm:py-20">
         <div className="container-page">
           <div className="text-center">
-            <p className="text-xs font-bold uppercase tracking-widest text-admax-green">The Process</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-admax-green">
+              The Process
+            </p>
             <h2 className="mt-3 font-display text-3xl font-extrabold text-dark sm:text-4xl">
               How it works, start to finish
             </h2>
@@ -295,18 +326,24 @@ export default function Services() {
                     Most Popular
                   </span>
                 )}
-                <h3 className={`font-display text-lg font-extrabold ${plan.highlight ? "text-white" : "text-dark"}`}>
+                <h3
+                  className={`font-display text-lg font-extrabold ${plan.highlight ? "text-white" : "text-dark"}`}
+                >
                   {plan.name}
                 </h3>
                 <p className={`mt-1 text-sm ${plan.highlight ? "text-white/70" : "text-gray-500"}`}>
                   {plan.desc}
                 </p>
                 <div className="mt-4 flex items-baseline gap-1">
-                  <span className={`font-display text-4xl font-extrabold ${plan.highlight ? "text-white" : "text-dark"}`}>
+                  <span
+                    className={`font-display text-4xl font-extrabold ${plan.highlight ? "text-white" : "text-dark"}`}
+                  >
                     {plan.price}
                   </span>
                   {plan.period && (
-                    <span className={`text-sm ${plan.highlight ? "text-white/60" : "text-gray-400"}`}>
+                    <span
+                      className={`text-sm ${plan.highlight ? "text-white/60" : "text-gray-400"}`}
+                    >
                       {plan.period}
                     </span>
                   )}
@@ -319,9 +356,13 @@ export default function Services() {
                           plan.highlight ? "bg-white/15" : "bg-admax-green-light"
                         }`}
                       >
-                        <Check className={`h-3 w-3 ${plan.highlight ? "text-white" : "text-admax-green"}`} />
+                        <Check
+                          className={`h-3 w-3 ${plan.highlight ? "text-white" : "text-admax-green"}`}
+                        />
                       </span>
-                      <span className={plan.highlight ? "text-white/90" : "text-gray-600"}>{f}</span>
+                      <span className={plan.highlight ? "text-white/90" : "text-gray-600"}>
+                        {f}
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -353,12 +394,15 @@ export default function Services() {
         <div className="container-page">
           <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-admax-green to-admax-green-dark px-8 py-14 text-center sm:px-12">
             <div className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/5" />
-            <p className="text-xs font-bold uppercase tracking-widest text-white/50">Ready to Advertise?</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-white/50">
+              Ready to Advertise?
+            </p>
             <h2 className="mt-3 font-display text-2xl font-extrabold text-white sm:text-3xl lg:text-4xl">
               Start reaching local customers today
             </h2>
             <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-white/80 sm:text-base">
-              Join AdMax India's hyperlocal TV network and put your brand in front of the right people.
+              Join AdMax India's hyperlocal TV network and put your brand in front of the right
+              people.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <Link to="/register">

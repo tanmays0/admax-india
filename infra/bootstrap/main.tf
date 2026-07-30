@@ -29,10 +29,10 @@ resource "aws_s3_bucket" "terraform_state" {
   bucket = "${var.project_name}-tfstate-${data.aws_caller_identity.current.account_id}"
 
   tags = {
-    Name        = "${var.project_name}-tfstate"
-    Project     = var.project_name
-    ManagedBy   = "terraform"
-    Purpose     = "terraform-remote-state"
+    Name      = "${var.project_name}-tfstate"
+    Project   = var.project_name
+    ManagedBy = "terraform"
+    Purpose   = "terraform-remote-state"
   }
 }
 

@@ -17,9 +17,21 @@ const tabs = [
 ];
 
 const notificationItems = [
-  { id: "campaign", label: "Campaign Updates", desc: "Get notified when your campaigns start, pause, or end" },
-  { id: "reports", label: "Performance Reports", desc: "Weekly summary of your campaign performance" },
-  { id: "billing", label: "Billing Alerts", desc: "Payment confirmations and invoice notifications" },
+  {
+    id: "campaign",
+    label: "Campaign Updates",
+    desc: "Get notified when your campaigns start, pause, or end",
+  },
+  {
+    id: "reports",
+    label: "Performance Reports",
+    desc: "Weekly summary of your campaign performance",
+  },
+  {
+    id: "billing",
+    label: "Billing Alerts",
+    desc: "Payment confirmations and invoice notifications",
+  },
   { id: "marketing", label: "Marketing Emails", desc: "Tips, updates, and promotional offers" },
   { id: "screens", label: "Screen Network Updates", desc: "New screens added in your target area" },
 ];
@@ -417,7 +429,10 @@ export default function Settings() {
                 error={businessErrors.businessName}
               />
               <div>
-                <label htmlFor="category" className="mb-1.5 block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="category"
+                  className="mb-1.5 block text-sm font-medium text-gray-700"
+                >
                   Category
                 </label>
                 <select
@@ -482,9 +497,7 @@ export default function Settings() {
                     <input
                       type="checkbox"
                       checked={Boolean(prefs[item.id])}
-                      onChange={(e) =>
-                        setPrefs((p) => ({ ...p, [item.id]: e.target.checked }))
-                      }
+                      onChange={(e) => setPrefs((p) => ({ ...p, [item.id]: e.target.checked }))}
                       className="peer sr-only"
                     />
                     <div className="relative h-6 w-11 rounded-full bg-gray-300 transition peer-checked:bg-admax-green peer-focus:ring-2 peer-focus:ring-admax-green/20 after:absolute after:left-0.5 after:top-0.5 after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow after:transition-all peer-checked:after:translate-x-5" />
@@ -513,9 +526,7 @@ export default function Settings() {
                   name="currentPassword"
                   type="password"
                   value={security.currentPassword}
-                  onChange={(e) =>
-                    setSecurity({ ...security, currentPassword: e.target.value })
-                  }
+                  onChange={(e) => setSecurity({ ...security, currentPassword: e.target.value })}
                   error={securityErrors.currentPassword}
                 />
                 <Input
@@ -532,9 +543,7 @@ export default function Settings() {
                   name="confirmPassword"
                   type="password"
                   value={security.confirmPassword}
-                  onChange={(e) =>
-                    setSecurity({ ...security, confirmPassword: e.target.value })
-                  }
+                  onChange={(e) => setSecurity({ ...security, confirmPassword: e.target.value })}
                   error={securityErrors.confirmPassword}
                 />
                 <Button type="submit" loading={saving}>

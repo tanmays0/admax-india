@@ -95,11 +95,7 @@ export default function RefundPolicy() {
             {sections.map((section, idx) => (
               <div
                 key={section.title}
-                className={
-                  idx < sections.length - 1
-                    ? "mb-10 border-b border-gray-100 pb-10"
-                    : ""
-                }
+                className={idx < sections.length - 1 ? "mb-10 border-b border-gray-100 pb-10" : ""}
               >
                 <h2 className="mb-3 text-lg font-bold text-dark">{section.title}</h2>
                 <p className="text-sm leading-relaxed text-gray-600">{section.content}</p>

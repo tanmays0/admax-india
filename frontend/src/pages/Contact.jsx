@@ -139,7 +139,10 @@ export default function Contact() {
                 <form onSubmit={handleSubmit} className="mt-8 space-y-4">
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div>
-                      <label htmlFor="name" className="mb-1.5 block text-sm font-semibold text-gray-700">
+                      <label
+                        htmlFor="name"
+                        className="mb-1.5 block text-sm font-semibold text-gray-700"
+                      >
                         Full Name *
                       </label>
                       <input
@@ -153,7 +156,10 @@ export default function Contact() {
                       />
                     </div>
                     <div>
-                      <label htmlFor="email" className="mb-1.5 block text-sm font-semibold text-gray-700">
+                      <label
+                        htmlFor="email"
+                        className="mb-1.5 block text-sm font-semibold text-gray-700"
+                      >
                         Email Address *
                       </label>
                       <input
@@ -171,7 +177,10 @@ export default function Contact() {
 
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div>
-                      <label htmlFor="phone" className="mb-1.5 block text-sm font-semibold text-gray-700">
+                      <label
+                        htmlFor="phone"
+                        className="mb-1.5 block text-sm font-semibold text-gray-700"
+                      >
                         Phone Number
                       </label>
                       <input
@@ -184,7 +193,10 @@ export default function Contact() {
                       />
                     </div>
                     <div>
-                      <label htmlFor="city" className="mb-1.5 block text-sm font-semibold text-gray-700">
+                      <label
+                        htmlFor="city"
+                        className="mb-1.5 block text-sm font-semibold text-gray-700"
+                      >
                         City
                       </label>
                       <input
@@ -199,7 +211,10 @@ export default function Contact() {
                   </div>
 
                   <div>
-                    <label htmlFor="business" className="mb-1.5 block text-sm font-semibold text-gray-700">
+                    <label
+                      htmlFor="business"
+                      className="mb-1.5 block text-sm font-semibold text-gray-700"
+                    >
                       Business Name
                     </label>
                     <input
@@ -213,7 +228,10 @@ export default function Contact() {
                   </div>
 
                   <div>
-                    <label htmlFor="message" className="mb-1.5 block text-sm font-semibold text-gray-700">
+                    <label
+                      htmlFor="message"
+                      className="mb-1.5 block text-sm font-semibold text-gray-700"
+                    >
                       Message *
                     </label>
                     <textarea
@@ -270,7 +288,9 @@ export default function Contact() {
             <h2 className="font-display text-xl font-extrabold text-dark sm:text-2xl">
               Common questions
             </h2>
-            <p className="mt-1 text-sm text-gray-500">Quick answers to things people usually ask us.</p>
+            <p className="mt-1 text-sm text-gray-500">
+              Quick answers to things people usually ask us.
+            </p>
 
             <div className="mt-6 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
               {faqs.map((faq, i) => (

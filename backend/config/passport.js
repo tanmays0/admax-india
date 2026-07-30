@@ -60,15 +60,7 @@ async function findOrCreateOAuthUser({ provider, providerId, email, name, avatar
     `INSERT INTO users
       (name, first_name, last_name, email, password, role, oauth_provider, oauth_id, avatar_url)
      VALUES (?, ?, ?, ?, NULL, 'advertiser', ?, ?, ?)`,
-    [
-      displayName,
-      firstName,
-      lastName,
-      normalizedEmail,
-      provider,
-      providerId,
-      avatarUrl || null,
-    ]
+    [displayName, firstName, lastName, normalizedEmail, provider, providerId, avatarUrl || null]
   );
 
   const [rows] = await db.query("SELECT * FROM users WHERE id = ?", [result.insertId]);
@@ -119,8 +111,7 @@ function configurePassport() {
         async (_accessToken, _refreshToken, profile, done) => {
           try {
             const primaryEmail =
-              profile.emails?.find((e) => e.primary)?.value ||
-              profile.emails?.[0]?.value;
+              profile.emails?.find((e) => e.primary)?.value || profile.emails?.[0]?.value;
             const user = await findOrCreateOAuthUser({
               provider: "github",
               providerId: String(profile.id),

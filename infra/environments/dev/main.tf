@@ -69,10 +69,10 @@ module "eks" {
 module "database" {
   source = "../../modules/database"
 
-  project_name                = var.project_name
-  environment                 = var.environment
-  vpc_id                      = module.networking.vpc_id
-  private_subnet_ids          = module.networking.private_subnet_ids
-  allowed_security_group_ids  = [module.eks.cluster_security_group_id]
-  instance_class              = var.db_instance_class
+  project_name               = var.project_name
+  environment                = var.environment
+  vpc_id                     = module.networking.vpc_id
+  private_subnet_ids         = module.networking.private_subnet_ids
+  allowed_security_group_ids = [module.eks.cluster_security_group_id]
+  instance_class             = var.db_instance_class
 }

@@ -115,11 +115,7 @@ async function main() {
     "first_name",
     "ALTER TABLE users ADD COLUMN first_name VARCHAR(80) NULL"
   );
-  await addColumn(
-    "users",
-    "last_name",
-    "ALTER TABLE users ADD COLUMN last_name VARCHAR(80) NULL"
-  );
+  await addColumn("users", "last_name", "ALTER TABLE users ADD COLUMN last_name VARCHAR(80) NULL");
   await addColumn(
     "users",
     "notification_prefs",
@@ -180,9 +176,7 @@ async function main() {
   try {
     const [indexes] = await db.query("SHOW INDEX FROM users WHERE Key_name = 'uq_users_oauth'");
     if (!indexes.length) {
-      await db.query(
-        "ALTER TABLE users ADD UNIQUE KEY uq_users_oauth (oauth_provider, oauth_id)"
-      );
+      await db.query("ALTER TABLE users ADD UNIQUE KEY uq_users_oauth (oauth_provider, oauth_id)");
       console.log("added uq_users_oauth");
     } else {
       console.log("skip  uq_users_oauth");
@@ -192,10 +186,7 @@ async function main() {
   }
 
   const [tables] = await db.query("SHOW TABLES");
-  console.log(
-    "\nTables:",
-    tables.map((t) => Object.values(t)[0]).join(", ")
-  );
+  console.log("\nTables:", tables.map((t) => Object.values(t)[0]).join(", "));
 }
 
 main()

@@ -35,11 +35,9 @@ function authorize(...roles) {
 }
 
 function signToken(user) {
-  return jwt.sign(
-    { id: user.id, email: user.email, role: user.role },
-    JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES_IN || "7d" }
-  );
+  return jwt.sign({ id: user.id, email: user.email, role: user.role }, JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN || "7d",
+  });
 }
 
 function sanitizeUser(row) {

@@ -310,7 +310,10 @@ export default function UploadAd() {
                     { fmt: "Aspect Ratio", spec: "16:9 landscape only" },
                     { fmt: "File Size", spec: "Maximum 50MB" },
                   ].map((s, i, arr) => (
-                    <div key={s.fmt} className={i < arr.length - 1 ? "border-b border-gray-100 pb-4" : ""}>
+                    <div
+                      key={s.fmt}
+                      className={i < arr.length - 1 ? "border-b border-gray-100 pb-4" : ""}
+                    >
                       <p className="text-sm font-bold text-dark">{s.fmt}</p>
                       <p className="text-xs text-gray-500">{s.spec}</p>
                     </div>
@@ -331,7 +334,10 @@ export default function UploadAd() {
                     "Include phone number or address",
                     "High-contrast visuals work best",
                   ].map((tip) => (
-                    <li key={tip} className="flex items-start gap-2 text-xs leading-relaxed text-admax-green">
+                    <li
+                      key={tip}
+                      className="flex items-start gap-2 text-xs leading-relaxed text-admax-green"
+                    >
                       <CheckCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
                       {tip}
                     </li>
@@ -342,7 +348,10 @@ export default function UploadAd() {
               <Card>
                 <div className="mb-4 flex items-center justify-between">
                   <h3 className="font-display text-sm font-bold text-dark">Recent Ads</h3>
-                  <Link to="/ads" className="text-xs font-semibold text-admax-green hover:underline">
+                  <Link
+                    to="/ads"
+                    className="text-xs font-semibold text-admax-green hover:underline"
+                  >
                     View all
                   </Link>
                 </div>
@@ -392,10 +401,12 @@ export default function UploadAd() {
           <div className="relative mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-admax-green-light">
             <CheckCircle className="h-10 w-10 text-admax-green" />
           </div>
-          <h2 className="mb-3 font-display text-2xl font-bold text-dark">Ad uploaded successfully!</h2>
+          <h2 className="mb-3 font-display text-2xl font-bold text-dark">
+            Ad uploaded successfully!
+          </h2>
           <p className="mx-auto mb-8 max-w-sm text-sm leading-relaxed text-gray-500">
-            <strong className="text-dark">{title}</strong> has been submitted. It will be reviewed and
-            go live within 24 hours.
+            <strong className="text-dark">{title}</strong> has been submitted. It will be reviewed
+            and go live within 24 hours.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link to="/campaigns/new">

@@ -1,12 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
-import {
-  ArrowRight,
-  CheckCircle2,
-  CreditCard,
-  LayoutDashboard,
-  List,
-} from "lucide-react";
+import { ArrowRight, CheckCircle2, CreditCard, LayoutDashboard, List } from "lucide-react";
 import Button from "../components/ui/Button";
 import BackButton from "../components/BackButton";
 import Logo from "../components/Logo";
@@ -133,7 +127,9 @@ export default function PaymentSuccess() {
               <div className="space-y-4">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-500">Order ID</span>
-                  <span className="max-w-[60%] truncate font-mono font-bold text-dark">{orderId}</span>
+                  <span className="max-w-[60%] truncate font-mono font-bold text-dark">
+                    {orderId}
+                  </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-500">Status</span>

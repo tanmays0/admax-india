@@ -186,7 +186,9 @@ export default function AdGuidelines() {
 
           {activeSection === "specs" && (
             <div>
-              <h2 className="font-display text-2xl font-bold text-dark">Technical Specifications</h2>
+              <h2 className="font-display text-2xl font-bold text-dark">
+                Technical Specifications
+              </h2>
               <p className="mt-2 text-sm text-gray-500">
                 These specs ensure your ad renders correctly across all AdMax screens.
               </p>

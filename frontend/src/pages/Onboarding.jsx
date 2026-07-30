@@ -177,8 +177,7 @@ export default function Onboarding() {
             </div>
           </div>
           <div className="text-sm text-gray-500">
-            Step{" "}
-            <span className="font-mono font-bold text-admax-green">{currentStep}</span> of 4
+            Step <span className="font-mono font-bold text-admax-green">{currentStep}</span> of 4
           </div>
         </div>
       </header>
@@ -490,7 +489,12 @@ export default function Onboarding() {
 
           <div className="mt-8 flex gap-3 border-t border-gray-200 pt-8">
             {currentStep > 1 && (
-              <Button type="button" variant="secondary" onClick={handleBack} className="flex-1 gap-2">
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={handleBack}
+                className="flex-1 gap-2"
+              >
                 <ArrowLeft className="h-4 w-4" />
                 Back
               </Button>

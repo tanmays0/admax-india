@@ -114,7 +114,9 @@ export default function About() {
         <div className="container-page relative text-center">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-admax-green/20 bg-admax-green-light px-4 py-1.5">
             <Sprout className="h-4 w-4 text-admax-green" />
-            <span className="text-sm font-semibold text-admax-green">Built in India, for India</span>
+            <span className="text-sm font-semibold text-admax-green">
+              Built in India, for India
+            </span>
           </div>
           <h1 className="font-display text-4xl font-extrabold text-dark sm:text-5xl lg:text-6xl">
             The story behind <span className="text-admax-green">AdMax India</span>
@@ -149,16 +151,18 @@ export default function About() {
             </div>
 
             <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-admax-green">Our Story</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-admax-green">
+                Our Story
+              </p>
               <h2 className="mt-3 font-display text-3xl font-extrabold text-dark sm:text-4xl">
                 We noticed a gap.
                 <br />
                 Local ads weren't local enough.
               </h2>
               <p className="mt-5 text-sm leading-relaxed text-gray-600 sm:text-base">
-                Small businesses in Pune were spending thousands on Facebook and Google ads, reaching
-                people miles away — while the customer they needed was sitting 500 meters away at a
-                coffee shop or gym.
+                Small businesses in Pune were spending thousands on Facebook and Google ads,
+                reaching people miles away — while the customer they needed was sitting 500 meters
+                away at a coffee shop or gym.
               </p>
               <p className="mt-4 text-sm leading-relaxed text-gray-600 sm:text-base">
                 AdMax India was built to solve that. We install smart TV screens inside local
@@ -184,7 +188,9 @@ export default function About() {
       <section className="bg-surface py-16 sm:py-20 lg:py-24">
         <div className="container-page">
           <div className="text-center">
-            <p className="text-xs font-bold uppercase tracking-widest text-admax-green">The Network</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-admax-green">
+              The Network
+            </p>
             <h2 className="mt-3 font-display text-3xl font-extrabold text-dark sm:text-4xl">
               Where your ads appear
             </h2>
@@ -223,7 +229,9 @@ export default function About() {
       <section className="py-16 sm:py-20 lg:py-24">
         <div className="container-page">
           <div className="text-center">
-            <p className="text-xs font-bold uppercase tracking-widest text-admax-green">Why Choose Us</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-admax-green">
+              Why Choose Us
+            </p>
             <h2 className="mt-3 font-display text-3xl font-extrabold text-dark sm:text-4xl">
               Built different. Built local.
             </h2>
@@ -250,7 +258,9 @@ export default function About() {
       <section className="bg-dark py-16 text-white sm:py-20">
         <div className="container-page">
           <div className="text-center">
-            <p className="text-xs font-bold uppercase tracking-widest text-admax-green">Success Stories</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-admax-green">
+              Success Stories
+            </p>
             <h2 className="mt-3 font-display text-3xl font-extrabold sm:text-4xl">
               Real results from local brands
             </h2>
@@ -268,7 +278,10 @@ export default function About() {
             ))}
           </div>
           <div className="mt-8 text-center">
-            <Link to="/case-studies" className="inline-flex items-center gap-2 text-sm font-semibold text-admax-green hover:underline">
+            <Link
+              to="/case-studies"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-admax-green hover:underline"
+            >
               View all case studies <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
@@ -320,8 +333,8 @@ export default function About() {
               Want to be part of the network?
             </h2>
             <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-white/80 sm:text-base">
-              Register your business today and start advertising on AdMax India's growing local screen
-              network.
+              Register your business today and start advertising on AdMax India's growing local
+              screen network.
             </p>
             <Link to="/register" className="mt-8 inline-block">
               <Button size="lg" variant="inverse">

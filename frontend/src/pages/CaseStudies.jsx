@@ -1,12 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  ArrowRight,
-  Building2,
-  Quote,
-  Star,
-  TrendingUp,
-} from "lucide-react";
+import { ArrowRight, Building2, Quote, Star, TrendingUp } from "lucide-react";
 import PublicLayout from "../layouts/PublicLayout";
 import Button from "../components/ui/Button";
 import { images } from "../constants/images";
@@ -224,7 +218,9 @@ export default function CaseStudies() {
                     <div className="mb-2 text-[11px] uppercase tracking-wider text-gray-400">
                       {result.metric}
                     </div>
-                    <div className={`font-display text-3xl font-extrabold ${selectedCase.textAccent}`}>
+                    <div
+                      className={`font-display text-3xl font-extrabold ${selectedCase.textAccent}`}
+                    >
                       {result.value}
                     </div>
                   </div>
@@ -264,10 +260,7 @@ export default function CaseStudies() {
 
           <div className="grid gap-5 md:grid-cols-3">
             {testimonials.map((test) => (
-              <div
-                key={test.name}
-                className="rounded-xl border border-gray-200 bg-white p-7"
-              >
+              <div key={test.name} className="rounded-xl border border-gray-200 bg-white p-7">
                 <div className="mb-4 flex gap-0.5">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />

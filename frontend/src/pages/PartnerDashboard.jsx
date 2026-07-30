@@ -141,8 +141,7 @@ export default function PartnerDashboard() {
 
   const summary = analyticsData || {};
   const onlineCount = screens.filter((s) => s.status === "online").length;
-  const uptimePct =
-    screens.length > 0 ? Math.round((onlineCount / screens.length) * 1000) / 10 : 0;
+  const uptimePct = screens.length > 0 ? Math.round((onlineCount / screens.length) * 1000) / 10 : 0;
 
   const chartData = (summary.impressionsSeries || []).map((p) => ({
     month: p.date?.slice(5) || p.date,
@@ -235,11 +234,7 @@ export default function PartnerDashboard() {
             icon={Monitor}
             label="Active Screens"
             value={String(screens.length)}
-            subtext={
-              screens.length === 0
-                ? "No screens yet"
-                : `${onlineCount} online`
-            }
+            subtext={screens.length === 0 ? "No screens yet" : `${onlineCount} online`}
           />
           <StatCard
             icon={Play}
@@ -284,7 +279,10 @@ export default function PartnerDashboard() {
                   </p>
                   {chartData.length > 0 ? (
                     <ResponsiveContainer width="100%" height={280}>
-                      <AreaChart data={chartData} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
+                      <AreaChart
+                        data={chartData}
+                        margin={{ top: 4, right: 4, left: -20, bottom: 0 }}
+                      >
                         <defs>
                           <linearGradient id="earningsGrad" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="5%" stopColor="#1F7A4D" stopOpacity={0.2} />
@@ -398,21 +396,29 @@ export default function PartnerDashboard() {
                       </div>
                       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
                         <div>
-                          <p className="text-[11px] font-semibold uppercase text-gray-400">Status</p>
-                          <p className="text-base font-bold text-dark capitalize">{screen.status}</p>
+                          <p className="text-[11px] font-semibold uppercase text-gray-400">
+                            Status
+                          </p>
+                          <p className="text-base font-bold text-dark capitalize">
+                            {screen.status}
+                          </p>
                         </div>
                         <div>
                           <p className="text-[11px] font-semibold uppercase text-gray-400">City</p>
                           <p className="text-base font-bold text-dark">{screen.city || "—"}</p>
                         </div>
                         <div>
-                          <p className="text-[11px] font-semibold uppercase text-gray-400">Latitude</p>
+                          <p className="text-[11px] font-semibold uppercase text-gray-400">
+                            Latitude
+                          </p>
                           <p className="text-base font-bold text-dark">
                             {screen.latitude != null ? screen.latitude : "—"}
                           </p>
                         </div>
                         <div>
-                          <p className="text-[11px] font-semibold uppercase text-gray-400">Longitude</p>
+                          <p className="text-[11px] font-semibold uppercase text-gray-400">
+                            Longitude
+                          </p>
                           <p className="text-sm text-gray-500">
                             {screen.longitude != null ? screen.longitude : "—"}
                           </p>

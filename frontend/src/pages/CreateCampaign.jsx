@@ -1,13 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Check,
-  MapPin,
-  Rocket,
-  PartyPopper,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, Check, MapPin, Rocket, PartyPopper } from "lucide-react";
 import API from "../services/api";
 import DashboardLayout from "../components/DashboardLayout";
 import Card from "../components/ui/Card";
@@ -170,7 +163,10 @@ export default function CreateCampaign() {
       subtitle="Launch a new local ad campaign in minutes"
     >
       <div className="mb-6 flex items-center gap-2 text-sm">
-        <Link to="/campaigns" className="flex items-center gap-1 text-gray-500 hover:text-admax-green">
+        <Link
+          to="/campaigns"
+          className="flex items-center gap-1 text-gray-500 hover:text-admax-green"
+        >
           <ChevronLeft className="h-4 w-4" />
           Campaigns
         </Link>
@@ -182,7 +178,10 @@ export default function CreateCampaign() {
         {!success && <StepIndicator step={step} />}
 
         {formError && !success && (
-          <div className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
+          <div
+            className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+            role="alert"
+          >
             {formError}
           </div>
         )}
@@ -294,8 +293,8 @@ export default function CreateCampaign() {
               <div className="mb-6 flex items-start gap-2 rounded-lg border border-admax-green bg-admax-green-light p-4 text-sm text-dark">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-admax-green" />
                 <span>
-                  Your ads will appear on screens within <strong>{radius}km</strong> of your business
-                  in {city || "your city"}
+                  Your ads will appear on screens within <strong>{radius}km</strong> of your
+                  business in {city || "your city"}
                 </span>
               </div>
             )}
@@ -406,7 +405,9 @@ export default function CreateCampaign() {
         {step === 4 && !success && (
           <Card>
             <h2 className="mb-1 font-display text-lg font-bold text-dark">Review & Launch</h2>
-            <p className="mb-6 text-sm text-gray-500">Confirm your campaign details before going live</p>
+            <p className="mb-6 text-sm text-gray-500">
+              Confirm your campaign details before going live
+            </p>
 
             <div className="mb-6 space-y-3">
               {[
@@ -463,8 +464,8 @@ export default function CreateCampaign() {
             </div>
             <h2 className="mb-3 font-display text-2xl font-bold text-dark">Campaign launched!</h2>
             <p className="mx-auto mb-8 max-w-md text-sm leading-relaxed text-gray-600">
-              <strong>{name}</strong> has been submitted for review. You will receive confirmation once
-              it goes live — usually within 24 hours.
+              <strong>{name}</strong> has been submitted for review. You will receive confirmation
+              once it goes live — usually within 24 hours.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               <Link to="/campaigns">

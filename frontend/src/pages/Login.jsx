@@ -127,9 +127,7 @@ export default function Login() {
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
-              {errors.password && (
-                <p className="mt-1.5 text-xs text-red-600">{errors.password}</p>
-              )}
+              {errors.password && <p className="mt-1.5 text-xs text-red-600">{errors.password}</p>}
             </div>
             <Button type="submit" loading={loading} className="w-full">
               Sign in
