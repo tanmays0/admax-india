@@ -4,9 +4,10 @@
 
 | Service | Command | Port |
 |---------|---------|------|
-| Backend API | `npm run dev --prefix backend` | 5000 |
+| Backend API | `npm run dev --prefix backend` | 5000 (host **5001** via Docker — macOS AirPlay owns 5000) |
 | Frontend (Vite) | `npm run dev --prefix frontend` | 5173 |
 | MySQL | local MySQL 8 or `docker compose up db -d` | 3306 |
+| Docker web | `npm run docker:up` | 8080 |
 
 Root helper: `npm run install:all` then `npm run schema:ensure && npm run seed && npm run dev`.
 

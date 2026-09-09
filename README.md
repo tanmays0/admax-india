@@ -33,12 +33,14 @@ npm run dev
 ## Docker
 
 ```bash
-npm run docker:up          # MySQL + API + web on :8080 / :5000
+npm run docker:up          # MySQL + API + web on :8080 / :5001
 npm run docker:logs
 npm run docker:down
 ```
 
-Web UI: http://localhost:8080 · API health: http://localhost:5000/healthz
+Web UI: http://localhost:8080 · API health: http://localhost:5001/healthz
+
+> **macOS note:** AirPlay Receiver uses port `5000`, so Docker maps the API to host port **5001** by default. Override with `API_HOST_PORT=5000` only if you disable AirPlay (System Settings → General → AirDrop & Handoff → AirPlay Receiver).
 
 ## Project layout
 
