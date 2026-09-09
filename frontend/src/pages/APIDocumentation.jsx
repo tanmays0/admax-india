@@ -142,8 +142,8 @@ export default function APIDocumentation() {
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             {[
-              ["Base URL", "https://api.admax.in/v1"],
-              ["Version", "v1.4"],
+              ["Base URL", "http://localhost:5000/api"],
+              ["Version", "current"],
               ["Format", "JSON"],
             ].map(([k, v]) => (
               <div key={k} className="bg-gray-900 px-4 py-2.5">
@@ -203,11 +203,7 @@ export default function APIDocumentation() {
               <CodeBlock
                 lang="JSON"
                 code={`{
-  "error": {
-    "code": "INVALID_CREDENTIALS",
-    "message": "The API key provided is invalid or expired.",
-    "status": 401
-  }
+  "message": "Authentication required"
 }`}
               />
             </div>
@@ -217,26 +213,26 @@ export default function APIDocumentation() {
             <div>
               <h2 className="font-display text-2xl font-bold text-dark">Authentication</h2>
               <p className="mt-4 text-sm leading-relaxed text-gray-700">
-                AdMax uses Bearer token authentication. Include your API key in the Authorization
-                header on every request.
+                AdMax uses JWT Bearer authentication from `/api/auth/login` or `/api/auth/register`.
+                Include the token on protected requests.
               </p>
               <CodeBlock
                 lang="HTTP"
-                code={`GET /v1/campaigns HTTP/1.1
-Host: api.admax.in
-Authorization: Bearer <your_api_key>
+                code={`GET /api/campaigns HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer <jwt_token>
 Content-Type: application/json`}
               />
               <CodeBlock
                 lang="cURL"
-                code={`curl -X GET https://api.admax.in/v1/campaigns \\
-  -H "Authorization: Bearer <your_api_key>" \\
+                code={`curl -X GET http://localhost:5000/api/campaigns \\
+  -H "Authorization: Bearer <jwt_token>" \\
   -H "Content-Type: application/json"`}
               />
               <div className="border-l-[3px] border-admax-orange bg-amber-50 px-5 py-4">
                 <p className="text-sm text-amber-900">
-                  API keys are available from <strong>Settings → API Access</strong> in your
-                  dashboard. Never expose your key in frontend code.
+                  Demo accounts are listed in the project README. OAuth (Google/GitHub) works when
+                  credentials are configured in the backend environment.
                 </p>
               </div>
             </div>
@@ -248,7 +244,7 @@ Content-Type: application/json`}
               <div className="mt-6">
                 <Endpoint
                   method="GET"
-                  path="/v1/campaigns"
+                  path="/api/campaigns"
                   desc="List all campaigns"
                   params={[
                     {
@@ -286,7 +282,7 @@ Content-Type: application/json`}
                 />
                 <Endpoint
                   method="POST"
-                  path="/v1/campaigns"
+                  path="/api/campaigns"
                   desc="Create a new campaign"
                   params={[
                     { name: "name", type: "string", desc: "Campaign name", required: true },
@@ -317,7 +313,7 @@ Content-Type: application/json`}
                 />
                 <Endpoint
                   method="PATCH"
-                  path="/v1/campaigns/:id"
+                  path="/api/campaigns/:id"
                   desc="Update campaign status or budget"
                   params={[
                     { name: "status", type: "string", desc: "New status: active, paused" },
@@ -327,7 +323,7 @@ Content-Type: application/json`}
                 />
                 <Endpoint
                   method="DELETE"
-                  path="/v1/campaigns/:id"
+                  path="/api/campaigns/:id"
                   desc="Delete a campaign (only if not active)"
                   response={`{ "message": "Campaign deleted successfully" }`}
                 />
@@ -341,7 +337,7 @@ Content-Type: application/json`}
               <div className="mt-6">
                 <Endpoint
                   method="GET"
-                  path="/v1/ads"
+                  path="/api/ads"
                   desc="List uploaded ad creatives"
                   params={[
                     { name: "status", type: "string", desc: "Filter: approved, pending, rejected" },
@@ -355,7 +351,7 @@ Content-Type: application/json`}
       "type": "image",
       "status": "approved",
       "duration": 15,
-      "file_url": "https://cdn.admax.in/ads/ad_01HABC.jpg",
+      "file_url": "http://localhost:5000/uploads/ads/ad_01HABC.jpg",
       "views": 12400
     }
   ]
@@ -363,7 +359,7 @@ Content-Type: application/json`}
                 />
                 <Endpoint
                   method="POST"
-                  path="/v1/ads/upload"
+                  path="/api/ads/upload"
                   desc="Upload an ad creative (multipart)"
                   params={[
                     {
@@ -397,7 +393,7 @@ Content-Type: application/json`}
               <div className="mt-6">
                 <Endpoint
                   method="GET"
-                  path="/v1/screens"
+                  path="/api/screens"
                   desc="Discover available screens"
                   params={[
                     { name: "city", type: "string", desc: "Filter by city name" },
@@ -439,7 +435,7 @@ Content-Type: application/json`}
               <div className="mt-6">
                 <Endpoint
                   method="GET"
-                  path="/v1/analytics/campaigns/:id"
+                  path="/api/analytics/campaigns/:id"
                   desc="Campaign performance metrics"
                   params={[
                     { name: "from", type: "string", desc: "Start date YYYY-MM-DD", required: true },

@@ -33,6 +33,7 @@ import PaymentSuccess from "./pages/PaymentSuccess";
 import HelpCenter from "./pages/HelpCenter";
 import CaseStudies from "./pages/CaseStudies";
 import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 import NotFound from "./pages/NotFound";
 import PartnerApplication from "./pages/PartnerApplication";
 import AdGuidelines from "./pages/AdGuidelines";
@@ -175,6 +176,7 @@ function App() {
         <Route path="/payment-success" element={<PaymentSuccess />} />
         <Route path="/case-studies" element={<CaseStudies />} />
         <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:id" element={<BlogPost />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/refund-policy" element={<RefundPolicy />} />

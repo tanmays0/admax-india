@@ -53,6 +53,16 @@ async function seed() {
       );
       console.log(`added ${u.email} / ${u.password} (${u.role})`);
     }
+
+    const [partners] = await db.query("SELECT id FROM users WHERE email = ?", ["partner@admax.in"]);
+    if (partners.length) {
+      const [updated] = await db.query(
+        "UPDATE screens SET partner_id = ? WHERE partner_id IS NULL",
+        [partners[0].id]
+      );
+      console.log(`linked ${updated.affectedRows} screens to partner@admax.in`);
+    }
+
     console.log("\nSeed complete.");
   } catch (err) {
     console.error("Seed failed:", err.message);

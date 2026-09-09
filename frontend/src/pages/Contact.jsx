@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 import {
   ArrowRight,
   Calendar,
@@ -16,6 +17,7 @@ import {
 import PublicLayout from "../layouts/PublicLayout";
 import Button from "../components/ui/Button";
 import { images } from "../constants/images";
+import API from "../services/api";
 
 const contactInfo = [
   {
@@ -60,13 +62,23 @@ export default function Contact() {
     message: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
+    setSubmitting(true);
+    try {
+      await API.post("/contact", form);
+      setSubmitted(true);
+      toast.success("Message sent");
+    } catch {
+      // interceptor toast
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const resetForm = () => {
@@ -248,9 +260,10 @@ export default function Contact() {
 
                   <button
                     type="submit"
-                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-admax-green py-3.5 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-admax-green-dark hover:shadow-lg"
+                    disabled={submitting}
+                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-admax-green py-3.5 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-admax-green-dark hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
                   >
-                    Send Message <Send className="h-4 w-4" />
+                    {submitting ? "Sending…" : "Send Message"} <Send className="h-4 w-4" />
                   </button>
 
                   <p className="flex items-center justify-center gap-1.5 text-center text-xs text-gray-400">

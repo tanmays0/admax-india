@@ -35,3 +35,31 @@ exports.assignAd = async (req, res) => {
     return res.status(500).json({ message: "Assignment failed" });
   }
 };
+
+exports.unassignAd = async (req, res) => {
+  try {
+    const { ad_id, screen_ids } = req.body;
+
+    if (!ad_id || !Array.isArray(screen_ids) || screen_ids.length === 0) {
+      return res.status(400).json({ message: "ad_id and screen_ids are required" });
+    }
+
+    const [ads] = await db.query("SELECT * FROM ads WHERE id = ?", [ad_id]);
+    if (!ads.length) {
+      return res.status(404).json({ message: "Ad not found" });
+    }
+    if (ads[0].user_id !== req.user.id && req.user.role !== "admin") {
+      return res.status(403).json({ message: "Not allowed to unassign this ad" });
+    }
+
+    await db.query("DELETE FROM screen_ads WHERE ad_id = ? AND screen_id IN (?)", [
+      ad_id,
+      screen_ids.map(Number),
+    ]);
+
+    return res.json({ message: "Ad unassigned from screens" });
+  } catch (error) {
+    console.error("Unassign error:", error);
+    return res.status(500).json({ message: "Unassignment failed" });
+  }
+};

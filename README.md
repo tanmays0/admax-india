@@ -1,6 +1,6 @@
 # AdMax India
 
-![CI](https://github.com/OWNER/REPO/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/tanmays0/admax-india/actions/workflows/ci.yml/badge.svg)
 
 Hyperlocal B2B digital advertising platform — React frontend + Express/MySQL backend.
 
