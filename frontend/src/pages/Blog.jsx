@@ -1,97 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Clock, Mail } from "lucide-react";
+import toast from "react-hot-toast";
 import PublicLayout from "../layouts/PublicLayout";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import { images } from "../constants/images";
-
-const posts = [
-  {
-    id: 1,
-    category: "Industry",
-    tag: "Trends",
-    title: "Why DOOH is Outperforming Digital Ads in 2025",
-    excerpt:
-      "Out-of-home advertising is seeing record engagement rates as consumers grow blind to online banners. Here's what the data says.",
-    author: "Priya Sharma",
-    date: "Jun 12, 2025",
-    readTime: "5 min",
-    featured: true,
-    stat: "+34%",
-    statLabel: "avg. recall vs. online",
-  },
-  {
-    id: 2,
-    category: "Guide",
-    tag: "Campaigns",
-    title: "How to Target the Right Screens for Your Business",
-    excerpt:
-      "Location, footfall timing, and demographic match — the three pillars of screen selection that most advertisers overlook.",
-    author: "Arjun Mehta",
-    date: "Jun 8, 2025",
-    readTime: "7 min",
-    featured: false,
-    stat: "3×",
-    statLabel: "better ROI with geo-targeting",
-  },
-  {
-    id: 3,
-    category: "Product",
-    tag: "Feature",
-    title: "Introducing Real-Time Analytics on AdMax",
-    excerpt:
-      "Track impressions, engagement windows, and audience density live — without waiting for end-of-day reports.",
-    author: "Sneha Iyer",
-    date: "Jun 3, 2025",
-    readTime: "4 min",
-    featured: false,
-    stat: "Live",
-    statLabel: "data, zero delay",
-  },
-  {
-    id: 4,
-    category: "Partner",
-    tag: "Earnings",
-    title: "Screen Owners: Maximize Revenue With Smart Scheduling",
-    excerpt:
-      "Prime-time slots, category exclusivity, and fill-rate optimization — turn idle screens into consistent income.",
-    author: "Vikram Nair",
-    date: "May 28, 2025",
-    readTime: "6 min",
-    featured: false,
-    stat: "₹12k",
-    statLabel: "avg. monthly per screen",
-  },
-  {
-    id: 5,
-    category: "Industry",
-    tag: "Report",
-    title: "India's Out-of-Home Ad Market: ₹4,200 Cr and Growing",
-    excerpt:
-      "A deep dive into regional growth, tier-2 city expansion, and why brands are doubling OOH budgets this year.",
-    author: "Priya Sharma",
-    date: "May 20, 2025",
-    readTime: "9 min",
-    featured: false,
-    stat: "₹4,200Cr",
-    statLabel: "market size 2025",
-  },
-  {
-    id: 6,
-    category: "Guide",
-    tag: "Creative",
-    title: "Ad Creative Best Practices for High-Traffic Screens",
-    excerpt:
-      "5-second attention windows demand ruthless design clarity. We break down what works — and what wastes your budget.",
-    author: "Sneha Iyer",
-    date: "May 15, 2025",
-    readTime: "5 min",
-    featured: false,
-    stat: "5s",
-    statLabel: "average viewer dwell time",
-  },
-];
+import { blogPosts } from "../constants/blogPosts";
+import API from "../services/api";
 
 const categories = ["All", "Industry", "Guide", "Product", "Partner"];
 
@@ -106,9 +22,28 @@ const tagColors = {
 
 export default function Blog() {
   const [active, setActive] = useState("All");
-  const filtered = active === "All" ? posts : posts.filter((p) => p.category === active);
-  const featured = posts.find((p) => p.featured);
+  const [email, setEmail] = useState("");
+  const [subscribing, setSubscribing] = useState(false);
+  const filtered = active === "All" ? blogPosts : blogPosts.filter((p) => p.category === active);
+  const featured = blogPosts.find((p) => p.featured);
   const rest = filtered.filter((p) => !p.featured || active !== "All");
+
+  const subscribe = async () => {
+    if (!email.trim()) {
+      toast.error("Enter your email");
+      return;
+    }
+    setSubscribing(true);
+    try {
+      await API.post("/contact/newsletter", { email, source: "blog" });
+      toast.success("You're subscribed");
+      setEmail("");
+    } catch {
+      // toast from interceptor
+    } finally {
+      setSubscribing(false);
+    }
+  };
 
   return (
     <PublicLayout>
@@ -139,7 +74,7 @@ export default function Blog() {
           <div className="mb-12 grid overflow-hidden rounded-xl border border-gray-200 bg-white lg:grid-cols-2">
             <div className="relative min-h-[280px]">
               <img
-                src={images.blog[0]}
+                src={featured.image}
                 alt={featured.title}
                 className="absolute inset-0 h-full w-full object-cover"
               />
@@ -177,12 +112,7 @@ export default function Blog() {
               >
                 {featured.category} · {featured.tag}
               </span>
-              <p className="mb-8 text-base leading-relaxed text-gray-600">
-                Out-of-home advertising is seeing record engagement rates as consumers grow
-                increasingly blind to online banners and social feed ads. New research across 14
-                Indian cities shows DOOH delivers 34% higher unaided brand recall compared to
-                equivalent digital spends.
-              </p>
+              <p className="mb-8 text-base leading-relaxed text-gray-600">{featured.body[0]}</p>
               <Link to={`/blog/${featured.id}`}>
                 <Button className="gap-2">
                   Read Full Article <ArrowRight className="h-4 w-4" />
@@ -210,14 +140,14 @@ export default function Blog() {
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {rest.map((post, idx) => (
+          {rest.map((post) => (
             <article
               key={post.id}
               className="group overflow-hidden rounded-xl border border-gray-200 bg-white transition hover:-translate-y-0.5 hover:shadow-card"
             >
               <div className="relative h-44 overflow-hidden">
                 <img
-                  src={images.blog[(idx + 1) % images.blog.length]}
+                  src={post.image}
                   alt={post.title}
                   className="h-full w-full object-cover transition group-hover:scale-105"
                 />
@@ -272,8 +202,14 @@ export default function Blog() {
             </p>
           </div>
           <div className="relative mt-6 flex flex-col gap-2 sm:flex-row lg:mt-0">
-            <Input type="email" placeholder="your@email.com" className="sm:w-72" />
-            <Button className="gap-2 shrink-0">
+            <Input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="your@email.com"
+              className="sm:w-72"
+            />
+            <Button className="gap-2 shrink-0" loading={subscribing} onClick={subscribe}>
               <Mail className="h-4 w-4" />
               Subscribe
             </Button>

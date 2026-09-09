@@ -1,6 +1,6 @@
 # AdMax India
 
-![CI](https://github.com/OWNER/REPO/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/tanmays0/admax-india/actions/workflows/ci.yml/badge.svg)
 
 Hyperlocal B2B digital advertising platform — React frontend + Express/MySQL backend.
 
@@ -33,12 +33,17 @@ npm run dev
 ## Docker
 
 ```bash
-npm run docker:up          # MySQL + API + web on :8080 / :5000
+npm run docker:up          # MySQL + API + web on :8080 / :5001
+npm run docker:rebuild     # force clean web/api images (fixes stale nginx cache)
 npm run docker:logs
 npm run docker:down
 ```
 
-Web UI: http://localhost:8080 · API health: http://localhost:5000/healthz
+Web UI: http://localhost:8080 · API health: http://localhost:5001/healthz
+
+> **macOS note:** AirPlay Receiver uses port `5000`, so Docker maps the API to host port **5001** by default. Override with `API_HOST_PORT=5000` only if you disable AirPlay (System Settings → General → AirDrop & Handoff → AirPlay Receiver).
+
+> If http://localhost:8080 returns **500** with an nginx redirect-cycle error, run `npm run docker:rebuild` — that usually means a stale web image.
 
 ## Project layout
 

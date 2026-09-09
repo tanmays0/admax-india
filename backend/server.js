@@ -18,6 +18,8 @@ const paymentRoutes = require("./routes/paymentRoutes");
 const stripeRoutes = require("./routes/stripeRoutes");
 const onboardingRoutes = require("./routes/onboardingRoutes");
 const analyticsRoutes = require("./routes/analyticsRoutes");
+const contactRoutes = require("./routes/contactRoutes");
+const partnerApplicationRoutes = require("./routes/partnerApplicationRoutes");
 
 const app = express();
 const passport = configurePassport();
@@ -61,6 +63,8 @@ app.use("/api/payments", paymentRoutes);
 app.use("/api/stripe", stripeRoutes);
 app.use("/api/onboarding", onboardingRoutes);
 app.use("/api/analytics", analyticsRoutes);
+app.use("/api/contact", contactRoutes);
+app.use("/api/partner-applications", partnerApplicationRoutes);
 
 app.get("/", (_req, res) => {
   res.json({ status: "ok", message: "AdMax India API running" });

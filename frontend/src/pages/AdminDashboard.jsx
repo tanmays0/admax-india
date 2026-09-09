@@ -27,6 +27,8 @@ import {
   X,
   Check,
   Search,
+  Inbox,
+  ClipboardList,
 } from "lucide-react";
 import DashboardLayout from "../components/DashboardLayout";
 import Card from "../components/ui/Card";
@@ -140,9 +142,25 @@ export default function AdminDashboard() {
     refetch: refetchUsers,
   } = useFetch("/auth/users", { fallback: [] });
 
+  const {
+    data: partnerAppsData,
+    loading: partnerAppsLoading,
+    error: partnerAppsError,
+    refetch: refetchPartnerApps,
+  } = useFetch("/partner-applications", { fallback: [] });
+
+  const {
+    data: contactData,
+    loading: contactLoading,
+    error: contactError,
+    refetch: refetchContact,
+  } = useFetch("/contact", { fallback: [] });
+
   const summary = analyticsData || {};
   const ads = Array.isArray(adsData) ? adsData : [];
   const users = Array.isArray(usersData) ? usersData : [];
+  const partnerApps = Array.isArray(partnerAppsData) ? partnerAppsData : [];
+  const contactMessages = Array.isArray(contactData) ? contactData : [];
 
   const usersById = useMemo(() => {
     const map = {};
@@ -203,13 +221,16 @@ export default function AdminDashboard() {
     });
   }, [users, userSearch]);
 
-  const loading = analyticsLoading || adsLoading || usersLoading;
-  const error = analyticsError || adsError || usersError;
+  const loading =
+    analyticsLoading || adsLoading || usersLoading || partnerAppsLoading || contactLoading;
+  const error = analyticsError || adsError || usersError || partnerAppsError || contactError;
 
   const refetch = () => {
     refetchAnalytics();
     refetchAds();
     refetchUsers();
+    refetchPartnerApps();
+    refetchContact();
   };
 
   const handleAdStatus = async (adId, status) => {
@@ -226,6 +247,21 @@ export default function AdminDashboard() {
     }
   };
 
+  const handlePartnerAppStatus = async (id, status) => {
+    setUpdatingId(`app-${id}`);
+    try {
+      await API.patch(`/partner-applications/${id}`, { status });
+      toast.success(`Application ${status}`);
+      await refetchPartnerApps();
+    } catch {
+      // interceptor
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
+  const pendingApps = partnerApps.filter((a) => a.status === "pending");
+
   const tabs = [
     { id: "overview", label: "Overview", icon: BarChart3 },
     {
@@ -233,6 +269,18 @@ export default function AdminDashboard() {
       label: "Ad Approvals",
       icon: CheckCircle,
       badge: pendingAds.length > 0 ? pendingAds.length : null,
+    },
+    {
+      id: "partners",
+      label: "Partner Apps",
+      icon: ClipboardList,
+      badge: pendingApps.length > 0 ? pendingApps.length : null,
+    },
+    {
+      id: "inbox",
+      label: "Inbox",
+      icon: Inbox,
+      badge: contactMessages.length > 0 ? contactMessages.length : null,
     },
     { id: "users", label: "Users", icon: Users },
   ];
@@ -545,6 +593,86 @@ export default function AdminDashboard() {
                             Approve
                           </Button>
                         </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === "partners" && (
+              <div className="p-6">
+                {partnerApps.length === 0 ? (
+                  <p className="text-sm text-gray-500">No partner applications yet.</p>
+                ) : (
+                  <div className="space-y-4">
+                    {partnerApps.map((app) => (
+                      <div
+                        key={app.id}
+                        className="flex flex-col gap-3 rounded-xl border border-gray-200 p-4 sm:flex-row sm:items-center sm:justify-between"
+                      >
+                        <div>
+                          <p className="font-semibold text-dark">
+                            {app.owner_name} · {app.application_code}
+                          </p>
+                          <p className="mt-1 text-sm text-gray-500">
+                            {app.business_name || "—"} · {app.city} · {app.screen_count} screen(s)
+                          </p>
+                          <p className="mt-1 text-xs text-gray-400">
+                            {app.email} · {app.phone} · {formatRelativeDate(app.created_at)}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="rounded-full bg-gray-100 px-2.5 py-1 text-xs font-semibold capitalize text-gray-700">
+                            {app.status}
+                          </span>
+                          {app.status === "pending" && (
+                            <>
+                              <Button
+                                size="sm"
+                                disabled={updatingId === `app-${app.id}`}
+                                onClick={() => handlePartnerAppStatus(app.id, "approved")}
+                              >
+                                Approve
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="secondary"
+                                disabled={updatingId === `app-${app.id}`}
+                                onClick={() => handlePartnerAppStatus(app.id, "rejected")}
+                              >
+                                Reject
+                              </Button>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === "inbox" && (
+              <div className="p-6">
+                {contactMessages.length === 0 ? (
+                  <p className="text-sm text-gray-500">No contact messages yet.</p>
+                ) : (
+                  <div className="space-y-4">
+                    {contactMessages.map((msg) => (
+                      <div key={msg.id} className="rounded-xl border border-gray-200 p-4">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <p className="font-semibold text-dark">
+                            {msg.name} · {msg.email}
+                          </p>
+                          <p className="text-xs text-gray-400">
+                            {formatRelativeDate(msg.created_at)}
+                          </p>
+                        </div>
+                        <p className="mt-1 text-xs text-gray-500">
+                          {[msg.phone, msg.business, msg.city].filter(Boolean).join(" · ") || "—"}
+                        </p>
+                        <p className="mt-3 text-sm text-gray-700">{msg.message}</p>
                       </div>
                     ))}
                   </div>

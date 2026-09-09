@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 import { ArrowLeft, ArrowRight, CheckCircle2, Monitor } from "lucide-react";
 import PublicLayout from "../layouts/PublicLayout";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import { images } from "../constants/images";
+import API from "../services/api";
 
 const steps = ["Screen Info", "Location & Access", "Submit"];
 
@@ -56,6 +58,7 @@ export default function PartnerApplication() {
   const [submitted, setSubmitted] = useState(false);
   const [applicationId, setApplicationId] = useState("");
   const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
 
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
 
@@ -85,10 +88,18 @@ export default function PartnerApplication() {
     if (validate()) setStep((s) => s + 1);
   };
   const back = () => setStep((s) => s - 1);
-  const submit = () => {
-    if (validate()) {
-      setApplicationId(Date.now().toString().slice(-8));
+  const submit = async () => {
+    if (!validate()) return;
+    setSubmitting(true);
+    try {
+      const res = await API.post("/partner-applications", form);
+      setApplicationId(res.data.applicationCode || `ADX-${Date.now().toString().slice(-8)}`);
       setSubmitted(true);
+      toast.success("Application submitted");
+    } catch {
+      // interceptor toast
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -108,7 +119,7 @@ export default function PartnerApplication() {
                 Application ID
               </div>
               <div className="mt-2 font-mono text-lg font-bold text-admax-green">
-                ADX-{applicationId}
+                {String(applicationId).startsWith("ADX-") ? applicationId : `ADX-${applicationId}`}
               </div>
             </div>
             <Link to="/" className="mt-8 inline-block">
@@ -466,7 +477,7 @@ export default function PartnerApplication() {
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               ) : (
-                <Button type="button" onClick={submit}>
+                <Button type="button" onClick={submit} loading={submitting}>
                   Submit Application
                 </Button>
               )}

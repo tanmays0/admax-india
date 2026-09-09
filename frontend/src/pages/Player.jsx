@@ -93,6 +93,14 @@ export default function Player() {
   }, [ads.length]);
 
   useEffect(() => {
+    const ad = ads[current];
+    if (loading || !ad || !screen_id) return;
+    // Only record plays for real API ads (numeric ids), not fallback creatives
+    if (!ad.id || Number(ad.id) < 1) return;
+    API.post(`/player/${screen_id}/play`, { ad_id: ad.id }).catch(() => {});
+  }, [current, ads, loading, screen_id]);
+
+  useEffect(() => {
     if (loading || paused || ads.length === 0) return;
     setProgress(0);
 

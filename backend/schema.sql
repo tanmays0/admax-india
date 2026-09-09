@@ -28,6 +28,10 @@ CREATE TABLE IF NOT EXISTS users (
   target_audience TEXT NULL,
   monthly_budget VARCHAR(50) NULL,
   onboarding_complete TINYINT(1) NOT NULL DEFAULT 0,
+  first_name VARCHAR(80) NULL,
+  last_name VARCHAR(80) NULL,
+  avatar_url VARCHAR(500) NULL,
+  notification_prefs JSON NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX idx_users_role (role),
@@ -132,6 +136,69 @@ CREATE TABLE IF NOT EXISTS subscriptions (
   CONSTRAINT fk_subscriptions_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
   INDEX idx_subscriptions_user (user_id),
   INDEX idx_subscriptions_status (status)
+) ENGINE=InnoDB;
+
+-- ───────── Contact messages ─────────
+CREATE TABLE IF NOT EXISTS contact_messages (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(120) NOT NULL,
+  email VARCHAR(180) NOT NULL,
+  phone VARCHAR(30) NULL,
+  business VARCHAR(180) NULL,
+  city VARCHAR(100) NULL,
+  message TEXT NOT NULL,
+  source VARCHAR(40) NOT NULL DEFAULT 'contact',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_contact_created (created_at)
+) ENGINE=InnoDB;
+
+-- ───────── Partner applications ─────────
+CREATE TABLE IF NOT EXISTS partner_applications (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  application_code VARCHAR(32) NOT NULL UNIQUE,
+  owner_name VARCHAR(120) NOT NULL,
+  email VARCHAR(180) NOT NULL,
+  phone VARCHAR(30) NOT NULL,
+  business_name VARCHAR(180) NULL,
+  screen_count INT UNSIGNED NOT NULL DEFAULT 1,
+  screen_type VARCHAR(80) NULL,
+  screen_size VARCHAR(80) NULL,
+  resolution VARCHAR(80) NULL,
+  address VARCHAR(255) NOT NULL,
+  city VARCHAR(100) NOT NULL,
+  state VARCHAR(100) NULL,
+  pincode VARCHAR(12) NOT NULL,
+  connectivity VARCHAR(80) NULL,
+  power_supply VARCHAR(80) NULL,
+  access_type VARCHAR(80) NULL,
+  monthly_footfall VARCHAR(80) NULL,
+  primary_audience VARCHAR(120) NULL,
+  status ENUM('pending', 'approved', 'rejected') NOT NULL DEFAULT 'pending',
+  payload JSON NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_partner_apps_status (status),
+  INDEX idx_partner_apps_email (email)
+) ENGINE=InnoDB;
+
+-- ───────── Newsletter subscribers ─────────
+CREATE TABLE IF NOT EXISTS newsletter_subscribers (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  email VARCHAR(180) NOT NULL UNIQUE,
+  source VARCHAR(40) NOT NULL DEFAULT 'blog',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+-- ───────── Play / impression events ─────────
+CREATE TABLE IF NOT EXISTS play_events (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  screen_id INT UNSIGNED NOT NULL,
+  ad_id INT UNSIGNED NULL,
+  played_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_play_screen FOREIGN KEY (screen_id) REFERENCES screens(id) ON DELETE CASCADE,
+  CONSTRAINT fk_play_ad FOREIGN KEY (ad_id) REFERENCES ads(id) ON DELETE SET NULL,
+  INDEX idx_play_screen_time (screen_id, played_at),
+  INDEX idx_play_ad_time (ad_id, played_at)
 ) ENGINE=InnoDB;
 
 -- ───────── Seed demo screens (Pune) ─────────
