@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import PublicLayout from "../layouts/PublicLayout";
 import Button from "../components/ui/Button";
+import { ScrollBasedVelocity } from "../components/ui/scroll-based-velocity";
 import { images } from "../constants/images";
 
 const mainServices = [
@@ -215,6 +216,14 @@ export default function Services() {
             local advertising journey with smart, affordable tools.
           </p>
         </div>
+      </section>
+
+      <section className="overflow-hidden border-y border-dark/10 bg-dark py-7 text-white">
+        <ScrollBasedVelocity
+          text="Screens  ·  Targeting  ·  Creative  ·  Analytics  ·  Partners  ·  AdMax  · "
+          default_velocity={1.4}
+          className="font-display text-center text-3xl font-bold tracking-[-0.02em] text-white/85 md:text-5xl md:leading-[4rem]"
+        />
       </section>
 
       {/* Services grid */}

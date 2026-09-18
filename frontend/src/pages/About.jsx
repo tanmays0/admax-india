@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import PublicLayout from "../layouts/PublicLayout";
 import Button from "../components/ui/Button";
+import { ScrollBasedVelocity } from "../components/ui/scroll-based-velocity";
 import { images } from "../constants/images";
 
 const network = [
@@ -127,6 +128,14 @@ export default function About() {
             customers already visit every day.
           </p>
         </div>
+      </section>
+
+      <section className="overflow-hidden border-y border-dark/10 bg-dark py-7 text-white">
+        <ScrollBasedVelocity
+          text="Local first  ·  Built in India  ·  Neighbourhood screens  ·  AdMax  · "
+          default_velocity={1.2}
+          className="font-display text-center text-3xl font-bold tracking-[-0.02em] text-white/85 md:text-5xl md:leading-[4rem]"
+        />
       </section>
 
       {/* Mission */}

@@ -2,7 +2,7 @@ const path = require("path");
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
-require("dotenv").config();
+require("dotenv").config({ override: true });
 
 const db = require("./config/db");
 const { configurePassport } = require("./config/passport");
@@ -24,9 +24,13 @@ const passport = configurePassport();
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://127.0.0.1:5173", process.env.FRONTEND_URL].filter(
-      Boolean
-    ),
+    origin: [
+      "http://localhost:8080",
+      "http://127.0.0.1:8080",
+      "http://localhost:5173",
+      "http://127.0.0.1:5173",
+      process.env.FRONTEND_URL,
+    ].filter(Boolean),
     credentials: true,
   })
 );

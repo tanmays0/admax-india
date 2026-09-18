@@ -2,7 +2,10 @@
  * Ensure required tables/columns exist on an older admax_india database.
  * Usage: node scripts/ensure-schema.js
  */
-require("dotenv").config({ path: require("path").join(__dirname, "..", ".env") });
+require("dotenv").config({
+  path: require("path").join(__dirname, "..", ".env"),
+  override: true,
+});
 
 const db = require("../config/db");
 
@@ -87,6 +90,36 @@ async function main() {
     "user_id",
     "ALTER TABLE campaigns ADD COLUMN user_id INT UNSIGNED NULL AFTER id"
   );
+  await addColumn(
+    "campaigns",
+    "category",
+    "ALTER TABLE campaigns ADD COLUMN category VARCHAR(100) NULL AFTER name"
+  );
+  await addColumn(
+    "campaigns",
+    "city",
+    "ALTER TABLE campaigns ADD COLUMN city VARCHAR(100) NULL AFTER category"
+  );
+  await addColumn(
+    "campaigns",
+    "radius",
+    "ALTER TABLE campaigns ADD COLUMN radius INT UNSIGNED NULL AFTER city"
+  );
+  await addColumn(
+    "campaigns",
+    "time_slots",
+    "ALTER TABLE campaigns ADD COLUMN time_slots JSON NULL AFTER end_date"
+  );
+  await addColumn(
+    "campaigns",
+    "status",
+    "ALTER TABLE campaigns ADD COLUMN status VARCHAR(50) NOT NULL DEFAULT 'active' AFTER time_slots"
+  );
+  await addColumn(
+    "campaigns",
+    "updated_at",
+    "ALTER TABLE campaigns ADD COLUMN updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
+  );
 
   await addColumn(
     "screens",
@@ -104,6 +137,28 @@ async function main() {
     "campaign_id",
     "ALTER TABLE screen_ads ADD COLUMN campaign_id INT UNSIGNED NULL AFTER ad_id"
   );
+  await addColumn(
+    "screen_ads",
+    "assigned_at",
+    "ALTER TABLE screen_ads ADD COLUMN assigned_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER campaign_id"
+  );
+
+  // Needed for INSERT ... ON DUPLICATE KEY UPDATE in assignmentController
+  try {
+    const [indexes] = await db.query(
+      "SHOW INDEX FROM screen_ads WHERE Key_name IN ('uq_screen_ad', 'uniq_screen_ad')"
+    );
+    if (!indexes.length) {
+      await db.query(
+        "ALTER TABLE screen_ads ADD UNIQUE KEY uq_screen_ad (screen_id, ad_id)"
+      );
+      console.log("added uq_screen_ad");
+    } else {
+      console.log("skip  uq_screen_ad (unique on screen_id,ad_id already present)");
+    }
+  } catch (err) {
+    console.log(`skip  uq_screen_ad (${err.message})`);
+  }
 
   await addColumn(
     "users",

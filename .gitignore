@@ -1,30 +1,35 @@
+# Dependencies
 node_modules/
-dist/
-build/
+**/node_modules/
+
+# Environment / secrets
 .env
 .env.*
 !.env.example
-uploads/
+**/.env
+**/.env.*
+!**/.env.example
+
+# Uploads / local runtime
+backend/uploads/
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build
+frontend/dist/
+dist/
+dist-ssr/
+*.local
+
+# OS / editor
 .DS_Store
-Thumbs.db
-
-# Terraform / OpenTofu
-.terraform/
-*.tfstate
-*.tfstate.*
-*.tfplan
-tfplan
-crash.log
-crash.*.log
-override.tf
-override.tf.json
-*_override.tf
-*_override.tf.json
-terraform.tfvars
-*.tfvars
-!*.tfvars.example
-backend.hcl
-
-# Kubernetes local secrets
-k8s/secret.yaml
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

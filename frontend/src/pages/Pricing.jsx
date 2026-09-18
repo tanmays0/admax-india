@@ -4,6 +4,7 @@ import { ArrowRight, Check, ChevronDown, GraduationCap, IndianRupee } from "luci
 import toast from "react-hot-toast";
 import PublicLayout from "../layouts/PublicLayout";
 import Button from "../components/ui/Button";
+import { ScrollBasedVelocity } from "../components/ui/scroll-based-velocity";
 import { images } from "../constants/images";
 import { useAuth } from "../hooks/useAuth";
 import { startStripeCheckout } from "../services/stripe";
@@ -158,6 +159,14 @@ export default function Pricing() {
             Start with a free trial and scale as you grow.
           </p>
         </div>
+      </section>
+
+      <section className="overflow-hidden border-y border-admax-green/15 bg-admax-green-light py-7">
+        <ScrollBasedVelocity
+          text="No contracts  ·  Transparent pricing  ·  Free trial  ·  Scale anytime  · "
+          default_velocity={1.2}
+          className="font-display text-center text-3xl font-bold tracking-[-0.02em] text-admax-green-dark md:text-5xl md:leading-[4rem]"
+        />
       </section>
 
       <section className="py-12 sm:py-16 lg:py-20">
