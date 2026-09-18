@@ -1,0 +1,9 @@
+ALTER TABLE campaigns 
+ADD COLUMN category VARCHAR(100),
+ADD COLUMN city VARCHAR(100),
+ADD COLUMN radius INT,
+ADD COLUMN time_slots JSON,
+ADD COLUMN status VARCHAR(50) DEFAULT 'active',
+ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+UPDATE campaigns SET status = 'active' WHERE status IS NULL;

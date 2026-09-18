@@ -1,0 +1,9 @@
+# Copy to backend.hcl after running infra/bootstrap and fill values.
+# Never commit real backend.hcl with account-specific secrets if your org forbids it;
+# bucket/table names are non-secret but still environment-specific.
+
+bucket         = "admax-india-tfstate-ACCOUNT_ID"
+key            = "environments/dev/terraform.tfstate"
+region         = "ap-south-1"
+dynamodb_table = "admax-india-tf-locks"
+encrypt        = true

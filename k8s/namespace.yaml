@@ -1,0 +1,6 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: admax-india
+  labels:
+    app.kubernetes.io/part-of: admax-india
